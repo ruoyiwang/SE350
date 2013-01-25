@@ -10,6 +10,14 @@ void process_init() {
 
 }
 
+int set_process_priority(int pid, int priority) {
+
+}
+
+int get_process_priority(int pid) {
+	
+}
+
 int context_switch(pcb& proc) {
 
 }
