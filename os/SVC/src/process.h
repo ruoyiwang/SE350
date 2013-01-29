@@ -3,7 +3,9 @@
 
 typedef enum {NEW, READY, RUN} process_state;
 typedef struct {
-
+	uint32_t *sp;
+	uint32_t pid;
+	process_state state;
 } pcb;
 
 
