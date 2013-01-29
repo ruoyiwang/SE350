@@ -1,6 +1,9 @@
+#ifndef NULL
+#define NULL (void *)0
+#endif
+
 #ifndef PROCESS_H
 #define PROCESS_H
-#define NULL 0
 
 #include "pqueue.h"
 
