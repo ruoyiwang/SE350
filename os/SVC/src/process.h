@@ -1,5 +1,8 @@
 #ifndef PROCESS_H
 #define PROCESS_H
+#define NULL 0
+
+#include "pqueue.h"
 
 typedef enum {NEW, READY, RUN} process_state;
 typedef struct {
@@ -50,7 +53,8 @@ int processBST_priority_lookup(int pid, processBST& root){
 
 
 
-pcb* current_processor;
+pcb* current_process;
+pqueue* ready_queue;
 
 void process_init() {
 
@@ -71,25 +75,34 @@ int get_process_priority(int pid) {
     return processBST_priority_lookup(pid, root);
 }
 
-int context_switch(pcb& proc) {
+int process_switch(){
+	current_process->state = READY;
+	current_process->sp = (uint32_t *) __get_MSP();
+	pqueue_enqueue(current_process, current_process->priority);
 
-}
-
-int scheduler() {
-
-}
-
-void process_switch(){
     // Go through process queues that are 'ready' and take the highest priority process
+    current_process = pqueue_dequeue(ready_queue);
 
-    // If process queue is empty execute the null process
+    // If process queue is empty or the state is not READY execute the null process
+    if (current_process == NULL || current_process->state != READY) {
+    	current_process = pcb_lookup(0);
+    }
 
+    current_process->state = RUN;
+    __set_MSP((uint32_t *) current_process->sp);
+
+	return 0;
 }
 
+// Return 0 if success; 1 if fail
 int release_processor() {
-	current_processor->state = READY;
-	rq_enqueue(current_processor);
-	process_switch();
+	if (current_process = NULL) {
+		return 1;
+	}
+
+	if (process_switch()) {
+		return 1;
+	}
 }
 
 #endif
