@@ -22,10 +22,6 @@ int context_switch(pcb& proc) {
 
 }
 
-int scheduler() {
-
-}
-
 int process_switch() {
 
 }
