@@ -13,6 +13,8 @@ typedef struct {
 	uint32_t pid;
     uint32_t priority;   // priority. Ranges from values 0-4
 	process_state state;
+	pcb *next;
+	pcb *previous;       // Pointers to previous and next pcb in the stack
 } pcb;
 
 // BST used to store the process ids along with their priorities
