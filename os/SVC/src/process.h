@@ -2,9 +2,12 @@
 #define PROCESS_H
 
 typedef enum {NEW, READY, RUN} process_state;
-typedef struct pcb {
+typedef struct {
 
-}
+} pcb;
+
+
+pcb* current_processor;
 
 void process_init() {
 
@@ -27,7 +30,9 @@ int process_switch() {
 }
 
 int release_processor() {
-
+	current_processor->state = READY;
+	rq_enqueue(current_processor);
+	process_switch();
 }
 
 #endif
