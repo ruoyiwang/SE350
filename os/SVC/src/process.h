@@ -1,15 +1,18 @@
+#ifndef NULL
+#define NULL (void *)0
+#endif
+
 #ifndef PROCESS_H
 #define PROCESS_H
-#define NULL 0
 
 #include "pqueue.h"
 
 typedef enum {NEW, READY, RUN} process_state;
 typedef struct {
-    int pid;        // process id
-    int priority;   // priority. Ranges from values 0-4
-    uint32_t *sp;   // Stack pointer
-
+	uint32_t *sp;
+	uint32_t pid;
+    uint32_t priority;   // priority. Ranges from values 0-4
+	process_state state;
 } pcb;
 
 // BST used to store the process ids along with their priorities

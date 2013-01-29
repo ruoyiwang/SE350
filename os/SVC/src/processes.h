@@ -1,5 +1,5 @@
-#ifndef __NULL_PROCESS__
-#define __NULL_PROCESS__
+#ifndef __PROCESSES__
+#define __PROCESSES__
 
 void null_process() {
 	while(true) {
@@ -8,6 +8,30 @@ void null_process() {
 		#endif
 		release_processor();
 	}
+}
+
+void test_process_1() {
+
+}
+
+void test_process_2() {
+	
+}
+
+void test_process_3() {
+	
+}
+
+void test_process_4() {
+	
+}
+
+void test_process_5() {
+	
+}
+
+void test_process_6() {
+	
 }
 
 #endif
