@@ -80,21 +80,29 @@ int get_process_priority(int pid) {
     return processBST_priority_lookup(pid, root);
 }
 
-int process_switch(){
-	current_process->state = READY;
-	current_process->sp = (uint32_t *) __get_MSP();
-	pqueue_enqueue(current_process, current_process->priority);
+int context_switch(pcb* pcb) {
+    current_process->state = READY;
+    current_process->sp = (uint32_t *) __get_MSP();
+    pqueue_enqueue(current_process, current_process->priority);
 
-    // Go through process queues that are 'ready' and take the highest priority process
-    current_process = pqueue_dequeue(ready_queue);
-
-    // If process queue is empty or the state is not READY execute the null process
-    if (current_process == NULL || current_process->state != READY) {
-    	current_process = pcb_lookup(0);
-    }
-
+    current_process = pcb;
     current_process->state = RUN;
     __set_MSP((uint32_t *) current_process->sp);
+
+    return 0;
+}
+
+int process_switch(){
+    pcb* new_process = pqueue_dequeue(ready_queue);
+
+    // If process queue is empty or the state is not READY execute the null process
+    if (new_process == NULL || new_process->state != READY) {
+    	new_process = pcb_lookup(0);
+    }
+
+    if (context_switch(new_process)) {
+        return 1;
+    }
 
 	return 0;
 }
@@ -108,6 +116,8 @@ int release_processor() {
 	if (process_switch()) {
 		return 1;
 	}
+
+    return 0;
 }
 
 #endif
