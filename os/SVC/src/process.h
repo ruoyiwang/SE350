@@ -40,7 +40,7 @@ pcb_list* root = NULL;
  *************************************************************************/
 void pcb_list_init(pcb_list *root);
 
-pcb_list pcb_lookup_by_pid(int pid, pcb_list *root);
+pcb* pcb_lookup_by_pid(int pid, pcb_list *root);
 
 // Insert pcb into linked list
 void pcb_insert(pcb *block, pcb_list *root);
