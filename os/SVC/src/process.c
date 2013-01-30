@@ -8,7 +8,6 @@ pcb* current_process;
 pqueue ready_queue;
 pcb_list* pcb_lookup_list;
 
-uint32_t processes[7];
 pcb pcbs[7];
 
 pcb_list* root = NULL;
@@ -90,13 +89,13 @@ void process_init() {
 	volatile int i, j;
 	volatile uint32_t * sp;
 
-	processes[0] = (uint32_t) null_process;
-	processes[1] = (uint32_t)test_process_1;
-	processes[2] = (uint32_t)test_process_2;
-	processes[3] = (uint32_t)test_process_3;
-	processes[4] = (uint32_t)test_process_4;
-	processes[5] = (uint32_t)test_process_5;
-	processes[6] = (uint32_t)test_process_6;
+	pcbs[0].pc = (uint32_t) null_process;
+	pcbs[1].pc = (uint32_t)test_process_1;
+	pcbs[2].pc = (uint32_t)test_process_2;
+	pcbs[3].pc = (uint32_t)test_process_3;
+	pcbs[4].pc = (uint32_t)test_process_4;
+	pcbs[5].pc = (uint32_t)test_process_5;
+	pcbs[6].pc = (uint32_t)test_process_6;
 	
 	for (i=0; i<7;i++)
 	{
@@ -112,7 +111,7 @@ void process_init() {
 		}
 		
 		*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */ 
-		*(--sp)  = (uint32_t) processes[i];  /* PC contains the entry point of the process */
+		*(--sp)  = (uint32_t) pcbs[i].pc;  /* PC contains the entry point of the process */
 
 		for (j = 0; j < 6; j++) { /* R0-R3, R12 are cleared with 0 */
 			*(--sp) = 0x0;
