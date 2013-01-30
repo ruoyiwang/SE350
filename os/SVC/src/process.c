@@ -101,6 +101,8 @@ void process_init() {
 		}
 			pcbs[i]->sp = sp;
 	}
+
+	process_switch();
 }
 
 int set_process_priority(int pid, int priority) {
@@ -119,9 +121,11 @@ int get_process_priority(int pid) {
 }
 
 int context_switch(pcb* pcb) {
-    current_process->state = READY;
-    current_process->sp = (uint32_t *) __get_MSP();
-    pqueue_enqueue( ready_queue, current_process );
+	if (current_process != NULL) {
+	    current_process->state = READY;
+	    current_process->sp = (uint32_t *) __get_MSP();
+	    pqueue_enqueue( ready_queue, current_process );
+	}
 
     current_process = pcb;
     current_process->state = RUN;
