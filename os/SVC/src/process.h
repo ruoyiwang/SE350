@@ -5,7 +5,6 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-#include "pqueue.h"
 
 typedef enum {NEW, READY, RUN} process_state;
 typedef struct {
@@ -14,6 +13,12 @@ typedef struct {
 	process_state state;
 } pcb;
 
+
+typedef struct {
+	proc_state state;
+	pcb *pq_end[4];
+	pcb *pq_front[4];
+} pqueue;
 
 pcb* current_process;
 pqueue* ready_queue;

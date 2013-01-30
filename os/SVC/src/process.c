@@ -1,4 +1,3 @@
-#include "pqueue.h"
 #include "process.h"
 
 pcb* pqueue_dequeue(pqueue *queue, int priority)
