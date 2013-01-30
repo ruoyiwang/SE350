@@ -42,16 +42,30 @@ extern pcb_list* root;
  *          PCB BST DEFINITIONS
  *************************************************************************/
 void pcb_list_init(pcb_list *root);
+#define k_pcb_list_init(root) _pcb_list_init((U32)pcb_list_init, root)
+pcb* _pcb_list_init(U32 p_func, pcb_list *root)  __SVC_0;
 
 pcb* pcb_lookup_by_pid(int pid, pcb_list *root);
+#define k_pcb_lookup_by_pid(pid, root) _pcb_lookup_by_pid((U32)pcb_lookup_by_pid, pid, root)
+pcb* _pcb_pcb_lookup_by_pid(U32 p_func, int pid, pcb_list *root)  __SVC_0;
 
 // Insert pcb into linked list
 void pcb_insert(pcb *block, pcb_list *root);
 
 // Priority lookup based on process id
 int pcb_priority_lookup(int pid, pcb_list *root);
+#define k_pcb_priority_lookup(pid, root) _pcb_priority_lookup((U32)pcb_priority_lookup, pid, root)
+int _pcb_priority_lookup(U32 p_func, int pid, pcb_list *root)  __SVC_0;
 
 void process_init();
+
+pcb* pqueue_dequeue(pqueue *queue);
+#define k_pqueue_dequeue() _pqueue_dequeue((U32)pqueue_dequeue)
+pcb* _pqueue_dequeue(U32 p_func)  __SVC_0;
+
+void pqueue_enqueue(pqueue *queue, pcb *new_pcb);
+#define k_pqueue_enqueue(new_pcb) _pqueue_enqueue((U32)pqueue_enqueue, new_pcb)
+int __SVC_0 _pqueue_enqueue(U32 p_func, pcb *new_pcb);
 
 int set_process_priority(int pid, int priority);
 #define k_set_process_priority(pid, priority) _set_process_priority((U32)set_process_priority, pid, priority)
