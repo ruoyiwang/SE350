@@ -39,23 +39,23 @@ extern pcb_list* pcb_lookup_list;
 // Declare the pcb linked list
 extern pcb_list* root;
 /*************************************************************************
- *          PCB BST DEFINITIONS
+ *          PCB LINKED LIST DEFINITIONS
  *************************************************************************/
-void pcb_list_init(pcb_list *root);
-#define k_pcb_list_init(root) _pcb_list_init((U32)pcb_list_init, root)
-pcb* _pcb_list_init(U32 p_func, pcb_list *root)  __SVC_0;
+void pcb_list_init(pcb_list *node);
+#define k_pcb_list_init(node) _pcb_list_init((U32)pcb_list_init, node)
+pcb* _pcb_list_init(U32 p_func, pcb_list *node)  __SVC_0;
 
-pcb* pcb_lookup_by_pid(int pid, pcb_list *root);
-#define k_pcb_lookup_by_pid(pid, root) _pcb_lookup_by_pid((U32)pcb_lookup_by_pid, pid, root)
-pcb* _pcb_lookup_by_pid(U32 p_func, int pid, pcb_list *root)  __SVC_0;
+pcb* pcb_lookup_by_pid(int pid, pcb_list *node);
+#define k_pcb_lookup_by_pid(pid, node) _pcb_lookup_by_pid((U32)pcb_lookup_by_pid, pid, node)
+pcb* _pcb_lookup_by_pid(U32 p_func, int pid, pcb_list *node)  __SVC_0;
 
 // Insert pcb into linked list
-void pcb_insert(pcb *block, pcb_list *root);
+void pcb_insert(pcb *block, pcb_list *node);
 
 // Priority lookup based on process id
-int pcb_priority_lookup(int pid, pcb_list *root);
-#define k_pcb_priority_lookup(pid, root) _pcb_priority_lookup((U32)pcb_priority_lookup, pid, root)
-int _pcb_priority_lookup(U32 p_func, int pid, pcb_list *root)  __SVC_0;
+int pcb_priority_lookup(int pid, pcb_list node);
+#define k_pcb_priority_lookup(pid, node) _pcb_priority_lookup((U32)pcb_priority_lookup, pid, node)
+int _pcb_priority_lookup(U32 p_func, int pid, pcb_list *node)  __SVC_0;
 
 void process_init();
 
