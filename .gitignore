@@ -1,0 +1,34 @@
+# Object files
+*.o
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# d files
+*.d
+
+# __i files whatever they are
+*.__i
+
+# whatever crf files are
+*.crf
+
+# backup files
+*.bak
+*.*.bak
+
+#personal files
+*.Bill
+*.Roy

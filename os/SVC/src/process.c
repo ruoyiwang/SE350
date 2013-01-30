@@ -8,7 +8,6 @@ pcb* current_process;
 pqueue ready_queue;
 pcb_list pcb_lookup_list;
 
-int (*processes[7])();
 pcb pcbs[7];
 
 MMU mmu;
@@ -93,21 +92,20 @@ void process_init() {
 	volatile int i, j;
 	volatile uint32_t * sp;
 
-	processes[0] = null_process;
-	processes[1] = test_process_1;
-	processes[2] = test_process_2;
-	processes[3] = test_process_3;
-	processes[4] = test_process_4;
-	processes[5] = test_process_5;
-	processes[6] = test_process_6;
+	pcbs[0].pc = (uint32_t) null_process;
+	pcbs[1].pc = (uint32_t)test_process_1;
+	pcbs[2].pc = (uint32_t)test_process_2;
+	pcbs[3].pc = (uint32_t)test_process_3;
+	pcbs[4].pc = (uint32_t)test_process_4;
+	pcbs[5].pc = (uint32_t)test_process_5;
+	pcbs[6].pc = (uint32_t)test_process_6;
 
 	for (i=0; i<7;i++)
 	{
 		/* initialize the first process	exception stack frame */
 		pcbs[i].pid = i;
-		pcbs[i].state = READY;
-		pcbs[i].priority = 3;
-
+		pcbs[i].state = NEW;
+		pcbs[i].priority = 2;
 		sp  = request_memory_block();
 
 		/* 8 bytes alignement adjustment to exception stack frame */
@@ -116,7 +114,7 @@ void process_init() {
 		}
 
 		*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
-		*(--sp)  = (uint32_t) processes[i];  /* PC contains the entry point of the process */
+		*(--sp)  = (uint32_t) pcbs[i].pc;  /* PC contains the entry point of the process */
 
 		for (j = 0; j < 6; j++) { /* R0-R3, R12 are cleared with 0 */
 			*(--sp) = 0x0;
@@ -126,6 +124,7 @@ void process_init() {
 		//pcb_insert(&pcbs[i], &pcb_lookup_list);
 	}
 
+	pcbs[0].priority = 3;
 	process_switch();
 }
 
@@ -151,12 +150,23 @@ int context_switch(pcb* pcb) {
 	    pqueue_enqueue( &ready_queue, current_process );
 	}
 
-    current_process = pcb;
+  current_process = pcb;
+
+	if (current_process->state == NEW) {
     current_process->state = RUN;
     __set_MSP((uint32_t ) current_process->sp);
 	current_process->pid = current_process->pid;
-		(processes[current_process->pid])();
-    return 0;
+		__rte();
+	}
+	else if (current_process->state == READY) {
+    current_process->state = RUN;
+    __set_MSP((uint32_t ) current_process->sp);
+		current_process->pid = current_process->pid;
+	}
+	else {
+		return 1;
+	}
+  return 0;
 }
 
 int process_switch(){

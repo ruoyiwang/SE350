@@ -3,6 +3,12 @@
  * @date: 2013/01/06
  * NOTE this file contains embedded assembly.
  */
+ 
+__asm void __rte(void) {
+	PRESERVE8
+	MVN LR, #:NOT:0xFFFFFFF9 ; set EXC_RETURN value, Thread mode, MSP
+	BX LR
+}
 
 /* NOTE: assuming MSP is used. Ideally, PSP should be used */
 __asm void SVC_Handler (void) 
