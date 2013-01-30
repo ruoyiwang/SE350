@@ -123,7 +123,6 @@ void process_init() {
 	}
 
 	pcbs[0].priority = 3;
-	process_switch();
 }
 
 int set_process_priority(int pid, int priority) {
@@ -153,13 +152,11 @@ int context_switch(pcb* pcb) {
 	if (current_process->state == NEW) {
     current_process->state = RUN;
     __set_MSP((uint32_t ) current_process->sp);
-	current_process->pid = current_process->pid;
 		__rte();
 	}
 	else if (current_process->state == READY) {
     current_process->state = RUN;
     __set_MSP((uint32_t ) current_process->sp);
-		current_process->pid = current_process->pid;
 	}
 	else {
 		return 1;
