@@ -102,8 +102,8 @@ void process_init() {
 	{
 		/* initialize the first process	exception stack frame */
 		pcbs[i].pid = i;
-		pcbs[i].state = READY;
-		pcbs[i].priority = 3;
+		pcbs[i].state = NEW;
+		pcbs[i].priority = 2;
 
 		sp  = request_memory_block();
 			
@@ -123,6 +123,7 @@ void process_init() {
 		//pcb_insert(&pcbs[i], root);
 	}
 
+	pcbs[0].priority = 3;
 	process_switch();
 }
 
