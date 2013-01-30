@@ -1,6 +1,14 @@
 #include "process.h"
 #include "processes.h"
 #include "memory.h"
+#include <LPC17xx.h>
+#include "uart_polling.h"
+
+pcb* current_process;
+pqueue* ready_queue;
+pcb_list* pcb_lookup_list;
+
+pcb_list* root = NULL;
 
 pcb* pqueue_dequeue(pqueue *queue, int priority)
 {
@@ -31,7 +39,7 @@ void pcb_insert(pcb *block, pcb_list *root){
         root = new_node;
     }
     else{
-        pcb_list_insert(block, root->next);
+        pcb_insert(block, root->next);
     }
 }
 
@@ -117,7 +125,7 @@ int context_switch(pcb* pcb) {
 
     current_process = pcb;
     current_process->state = RUN;
-    __set_MSP((uint32_t *) current_process->sp);
+    __set_MSP((uint32_t ) current_process->sp);
 
     return 0;
 }

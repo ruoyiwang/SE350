@@ -29,12 +29,12 @@ typedef struct pqueue_t{
 	pcb *pq_front[4];
 } pqueue;
 
-pcb* current_process;
-pqueue* ready_queue;
-pcb_list* pcb_lookup_list;
+extern pcb* current_process;
+extern pqueue* ready_queue;
+extern pcb_list* pcb_lookup_list;
 
 // Declare the pcb linked list
-pcb_list* root = NULL;
+extern pcb_list* root;
 /*************************************************************************
  *          PCB BST DEFINITIONS
  *************************************************************************/
