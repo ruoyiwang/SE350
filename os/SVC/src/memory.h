@@ -4,8 +4,18 @@
 
 #ifdef DEBUG_0
 #define USR_SZ_STACK 0x120
+#define INITIAL_xPSR 0x10000000    /* user process initial xPSR value */
 #endif /* DEBUG_0 */
 
+typedef struct qnode_t{
+	qnode_t* next;
+} qnode;
+
+typedef struct queue_t{
+	int size;
+	qnode_t* front;
+	qnode_t* end;
+} queue;
 
 typedef struct mmu_t{
 	int * lookup_table;
