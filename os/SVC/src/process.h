@@ -33,6 +33,8 @@ pcb* current_process;
 pqueue* ready_queue;
 pcb_list* pcb_lookup_list;
 
+// Declare the pcb linked list
+pcb_list* root = NULL;
 /*************************************************************************
  *          PCB BST DEFINITIONS
  *************************************************************************/
