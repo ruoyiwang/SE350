@@ -5,28 +5,35 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-
 typedef enum {NEW, READY, RUN} process_state;
-typedef struct {
+
+typedef struct pcb_t{
 	uint32_t *sp;
 	uint32_t pid;
-    uint32_t priority;   // priority. Ranges from values 0-4
+  uint32_t priority;   // priority. Ranges from values 0-4
 	process_state state;
-	pcb *next;
-	pcb *previous;       // Pointers to previous and next pcb in the stack
+	struct pcb_t *next;
+	struct pcb_t *prev;       // Pointers to previous and next pcb in the stack
 } pcb;
 
 // BST used to store the process ids along with their priorities
-typedef struct{
+typedef struct processBST_t{
     pcb *root;
-    processBST *left;
-    processBST *right;
+    struct processBST_t *left;
+    struct processBST_t *right;
 } processBST;
+
+typedef struct pqueue_t{
+	process_state state;
+	pcb *pq_end[4];
+	pcb *pq_front[4];
+} pqueue;
 
 /*************************************************************************
  *          PCB BST DEFINITIONS
  *************************************************************************/
-void processBST_init(processBST& root){
+void processBST_init(processBST &root)
+{
     root = NULL;
 }
 
@@ -56,12 +63,6 @@ int processBST_priority_lookup(int pid, processBST& root){
 }
 
 
-
-typedef struct {
-	proc_state state;
-	pcb *pq_end[4];
-	pcb *pq_front[4];
-} pqueue;
 
 pcb* current_process;
 pqueue* ready_queue;
@@ -98,7 +99,7 @@ int context_switch(pcb* pcb) {
 }
 
 int process_switch(){
-    pcb* new_process = pqueue_dequeue(ready_queue);
+    pcb* new_process = pqueue_dequeue(ready_queue,4);
 
     // If process queue is empty or the state is not READY execute the null process
     if (new_process == NULL || new_process->state != READY) {
