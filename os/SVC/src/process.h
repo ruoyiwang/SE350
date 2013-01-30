@@ -62,8 +62,8 @@ int context_switch(pcb* pcb);
 int process_switch();
 
 // Return 0 if success; 1 if fail
-extern int k_release_processor(void);
-#define release_processor() _release_processor((U32)k_release_processor)
+extern int release_processor(void);
+#define k_release_processor() _release_processor((U32)release_processor)
 int __SVC_0 _release_processor(U32 p_func);
 
 #endif
