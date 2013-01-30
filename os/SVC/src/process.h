@@ -17,11 +17,10 @@ typedef struct pcb_t{
 } pcb;
 
 // BST used to store the process ids along with their priorities
-typedef struct processBST_t{
-    pcb *root;
-    struct processBST_t *left;
-    struct processBST_t *right;
-} processBST;
+typedef struct pcb_linked_list_t{
+    pcb *process_block;
+    struct pcb_linked_list_t *next;
+} pcb_list;
 
 typedef struct pqueue_t{
 	process_state state;
@@ -31,16 +30,20 @@ typedef struct pqueue_t{
 
 pcb* current_process;
 pqueue* ready_queue;
+pcb_list* pcb_lookup_list;
 
 /*************************************************************************
  *          PCB BST DEFINITIONS
  *************************************************************************/
-void processBST_init(processBST &root);
+void pcb_list_init(pcb_list *root);
 
-processBST processBST_lookup_by_pid(int pid, processBST& root);
+pcb_list pcb_lookup_by_pid(int pid, pcb_list *root);
+
+// Insert pcb into linked list
+void pcb_insert(pcb *block, pcb_list *root);
 
 // Priority lookup based on process id
-int processBST_priority_lookup(int pid, processBST& root);
+int pcb_priority_lookup(int pid, pcb_list *root);
 
 void process_init();
 
