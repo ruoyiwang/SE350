@@ -34,7 +34,7 @@ typedef struct pqueue_t{
 
 extern pcb* current_process;
 extern pqueue ready_queue;
-extern pcb_list* pcb_lookup_list;
+extern pcb_list pcb_lookup_list;
 
 // Declare the pcb linked list
 extern pcb_list* root;
@@ -53,7 +53,7 @@ pcb* _pcb_lookup_by_pid(U32 p_func, int pid, pcb_list *node)  __SVC_0;
 void pcb_insert(pcb *block, pcb_list *node);
 
 // Priority lookup based on process id
-int pcb_priority_lookup(int pid, pcb_list node);
+int pcb_priority_lookup(int pid, pcb_list* node);
 #define k_pcb_priority_lookup(pid, node) _pcb_priority_lookup((U32)pcb_priority_lookup, pid, node)
 int _pcb_priority_lookup(U32 p_func, int pid, pcb_list *node)  __SVC_0;
 

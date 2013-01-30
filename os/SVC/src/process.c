@@ -51,6 +51,7 @@ void pcb_list_init(pcb_list *node){
 
 void pcb_insert(pcb *block, pcb_list *node){
     pcb_list new_node;
+	  pcb_list *iterator;
     new_node.process_block = block;
     new_node.next = NULL;
 
@@ -58,7 +59,7 @@ void pcb_insert(pcb *block, pcb_list *node){
         node = &new_node;
         return;
     }
-    pcb_list *iterator = node;
+    iterator = node;
     while(iterator->next != NULL){
         iterator = iterator->next;
     }
@@ -77,14 +78,14 @@ pcb* pcb_lookup_by_pid(int pid, pcb_list *node){
     }
 }
 
-int pcb_priority_lookup(int pid, pcb_list *node){
-    pcb *node = pcb_lookup_by_pid(pid, pcb_lookup_list);
+int pcb_priority_lookup(int pid, pcb_list* node){
+    pcb *node2 = pcb_lookup_by_pid(pid, &pcb_lookup_list);
 
     // As per section 3.5 of project description, if pid is invalid return "-1"
-    if(node == NULL){
+    if(node2 == NULL){
         return -1;
     }
-    return node->priority;
+    return node2->priority;
 }
 
 void process_init() {
