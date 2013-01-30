@@ -54,12 +54,20 @@ int pcb_priority_lookup(int pid, pcb_list *root);
 void process_init();
 
 int set_process_priority(int pid, int priority);
+#define k_set_process_priority(pid, priority) _set_process_priority((U32)set_process_priority, pid, priority)
+int __SVC_0 _set_process_priority(U32 p_func, int pid, int priority);
 
 int get_process_priority(int pid);
+#define k_get_process_priority(pid) _get_process_priority((U32)get_process_priority, pid)
+int __SVC_0 _get_process_priority(U32 p_func, int pid);
 
-int context_switch(pcb* pcb);
+extern int context_switch(pcb* pcb);
+#define k_context_switch(pcb) _process_switch((U32)context_switch, pcb)
+int __SVC_0 _context_switch(U32 p_func, pcb* pcb);
 
-int process_switch();
+extern int process_switch();
+#define k_process_switch() _process_switch((U32)process_switch)
+int __SVC_0 _process_switch(U32 p_func);
 
 // Return 0 if success; 1 if fail
 extern int release_processor(void);
