@@ -2,10 +2,8 @@
 #define NULL ((void *)0) 
 #endif
 
-#ifdef DEBUG_0
 #define USR_SZ_STACK 128
 #define INITIAL_xPSR 0x10000000    /* user process initial xPSR value */
-#endif /* DEBUG_0 */
 
 typedef unsigned int U32;
 
@@ -79,5 +77,5 @@ int release_memory_block(void *MemoryBlock){
 	//calculates the index of the lookup table for that address and then set the flag to be freed
 	index = (mmu.max_mem - mem_block_address) / USR_SZ_STACK;
 	mmu.lookup_table[index] = 0;
-	return 0
+	return 0;
 }

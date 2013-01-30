@@ -6,13 +6,15 @@
  *       it is OK if you only use the C library for debugging purpose 
  *       during the development/prototyping phase
  */
-
+#ifndef NULL
+#define NULL (void *)0
+#endif
 #include <LPC17xx.h>
 #ifdef DEBUG_0
 #include <stdio.h>
 #endif /* DEBUG_0 */
 #include "uart_polling.h"
-#include "rtx.h"
+#include "process.h"
 
 int main()
 {
@@ -21,9 +23,10 @@ int main()
 
   SystemInit();  /* initialize the system */
   __disable_irq();
-  uart0_init();
+  uart1_init();
+	mmu_init();
+  process_init();
   __enable_irq();
-  
   // transit to unprivileged level, default MSP is used
   __set_CONTROL(__get_CONTROL() | BIT(0));  
 

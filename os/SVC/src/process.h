@@ -13,9 +13,9 @@ typedef enum {NEW, READY, RUN} process_state;
 
 typedef struct pcb_t{
 	uint32_t *sp;
-	uint32_t pid;
+	volatile uint32_t pid;
   uint32_t priority;   // priority. Ranges from values 0-4
-	process_state state;
+	volatile process_state state;
 	struct pcb_t *next;
 	struct pcb_t *prev;       // Pointers to previous and next pcb in the stack
 } pcb;
@@ -33,7 +33,7 @@ typedef struct pqueue_t{
 } pqueue;
 
 extern pcb* current_process;
-extern pqueue* ready_queue;
+extern pqueue ready_queue;
 extern pcb_list* pcb_lookup_list;
 
 // Declare the pcb linked list
@@ -47,7 +47,7 @@ pcb* _pcb_list_init(U32 p_func, pcb_list *root)  __SVC_0;
 
 pcb* pcb_lookup_by_pid(int pid, pcb_list *root);
 #define k_pcb_lookup_by_pid(pid, root) _pcb_lookup_by_pid((U32)pcb_lookup_by_pid, pid, root)
-pcb* _pcb_pcb_lookup_by_pid(U32 p_func, int pid, pcb_list *root)  __SVC_0;
+pcb* _pcb_lookup_by_pid(U32 p_func, int pid, pcb_list *root)  __SVC_0;
 
 // Insert pcb into linked list
 void pcb_insert(pcb *block, pcb_list *root);
@@ -76,7 +76,7 @@ int get_process_priority(int pid);
 int __SVC_0 _get_process_priority(U32 p_func, int pid);
 
 extern int context_switch(pcb* pcb);
-#define k_context_switch(pcb) _process_switch((U32)context_switch, pcb)
+#define k_context_switch(pcb) _context_switch((U32)context_switch, pcb)
 int __SVC_0 _context_switch(U32 p_func, pcb* pcb);
 
 extern int process_switch();
