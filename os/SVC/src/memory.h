@@ -10,9 +10,13 @@ typedef struct{
 	const unsigned int block_size = 120;
 } MMU;
 
+
+MMU* mmu;	//declarations
+
 extern unsigned int Image$$RW_IRAM1$$ZI$$Limit;
 
 MMU*  mmu_create_new_mmu(){
+	int *temp;
 	//initialize all vars
 	MMU* memory_management_unit;
 	memory_management_unit->free_mem = Image$$RW_IRAM1$$ZI$$Limit;
@@ -22,7 +26,7 @@ MMU*  mmu_create_new_mmu(){
 	//loop to init the lookup table
 	memory_management_unit->lookup_table_size = (max_mem - free_mem) / 4;
 	// allocate blocks of size 120
-	int *temp = realloc(lookup_table, memory_management_unit->lookup_table_size*sizeof(bool));
+	*temp = realloc(lookup_table, memory_management_unit->lookup_table_size*sizeof(bool));
 	if ( temp != NULL ) //realloc was successful
 	{
 		lookup_table = temp;
@@ -36,7 +40,7 @@ MMU*  mmu_create_new_mmu(){
 	return memory_management_unit;
 }
 
-MMU* mmu = mmu_create_new_mmu();
+mmu = mmu_create_new_mmu();
 
 void * request_memory_block(){
 	for (int i = 0; i < mmu->lookup_table_size; i+=mmu->lookup_table_size){
