@@ -5,6 +5,7 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
+#include <stdint.h>
 typedef enum {NEW, READY, RUN} process_state;
 
 typedef struct pcb_t{
@@ -35,12 +36,12 @@ pqueue* ready_queue;
 /*************************************************************************
  *          PCB BST DEFINITIONS
  *************************************************************************/
-void processBST_init(processBST &root);
+void processBST_init(processBST *root);
 
-processBST processBST_lookup_by_pid(int pid, processBST& root);
+processBST* processBST_lookup_by_pid(int pid, processBST* root);
 
 // Priority lookup based on process id
-int processBST_priority_lookup(int pid, processBST& root);
+int processBST_priority_lookup(int pid, processBST* root);
 
 void process_init();
 

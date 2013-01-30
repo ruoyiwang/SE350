@@ -2,8 +2,9 @@
 
 pcb* pqueue_dequeue(pqueue *queue, int priority)
 {
+	pcb* ret;
 	queue->pq_front[priority] = queue->pq_front[priority]->next;
-	pcb* ret = queue->pq_front[priority]->prev;
+	ret = queue->pq_front[priority]->prev;
 	queue->pq_front[priority]->prev = NULL;
 	return ret;
 }
@@ -16,18 +17,18 @@ void pqueue_enqueue(pqueue *queue, pcb *new_pcb)
 	queue->pq_end[priority] = new_pcb;
 } 
 
-void processBST_init(processBST &root) {
+void processBST_init(processBST *root) {
     root = NULL;
 }
 
-processBST processBST_lookup_by_pid(int pid, processBST& root){
+processBST* processBST_lookup_by_pid(int pid, processBST* root){
     if(root == NULL){
         return NULL;
     }
-    else if (pid == root->pcb->pid){
+    else if (pid == root->root->pid){
         return root;
     }
-    else if(pid < root->pcb->pid){
+    else if(pid < root->root->pid){
         return processBST_lookup_by_pid(pid, root->left);
     }
     else{
@@ -35,18 +36,18 @@ processBST processBST_lookup_by_pid(int pid, processBST& root){
     }
 }
 
-int processBST_priority_lookup(int pid, processBST& root){
+int processBST_priority_lookup(int pid, processBST* root){
     processBST *node = processBST_lookup_by_pid(pid, root);
 
     // As per section 3.5 of project description, if pid is invalid return "-1"
     if(node == NULL){
         return -1;
     }
-    return node->pcb->priority;
+    return node->root->priority;
 }
 
 void process_init() {
-
+		
 }
 
 int set_process_priority(int pid, int priority) {
@@ -56,7 +57,7 @@ int set_process_priority(int pid, int priority) {
     if (node == NULL){
         return -1;
     }
-    node->pcb->priority = priority;
+    node->root->priority = priority;
     return 0;
 }
 
@@ -67,7 +68,7 @@ int get_process_priority(int pid) {
 int context_switch(pcb* pcb) {
     current_process->state = READY;
     current_process->sp = (uint32_t *) __get_MSP();
-    pqueue_enqueue(current_process, current_process->priority);
+    pqueue_enqueue( current_process, current_process );
 
     current_process = pcb;
     current_process->state = RUN;
@@ -93,7 +94,7 @@ int process_switch(){
 
 // Return 0 if success; 1 if fail
 int release_processor() {
-	if (current_process = NULL) {
+	if (current_process == NULL) {
 		return 1;
 	}
 
