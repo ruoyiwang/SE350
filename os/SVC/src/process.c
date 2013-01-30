@@ -6,19 +6,18 @@
 
 pcb* current_process;
 pqueue ready_queue;
-pcb_list* pcb_lookup_list;
+pcb_list pcb_lookup_list;
 
 int (*processes[7])();
 pcb pcbs[7];
 
-pcb_list* root = NULL;
-MMU mmu;	
+MMU mmu;
 
 pcb* pqueue_dequeue(pqueue *queue)
 {
 	pcb* ret;
 	int i;
-	
+
 	for (i=0; i<4; i++)
 	{
 		queue->pq_front[i]->state = queue->pq_front[i]->state;
@@ -47,36 +46,40 @@ void pqueue_enqueue(pqueue *queue, pcb *new_pcb)
 	queue->pq_end[priority] = new_pcb;
 }
 
-void pcb_list_init(pcb_list *root){
-    root = NULL;
+void pcb_list_init(pcb_list *node){
+    node = NULL;
 }
 
-void pcb_insert(pcb *block, pcb_list *root){
-    if (root == NULL){
-        pcb_list *new_node;
-        new_node->process_block = block;
-        new_node->next = NULL;
-        root = new_node;
+void pcb_insert(pcb *block, pcb_list *node){
+    pcb_list new_node;
+    new_node.process_block = block;
+    new_node.next = NULL;
+
+    if (node == NULL){
+        node = &new_node;
+        return;
     }
-    else{
-        pcb_insert(block, root->next);
+    pcb_list *iterator = node;
+    while(iterator->next != NULL){
+        iterator = iterator->next;
     }
+    iterator->next = &new_node;
 }
 
-pcb* pcb_lookup_by_pid(int pid, pcb_list *root){
-    if(root == NULL){
+pcb* pcb_lookup_by_pid(int pid, pcb_list *node){
+    if(node == NULL){
         return NULL;
     }
-    else if (pid == root->process_block->pid){
-        return root->process_block;
+    else if (pid == node->process_block->pid){
+        return node->process_block;
     }
     else{
-        return pcb_lookup_by_pid(pid, root->next);
+        return pcb_lookup_by_pid(pid, node->next);
     }
 }
 
-int pcb_priority_lookup(int pid, pcb_list *root){
-    pcb *node = pcb_lookup_by_pid(pid, root);
+int pcb_priority_lookup(int pid, pcb_list *node){
+    pcb *node = pcb_lookup_by_pid(pid, pcb_lookup_list);
 
     // As per section 3.5 of project description, if pid is invalid return "-1"
     if(node == NULL){
@@ -86,7 +89,7 @@ int pcb_priority_lookup(int pid, pcb_list *root){
 }
 
 void process_init() {
-	
+
 	volatile int i, j;
 	volatile uint32_t * sp;
 
@@ -97,7 +100,7 @@ void process_init() {
 	processes[4] = test_process_4;
 	processes[5] = test_process_5;
 	processes[6] = test_process_6;
-	
+
 	for (i=0; i<7;i++)
 	{
 		/* initialize the first process	exception stack frame */
@@ -106,13 +109,13 @@ void process_init() {
 		pcbs[i].priority = 3;
 
 		sp  = request_memory_block();
-			
+
 		/* 8 bytes alignement adjustment to exception stack frame */
 		if (!(((uint32_t)sp) & 0x04)) {
-				--sp; 
+				--sp;
 		}
-		
-		*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */ 
+
+		*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
 		*(--sp)  = (uint32_t) processes[i];  /* PC contains the entry point of the process */
 
 		for (j = 0; j < 6; j++) { /* R0-R3, R12 are cleared with 0 */
@@ -120,14 +123,14 @@ void process_init() {
 		}
 			pcbs[i].sp = sp;
 		pqueue_enqueue(&ready_queue,&pcbs[i]);
-		//pcb_insert(&pcbs[i], root);
+		//pcb_insert(&pcbs[i], &pcb_lookup_list);
 	}
 
 	process_switch();
 }
 
 int set_process_priority(int pid, int priority) {
-    pcb *node = pcb_lookup_by_pid(pid, root);
+    pcb *node = pcb_lookup_by_pid(pid, &pcb_lookup_list);
 
     // As per project description section 2.4, if no process exists with the pid passed in return a non-zero int value
     if (node == NULL){
@@ -138,7 +141,7 @@ int set_process_priority(int pid, int priority) {
 }
 
 int get_process_priority(int pid) {
-    return pcb_priority_lookup(pid, root);
+    return pcb_priority_lookup(pid, &pcb_lookup_list);
 }
 
 int context_switch(pcb* pcb) {
@@ -161,7 +164,7 @@ int process_switch(){
 
     // If process queue is empty or the state is not READY execute the null process
     if (new_process == NULL || new_process->state != READY) {
-    	new_process = pcb_lookup_by_pid(0,root);
+    	new_process = pcb_lookup_by_pid(0,&pcb_lookup_list);
     }
 
     if (context_switch(new_process)) {
