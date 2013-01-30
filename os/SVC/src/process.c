@@ -171,7 +171,7 @@ int process_switch(){
     pcb* new_process = pqueue_dequeue(&ready_queue);
 
     // If process queue is empty or the state is not READY execute the null process
-    if (new_process == NULL || new_process->state != READY) {
+    if (new_process == NULL || (new_process->state != READY && new_process->state != NEW)) {
     	new_process = pcb_lookup_by_pid(0,&pcb_lookup_list);
     }
 
