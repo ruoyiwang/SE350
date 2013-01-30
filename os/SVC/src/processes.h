@@ -9,7 +9,7 @@
 #include "uart_polling.h"
 
 void null_process() {
-	while(true) {
+	while(1) {
 		#ifdef DEBUG_0
 		printf("NULL PROCESS");
 		#endif
@@ -52,7 +52,7 @@ void test_process_2() {
 }
 
 void test_process_3() {
-	while(true) {
+	while(1) {
 		#ifdef DEBUG_0
 		printf("TEST PROCESS 3");
 		#endif
@@ -61,7 +61,7 @@ void test_process_3() {
 }
 
 void test_process_4() {
-	while(true) {
+	while(1) {
 		#ifdef DEBUG_0
 		printf("TEST PROCESS 4");
 		#endif
@@ -70,7 +70,7 @@ void test_process_4() {
 }
 
 void test_process_5() {
-	while(true) {
+	while(1) {
 		#ifdef DEBUG_0
 		printf("TEST PROCESS 5");
 		#endif
@@ -79,7 +79,7 @@ void test_process_5() {
 }
 
 void test_process_6() {
-	while(true) {
+	while(1) {
 		#ifdef DEBUG_0
 		printf("TEST PROCESS 5");
 		#endif

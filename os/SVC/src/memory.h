@@ -3,55 +3,80 @@
 #endif
 
 #ifdef DEBUG_0
-#define USR_SZ_STACK 0x120
+#define USR_SZ_STACK 128
 #define INITIAL_xPSR 0x10000000    /* user process initial xPSR value */
 #endif /* DEBUG_0 */
 
-typedef struct qnode_t{
-	qnode_t* next;
-} qnode;
+typedef struct lnode_t{
+	int address;
+	struct lnode_t* next;
+} lnode;
 
-typedef struct queue_t{
+typedef struct list_t{
 	int size;
-	qnode_t* front;
-	qnode_t* end;
-} queue;
+	lnode* front;
+	lnode* end;
+} list;
 
 typedef struct mmu_t{
 	int * lookup_table;
 	unsigned int free_mem;
 	unsigned int max_mem;
 	unsigned int lookup_table_size;
+	list memory_in_use;
+	list memory_not_in_use;
 } MMU;
 
-MMU* mmu;	//declarations
+extern MMU* mmu;	//declarations
 
 extern unsigned int Image$$RW_IRAM1$$ZI$$Limit;
 
+void list_create_node_and_push(list *q, int a){
+	lnode* curNode;
+	curNode->address = a;
+	curNode->next = NULL;
+
+	q->end->next = curNode;
+	q->end = curNode;
+	q->size++;
+}
+
+void list_push(list *q, lnode *node){
+	q->end->next = node;
+	q->end = node;
+	q->size++;
+}
+
+lnode* list_pop(list *q){
+	lnode* curNode;
+	curNode = q->front;
+
+	q->front = q->front->next;
+
+	q->size--;
+
+	return curNode;
+}
+
 MMU* mmu_create_new_mmu(){
-	int *temp, i;
+	lnode* curNode;
 	//initialize all vars
 	MMU* memory_management_unit;
 	memory_management_unit->free_mem = Image$$RW_IRAM1$$ZI$$Limit;
-	memory_management_unit->max_mem = 0x10000000;
-	memory_management_unit->lookup_table = NULL;
+	memory_management_unit->max_mem = INITIAL_xPSR;
 
-	//loop to init the lookup table
-	memory_management_unit->lookup_table_size = (memory_management_unit->max_mem - memory_management_unit->free_mem) / USR_SZ_STACK;
-	
-	// allocate blocks of size 120
-	*temp = realloc(memory_management_unit->lookup_table, memory_management_unit->lookup_table_size*sizeof(int));
-	if ( temp != NULL ) //realloc was successful
-	{
-		memory_management_unit->lookup_table = temp;
+	curNode->address = INITIAL_xPSR;
+	curNode->next = NULL;
+	memory_management_unit->memory_not_in_use.front = curNode;
+	memory_management_unit->memory_not_in_use.end = curNode;
+
+	for (; curNode->address != memory_management_unit->free_mem; curNode->address -= USR_SZ_STACK){
+		list_create_node_and_push(&memory_management_unit->memory_not_in_use, curNode->address);
 	}
-	else{
-		return NULL;	//it fucked up
-	}
-	
-	for (i = 0; i < memory_management_unit->lookup_table_size; i++){
-		memory_management_unit->lookup_table[i] = 0;	//set all blocks to be free
-	}
+
+	memory_management_unit->memory_in_use.front = NULL;
+	memory_management_unit->memory_in_use.end = NULL;
+
 	return memory_management_unit;
 }
 
@@ -60,20 +85,41 @@ void mmu_init(){
 }
 
 void * request_memory_block(){
-	int i;
-	for (i = 0; i < mmu->lookup_table_size; i+=mmu->lookup_table_size){
-		if (mmu->lookup_table[i] == 0){
-			return (void *)(i*USR_SZ_STACK + mmu->free_mem);	//return the actual address
-		}
+	lnode* curNode;
+	if (mmu->memory_not_in_use.size <= 0){
+		return 0;
 	}
-	return NULL;
+
+	curNode = list_pop(&mmu->memory_not_in_use);
+	list_push(&mmu->memory_in_use, curNode);
+
+	return (void *)curNode->address;
 }
 
 int release_memory_block(void *MemoryBlock){
-	unsigned int p = ((int)MemoryBlock - mmu->free_mem) / 4;
-	if((int)MemoryBlock > 0x10000000)
-		return 1;	//FAIL
+	lnode* curNode, *prevNode;
+
+	curNode = mmu->memory_in_use.front;
+
+	//edge case where the node is at the beginning of the list
+	if ((int)MemoryBlock == curNode->address){
+		list_pop(&mmu->memory_in_use);
+		list_push(&mmu->memory_not_in_use, curNode);
+		return 0;
+	}
+	prevNode = curNode;
+	curNode = curNode->next;
+	while (curNode!=mmu->memory_in_use.end){
+		if ((int)MemoryBlock==curNode->address){
+			//if found
+			prevNode->next = curNode->next;	//remove the node out of cur list
+			list_push(&mmu->memory_not_in_use, curNode);	//push it on to ther free one
+			return 0;
+		}
+		prevNode = curNode;
+		curNode = curNode->next;
+	}
 	
-	mmu->lookup_table[p] = 0;
-	return 0;		//true
+	return 1;
+
 }

@@ -4,6 +4,7 @@
  */
 
 #include "uart_polling.h"
+#include "process.h"
 #ifdef DEBUG_0
 #include <stdio.h>
 #endif // DEBUG_0

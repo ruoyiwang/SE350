@@ -67,10 +67,10 @@ int pcb_priority_lookup(int pid, pcb_list *root){
 
 void process_init() {
 	
-	uint32_t processes[7];
-	pcb* pcbs[7];
+	volatile uint32_t processes[7];
+	volatile pcb* pcbs[7];
 	  volatile int i, j;
-	uint32_t * sp;
+	volatile uint32_t * sp;
 
 	processes[0] = (uint32_t) null_process;
 	processes[1] = (uint32_t) test_process_1;
