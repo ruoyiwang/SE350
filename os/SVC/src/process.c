@@ -9,14 +9,22 @@ pqueue* ready_queue;
 pcb_list* pcb_lookup_list;
 
 pcb_list* root = NULL;
+MMU mmu;	
 
-pcb* pqueue_dequeue(pqueue *queue, int priority)
+pcb* pqueue_dequeue(pqueue *queue)
 {
 	pcb* ret;
-	queue->pq_front[priority] = queue->pq_front[priority]->next;
-	ret = queue->pq_front[priority]->prev;
-	queue->pq_front[priority]->prev = NULL;
-	return ret;
+	int i;
+	for (i=3; i<=0; i--)
+	{
+		if (queue->pq_front[i] == NULL)
+				continue;
+		queue->pq_front[i] = queue->pq_front[i]->next;
+		ret = queue->pq_front[i]->prev;
+		queue->pq_front[i]->prev = NULL;
+		return ret;
+	}
+	return NULL;
 }
 
 void pqueue_enqueue(pqueue *queue, pcb *new_pcb)
@@ -85,6 +93,7 @@ void process_init() {
 		/* initialize the first process	exception stack frame */
 		pcbs[i]->pid = i;
 		pcbs[i]->state = NEW;
+		pcbs[i]->priority = 3;
 
 		sp  = request_memory_block();
 			
@@ -100,6 +109,7 @@ void process_init() {
 			*(--sp) = 0x0;
 		}
 			pcbs[i]->sp = sp;
+		pqueue_enqueue(ready_queue,pcbs[i]);
 	}
 
 	process_switch();
@@ -135,7 +145,7 @@ int context_switch(pcb* pcb) {
 }
 
 int process_switch(){
-    pcb* new_process = pqueue_dequeue(ready_queue,4);
+    pcb* new_process = pqueue_dequeue(ready_queue);
 
     // If process queue is empty or the state is not READY execute the null process
     if (new_process == NULL || new_process->state != READY) {
