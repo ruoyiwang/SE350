@@ -2,8 +2,9 @@
 
 pcb* pqueue_dequeue(pqueue *queue, int priority)
 {
+	pcb* ret;
 	queue->pq_front[priority] = queue->pq_front[priority]->next;
-	pcb* ret = queue->pq_front[priority]->prev;
+	ret = queue->pq_front[priority]->prev;
 	queue->pq_front[priority]->prev = NULL;
 	return ret;
 }
@@ -76,7 +77,7 @@ int get_process_priority(int pid) {
 int context_switch(pcb* pcb) {
     current_process->state = READY;
     current_process->sp = (uint32_t *) __get_MSP();
-    pqueue_enqueue(current_process, current_process->priority);
+    pqueue_enqueue( current_process, current_process );
 
     current_process = pcb;
     current_process->state = RUN;
@@ -90,7 +91,7 @@ int process_switch(){
 
     // If process queue is empty or the state is not READY execute the null process
     if (new_process == NULL || new_process->state != READY) {
-    	new_process = pcb_lookup(0);
+    	new_process = pcb_lookup_by_pid(0);
     }
 
     if (context_switch(new_process)) {
@@ -102,7 +103,7 @@ int process_switch(){
 
 // Return 0 if success; 1 if fail
 int release_processor() {
-	if (current_process = NULL) {
+	if (current_process == NULL) {
 		return 1;
 	}
 

@@ -5,6 +5,7 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
+#include <stdint.h>
 typedef enum {NEW, READY, RUN} process_state;
 
 typedef struct pcb_t{
