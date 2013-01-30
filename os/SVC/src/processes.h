@@ -2,7 +2,7 @@
 #define __PROCESSES__
 
 void null_process() {
-	while(true) {
+	while(1) {
 		#ifdef DEBUG_0
 		printf("NULL PROCESS");
 		#endif
