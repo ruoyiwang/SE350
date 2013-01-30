@@ -8,11 +8,11 @@ pcb* current_process;
 pqueue ready_queue;
 pcb_list* pcb_lookup_list;
 
-int (*processes[7])();
+uint32_t processes[7];
 pcb pcbs[7];
 
 pcb_list* root = NULL;
-MMU mmu;	
+MMU mmu;
 
 pcb* pqueue_dequeue(pqueue *queue)
 {
@@ -90,19 +90,19 @@ void process_init() {
 	volatile int i, j;
 	volatile uint32_t * sp;
 
-	processes[0] = null_process;
-	processes[1] = test_process_1;
-	processes[2] = test_process_2;
-	processes[3] = test_process_3;
-	processes[4] = test_process_4;
-	processes[5] = test_process_5;
-	processes[6] = test_process_6;
+	processes[0] = (uint32_t) null_process;
+	processes[1] = (uint32_t)test_process_1;
+	processes[2] = (uint32_t)test_process_2;
+	processes[3] = (uint32_t)test_process_3;
+	processes[4] = (uint32_t)test_process_4;
+	processes[5] = (uint32_t)test_process_5;
+	processes[6] = (uint32_t)test_process_6;
 	
 	for (i=0; i<7;i++)
 	{
 		/* initialize the first process	exception stack frame */
 		pcbs[i].pid = i;
-		pcbs[i].state = READY;
+		pcbs[i].state = NEW;
 		pcbs[i].priority = 3;
 
 		sp  = request_memory_block();
@@ -148,19 +148,30 @@ int context_switch(pcb* pcb) {
 	    pqueue_enqueue( &ready_queue, current_process );
 	}
 
-    current_process = pcb;
+  current_process = pcb;
+	
+	if (current_process->state == NEW) {
     current_process->state = RUN;
     __set_MSP((uint32_t ) current_process->sp);
 	current_process->pid = current_process->pid;
-		(processes[current_process->pid])();
-    return 0;
+		__rte();
+	}
+	else if (current_process->state == READY) {
+    current_process->state = RUN;
+    __set_MSP((uint32_t ) current_process->sp);
+		current_process->pid = current_process->pid;
+	}
+	else {
+		return 1;
+	}
+  return 0;
 }
 
 int process_switch(){
     pcb* new_process = pqueue_dequeue(&ready_queue);
 
     // If process queue is empty or the state is not READY execute the null process
-    if (new_process == NULL || new_process->state != READY) {
+    if (new_process == NULL || (new_process->state != READY && new_process->state != NEW)) {
     	new_process = pcb_lookup_by_pid(0,root);
     }
 

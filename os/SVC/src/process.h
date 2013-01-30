@@ -88,4 +88,6 @@ extern int release_processor(void);
 #define kk_release_processor() _release_processor((U32)release_processor)
 int __SVC_0 _release_processor(U32 p_func);
 
+extern void __rte(void);
+
 #endif
