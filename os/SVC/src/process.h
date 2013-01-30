@@ -5,6 +5,9 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
+typedef unsigned int U32;
+#define __SVC_0  __svc_indirect(0)
+
 #include <stdint.h>
 typedef enum {NEW, READY, RUN} process_state;
 
@@ -59,6 +62,8 @@ int context_switch(pcb* pcb);
 int process_switch();
 
 // Return 0 if success; 1 if fail
-int release_processor();
+extern int k_release_processor(void);
+#define release_processor() _release_processor((U32)k_release_processor)
+int __SVC_0 _release_processor(U32 p_func);
 
 #endif
