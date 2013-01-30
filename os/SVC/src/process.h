@@ -12,6 +12,7 @@ typedef unsigned int U32;
 typedef enum {NEW, READY, RUN} process_state;
 
 typedef struct pcb_t{
+	uint32_t pc;
 	uint32_t *sp;
 	volatile uint32_t pid;
   uint32_t priority;   // priority. Ranges from values 0-4
