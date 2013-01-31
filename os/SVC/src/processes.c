@@ -57,16 +57,26 @@ void test_process_3() {
 		printf("TEST PROCESS 3");
 		#endif
 		release_processor();
-	}	
+	}
 }
 
 void test_process_4() {
+    int priority;
+    int prioritySet;    // priority we want to set on the process
 	while(1) {
 		#ifdef DEBUG_0
-		printf("TEST PROCESS 4");
-		#endif
+		prioritySet = 2;
+        set_process_priority(4, prioritySet);
+        priority = get_process_priority(4);
+        if(priority == prioritySet){
+            printf("PRIORITY SET");
+        }
+        else{
+            printf("PRIORITY NOT SET");
+        }
+        #endif
 		release_processor();
-	}	
+	}
 }
 
 void test_process_5() {
@@ -75,7 +85,7 @@ void test_process_5() {
 		printf("TEST PROCESS 5");
 		#endif
 		release_processor();
-	}	
+	}
 }
 
 void test_process_6() {
@@ -84,7 +94,7 @@ void test_process_6() {
 		printf("TEST PROCESS 5");
 		#endif
 		release_processor();
-	}	
+	}
 }
 
 #endif
