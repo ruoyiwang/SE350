@@ -62,6 +62,7 @@ void k_pcb_insert(pcb *block, pcb *node){
     iterator->lu_next = block;
 }
 
+
 pcb* k_pcb_lookup_by_pid(int pid, pcb *node){
     if(node == NULL){
         return NULL;
@@ -171,7 +172,7 @@ int k_process_switch(){
 
     // If process queue is empty or the state is not READY execute the null process
     if (new_process == NULL || (new_process->state != READY && new_process->state != NEW)) {
-    	new_process = k_pcb_lookup_by_pid(0);
+    	new_process = k_pcb_lookup_by_pid(0, pcb_lookup_list);
     }
 
     if (k_context_switch(new_process)) {
