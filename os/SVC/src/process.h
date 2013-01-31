@@ -30,7 +30,7 @@ typedef struct pqueue_t{
 
 extern pcb* current_process;
 extern pqueue ready_queue;
-extern pcb pcb_lookup_list;
+extern pcb* pcb_lookup_list;
 
 /*************************************************************************
  *          PCB LINKED LIST DEFINITIONS
