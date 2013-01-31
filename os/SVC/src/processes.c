@@ -69,10 +69,10 @@ void test_process_4() {
         set_process_priority(4, prioritySet);
         priority = get_process_priority(4);
         if(priority == prioritySet){
-            printf("PRIORITY SET");
+            uart1_put_string("PRIORITY SET");
         }
         else{
-            printf("PRIORITY NOT SET");
+            uart1_put_string("PRIORITY NOT SET");
         }
         #endif
 		release_processor();
