@@ -23,7 +23,7 @@ void test_process_1() {
 #ifdef DEBUG_0
       printf("\n\rproc1: ret_val=%d. ", ret_val);
 #else
-      uart1_put_string("\n\r");
+      uart1_put_string("\n\rTEST 1: ");
 #endif /* DEBUG_0 */
     }
     uart1_put_char('A' + i%26);
@@ -40,7 +40,7 @@ void test_process_2() {
 #ifdef DEBUG_0
       printf("\n\rproc2: ret_val=%d. ", ret_val);
 #else
-      uart1_put_string("\n\r");
+      uart1_put_string("\n\rTEST 2: ");
 #endif  /* DEBUG_0 */
     }
     uart1_put_char('a' + i%26);
@@ -64,14 +64,14 @@ void test_process_4() {
 				prioritySet = 2;
         set_process_priority(4, prioritySet);
         priority = get_process_priority(4);
-				uart1_put_string("\nEXPECTED PRIORITY: 2\nIS PRIORITY 2? ");
+				uart1_put_string("\n TEST 4: EXPECTED PRIORITY: 2\n TEST 4: IS PRIORITY 2? ");
         if(priority == prioritySet){
             uart1_put_string("YES");
         }
         else{
             uart1_put_string("NO");
         }
-				uart1_put_string("\nIS PRIORITY 0? ");
+				uart1_put_string("\n TEST 4: IS PRIORITY 0? ");
         priority = get_process_priority(4);
         if(priority == 0){
             uart1_put_string("YES");
@@ -91,10 +91,10 @@ void test_process_5() {
     memory = (void*)request_memory_block();
     release_success = release_memory_block(memory);
     if (release_success == 0){
-      uart1_put_string("memory test success!\n");
+      uart1_put_string("\nTEST 5: memory test success!\n");
     }
     else{
-      uart1_put_string("memory test fail!\n");
+      uart1_put_string("TEST 5: memory test fail!\n");
     }
 		release_processor();
 	}
@@ -106,10 +106,10 @@ void test_process_6() {
 	set_process_priority(6, priority);
 	while(1) {
 		if (i == 0) {
-      uart1_put_string("This should print once.");
+      uart1_put_string("\nTEST 6: This should print once.\n");
 		}
 		else {
-			uart1_put_string("If this prints, the test fails.");
+			uart1_put_string("\nTEST 6: If this prints, the test fails.");
 		}
 		release_processor();
 	}
