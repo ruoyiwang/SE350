@@ -49,10 +49,17 @@ void test_process_2() {
 }
 
 void test_process_3() {
+	int i, priority;
+  //set_process_priority(3, 0);
 	while(1) {
-		#ifdef DEBUG_0
-		printf("TEST PROCESS 3");
-		#endif
+		/*for(i =0; i<7;i++)
+		{
+        priority = get_process_priority(i);
+				uart1_put_string("\nPROCESS ");
+			  uart1_put_char('0'+i);
+				uart1_put_string(" PRIORITY: ");
+			  uart1_put_char('0'+priority);			 
+		}*/
 		release_processor();
 	}
 }
