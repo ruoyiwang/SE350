@@ -22,12 +22,6 @@ typedef struct pcb_t{
 	struct pcb_t *lu_next;
 } pcb;
 
-// BST used to store the process ids along with their priorities
-typedef struct pcb_linked_list_t{
-    pcb *process_block;
-    struct pcb_linked_list_t *next;
-} pcb_list;
-
 typedef struct pqueue_t{
 	process_state state;
 	pcb *pq_end[4];
@@ -36,28 +30,26 @@ typedef struct pqueue_t{
 
 extern pcb* current_process;
 extern pqueue ready_queue;
-extern pcb_list pcb_lookup_list;
+extern pcb* pcb_lookup_list;
 
-// Declare the pcb linked list
-extern pcb_list* root;
 /*************************************************************************
  *          PCB LINKED LIST DEFINITIONS
  *************************************************************************/
-void k_pcb_list_init(pcb_list *node);
+void k_pcb_list_init(pcb *node);
 #define pcb_list_init(node) _pcb_list_init((U32)pcb_list_init, node)
-pcb* _pcb_list_init(U32 p_func, pcb_list *node)  __SVC_0;
+pcb* _pcb_list_init(U32 p_func, pcb *node)  __SVC_0;
 
-pcb* k_pcb_lookup_by_pid(int pid, pcb_list *node);
+pcb* k_pcb_lookup_by_pid(int pid, pcb *node);
 #define pcb_lookup_by_pid(pid, node) _pcb_lookup_by_pid((U32)pcb_lookup_by_pid, pid, node)
-pcb* _pcb_lookup_by_pid(U32 p_func, int pid, pcb_list *node)  __SVC_0;
+pcb* _pcb_lookup_by_pid(U32 p_func, int pid, pcb *node)  __SVC_0;
 
 // Insert pcb into linked list
-void pcb_insert(pcb *block, pcb_list *node);
+void pcb_insert(pcb *block, pcb *node);
 
 // Priority lookup based on process id
-int k_pcb_priority_lookup(int pid, pcb_list* node);
+int k_pcb_priority_lookup(int pid, pcb* node);
 #define pcb_priority_lookup(pid, node) _pcb_priority_lookup((U32)pcb_priority_lookup, pid, node)
-int _pcb_priority_lookup(U32 p_func, int pid, pcb_list *node)  __SVC_0;
+int _pcb_priority_lookup(U32 p_func, int pid, pcb *node)  __SVC_0;
 
 void process_init();
 
