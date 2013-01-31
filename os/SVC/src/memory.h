@@ -56,14 +56,20 @@ void mmu_init(){
 
 void* request_memory_block(){
 	int i;
-	for (i = 0; i < mmu.actual_size; i++){
-		if (mmu.lookup_table[i]==0){
-			//set the flag to in use
-			mmu.lookup_table[i] = 1;
-			//give out the mem address according to map
-			return (void *)(mmu.max_mem - USR_SZ_STACK * i);
+	while(1){
+		for (i = 0; i < mmu.actual_size; i++){
+			if (mmu.lookup_table[i]==0){
+				//set the flag to in use
+				mmu.lookup_table[i] = 1;
+				//give out the mem address according to map
+				return (void *)(mmu.max_mem - USR_SZ_STACK * i);
+			}
 		}
+		//above loop loops through entire map for an empty spot
+		//if I can't find it, I end up here then I release
+		release_processor();
 	}
+	
 }
 
 int release_memory_block(void *MemoryBlock){
