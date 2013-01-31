@@ -64,7 +64,6 @@ void test_process_4() {
     int priority;
     int prioritySet;    // priority we want to set on the process
 	while(1) {
-		#ifdef DEBUG_0
 		prioritySet = 2;
         set_process_priority(4, prioritySet);
         priority = get_process_priority(4);
