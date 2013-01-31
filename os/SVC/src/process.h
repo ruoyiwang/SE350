@@ -30,7 +30,7 @@ typedef struct pqueue_t{
 
 extern pcb* current_process;
 extern pqueue ready_queue;
-extern pcb* pcb_lookup_list;
+extern pcb pcb_lookup_list;
 
 /*************************************************************************
  *          PCB LINKED LIST DEFINITIONS
@@ -72,10 +72,6 @@ int __SVC_0 _get_process_priority(U32 p_func, int pid);
 extern int k_context_switch(pcb* pcb);
 #define context_switch(pcb) _context_switch((U32)k_context_switch, pcb)
 int __SVC_0 _context_switch(U32 p_func, pcb* pcb);
-
-extern int k_process_switch();
-#define process_switch() _process_switch((U32)k_process_switch)
-int __SVC_0 _process_switch(U32 p_func);
 
 // Return 0 if success; 1 if fail
 extern int k_release_processor(void);
