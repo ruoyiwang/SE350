@@ -47,9 +47,9 @@ pcb* _pcb_lookup_by_pid(U32 p_func, int pid, pcb *node)  __SVC_0;
 void pcb_insert(pcb *block, pcb *node);
 
 // Priority lookup based on process id
-int k_pcb_priority_lookup(int pid, pcb* node);
-#define pcb_priority_lookup(pid, node) _pcb_priority_lookup((U32)pcb_priority_lookup, pid, node)
-int _pcb_priority_lookup(U32 p_func, int pid, pcb *node)  __SVC_0;
+int k_pcb_priority_lookup(int pid);
+#define pcb_priority_lookup(pid) _pcb_priority_lookup((U32)pcb_priority_lookup, pid)
+int _pcb_priority_lookup(U32 p_func, int pid)  __SVC_0;
 
 void process_init();
 

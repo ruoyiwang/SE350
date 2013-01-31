@@ -62,6 +62,7 @@ void k_pcb_insert(pcb *block, pcb *node){
     iterator->lu_next = block;
 }
 
+
 pcb* k_pcb_lookup_by_pid(int pid, pcb *node){
     if(node == NULL){
         return NULL;
@@ -122,7 +123,7 @@ void process_init() {
 
 		pcbs[i].sp = sp;
 		k_pqueue_enqueue(&ready_queue,&pcbs[i]);
-		pcb_insert(&pcbs[i], pcb_lookup_list);
+		k_pcb_insert(&pcbs[i], pcb_lookup_list);
 	}
 
 }
@@ -139,7 +140,7 @@ int k_set_process_priority(int pid, int priority) {
 }
 
 int k_get_process_priority(int pid) {
-    return k_pcb_priority_lookup(pid, &pcb_lookup_list);
+    return k_pcb_priority_lookup(pid);
 }
 
 int k_context_switch(pcb* pcb) {
@@ -171,7 +172,7 @@ int k_process_switch(){
 
     // If process queue is empty or the state is not READY execute the null process
     if (new_process == NULL || (new_process->state != READY && new_process->state != NEW)) {
-    	new_process = k_pcb_lookup_by_pid(0,pcb_lookup_list);
+    	new_process = k_pcb_lookup_by_pid(0, pcb_lookup_list);
     }
 
     if (k_context_switch(new_process)) {
