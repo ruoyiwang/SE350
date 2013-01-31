@@ -100,12 +100,15 @@ void process_init() {
 	pcbs[5].pc = (uint32_t)test_process_5;
 	pcbs[6].pc = (uint32_t)test_process_6;
 
+	pcbs[0].priority = 3;
+	
 	for (i=0; i<7;i++)
 	{
 		/* initialize the first process	exception stack frame */
 		pcbs[i].pid = i;
 		pcbs[i].state = NEW;
-		pcbs[i].priority = 2;
+		if (i!=0)
+			pcbs[i].priority = 2;
 
 		sp  = request_memory_block();
 		/* 8 bytes alignement adjustment to exception stack frame */
@@ -125,7 +128,6 @@ void process_init() {
 		//pcb_insert(&pcbs[i], &pcb_lookup_list);
 	}
 
-	pcbs[0].priority = 3;
 }
 
 int k_set_process_priority(int pid, int priority) {

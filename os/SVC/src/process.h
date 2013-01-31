@@ -19,6 +19,7 @@ typedef struct pcb_t{
 	volatile process_state state;
 	struct pcb_t *next;
 	struct pcb_t *prev;       // Pointers to previous and next pcb in the stack
+	struct pcb_t *lu_next;
 } pcb;
 
 // BST used to store the process ids along with their priorities
