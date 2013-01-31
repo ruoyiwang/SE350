@@ -2,6 +2,9 @@
 #define NULL ((void *)0) 
 #endif
 
+#ifndef __MEMORY__
+#define __MEMORY__
+
 #define USR_SZ_STACK 128
 #define INITIAL_xPSR 0x01000000    /* user process initial xPSR value */
 
@@ -85,3 +88,6 @@ int release_memory_block(void *MemoryBlock){
 	mmu.lookup_table[index] = 0;
 	return 0;
 }
+
+#endif
+	//__MEMORY__

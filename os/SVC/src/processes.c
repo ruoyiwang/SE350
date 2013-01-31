@@ -83,13 +83,11 @@ void test_process_5() {
   void * memory;
   int release_success;
 	while(1) {
-		#ifdef DEBUG_0
-      memory = request_memory_block();
-      release_success = release_memory_block(memory);
-      if (release_success == 0){
-        printf("memory test success!\n");
-      }
-		#endif
+    memory = request_memory_block();
+    release_success = release_memory_block(memory);
+    if (release_success == 0){
+      printf("memory test success!\n");
+    }
 		release_processor();
 	}
 }
