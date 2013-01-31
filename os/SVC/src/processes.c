@@ -1,13 +1,9 @@
-#ifndef __PROCESSES_H
-#define __PROCESSES_H
-
 #ifdef DEBUG_0
 #include <stdio.h>
 #endif
 
 #include "process.h"
 #include "uart_polling.h"
-#include "memory.h"
 
 void null_process() {
 	while(1) {
@@ -68,14 +64,14 @@ void test_process_4() {
 				prioritySet = 2;
         set_process_priority(4, prioritySet);
         priority = get_process_priority(4);
-				uart1_put_string("EXPECTED PRIORITY: 2\nIS PRIORITY 2?");
+				uart1_put_string("\nEXPECTED PRIORITY: 2\nIS PRIORITY 2? ");
         if(priority == prioritySet){
             uart1_put_string("YES");
         }
         else{
             uart1_put_string("NO");
         }
-				uart1_put_string("IS PRIORITY 0?");
+				uart1_put_string("\nIS PRIORITY 0? ");
         priority = get_process_priority(4);
         if(priority == 0){
             uart1_put_string("YES");
@@ -92,7 +88,7 @@ void test_process_5() {
   void * memory;
   int release_success;
 	while(1) {
-    memory = request_memory_block();
+    memory = (void*)request_memory_block();
     release_success = release_memory_block(memory);
     if (release_success == 0){
       printf("memory test success!\n");
@@ -102,12 +98,16 @@ void test_process_5() {
 }
 
 void test_process_6() {
+	int priority = 3;
+	int i = 0;
+	set_process_priority(6, priority);
 	while(1) {
-		#ifdef DEBUG_0
-		printf("TEST PROCESS 5");
-		#endif
+		if (i == 0) {
+      uart1_put_string("This should print once.");
+		}
+		else {
+			uart1_put_string("If this prints, the test fails.");
+		}
 		release_processor();
 	}
 }
-
-#endif
