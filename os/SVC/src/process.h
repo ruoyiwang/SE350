@@ -35,10 +35,6 @@ extern pcb pcb_lookup_list;
 /*************************************************************************
  *          PCB LINKED LIST DEFINITIONS
  *************************************************************************/
-void k_pcb_list_init(pcb *node);
-#define pcb_list_init(node) _pcb_list_init((U32)pcb_list_init, node)
-pcb* _pcb_list_init(U32 p_func, pcb *node)  __SVC_0;
-
 pcb* k_pcb_lookup_by_pid(int pid, pcb *node);
 #define pcb_lookup_by_pid(pid, node) _pcb_lookup_by_pid((U32)pcb_lookup_by_pid, pid, node)
 pcb* _pcb_lookup_by_pid(U32 p_func, int pid, pcb *node)  __SVC_0;
