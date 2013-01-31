@@ -3,7 +3,7 @@
 #endif
 
 #define USR_SZ_STACK 128
-#define INITIAL_xPSR 0x10000000    /* user process initial xPSR value */
+#define INITIAL_xPSR 0x01000000    /* user process initial xPSR value */
 
 typedef unsigned int U32;
 

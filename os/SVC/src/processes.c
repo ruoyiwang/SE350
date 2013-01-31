@@ -1,7 +1,6 @@
 #ifndef __PROCESSES_H
 #define __PROCESSES_H
 
-#define DEBUG_0
 #ifdef DEBUG_0
 #include <stdio.h>
 #endif

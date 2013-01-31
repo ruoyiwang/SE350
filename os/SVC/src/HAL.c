@@ -4,9 +4,10 @@
  * NOTE this file contains embedded assembly.
  */
  
-__asm void __rte(void) {
+__asm void __rte(void)
+{
 	PRESERVE8
-	MVN LR, #:NOT:0xFFFFFFF9 ; set EXC_RETURN value, Thread mode, MSP
+  MVN  LR, #:NOT:0xFFFFFFF9  ; set EXC_RETURN value, Thread mode, MSP
 	BX LR
 }
 
