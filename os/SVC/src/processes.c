@@ -64,16 +64,25 @@ void test_process_4() {
     int priority;
     int prioritySet;    // priority we want to set on the process
 	while(1) {
-		prioritySet = 2;
+				prioritySet = 2;
         set_process_priority(4, prioritySet);
         priority = get_process_priority(4);
+				uart1_put_string("EXPECTED PRIORITY: 2\nIS PRIORITY 2?");
         if(priority == prioritySet){
-            uart1_put_string("PRIORITY SET");
+            uart1_put_string("YES");
         }
         else{
-            uart1_put_string("PRIORITY NOT SET");
+            uart1_put_string("NO");
         }
-        #endif
+				uart1_put_string("IS PRIORITY 0?");
+        priority = get_process_priority(4);
+        if(priority == 0){
+            uart1_put_string("YES");
+        }
+        else{
+            uart1_put_string("NO");
+        }
+
 		release_processor();
 	}
 }
