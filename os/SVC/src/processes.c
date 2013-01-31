@@ -95,7 +95,10 @@ void test_process_5() {
     memory = request_memory_block();
     release_success = release_memory_block(memory);
     if (release_success == 0){
-      printf("memory test success!\n");
+      uart1_put_string("memory test success!\n");
+    }
+    else{
+      uart1_put_string("memory test fail!\n");
     }
 		release_processor();
 	}
