@@ -5,7 +5,7 @@
 
 pcb* current_process;
 pqueue ready_queue;
-pcb pcb_lookup_list;
+pcb *pcb_lookup_list;
 
 pcb pcbs[7];
 
@@ -72,7 +72,7 @@ pcb* k_pcb_lookup_by_pid(int pid, pcb *node){
 }
 
 int k_pcb_priority_lookup(int pid){
-    pcb *node2 = k_pcb_lookup_by_pid(pid, &pcb_lookup_list);
+    pcb *node2 = k_pcb_lookup_by_pid(pid, pcb_lookup_list);
 
     // As per section 3.5 of project description, if pid is invalid return "-1"
     if(node2 == NULL){
@@ -95,6 +95,7 @@ void process_init() {
 	pcbs[6].pc = (uint32_t)test_process_6;
 
 	pcbs[0].priority = 3;
+	pcb_lookup_list = &pcbs[0];
 	for (i=0; i<7;i++)
 	{
 		/* initialize the first process	exception stack frame */
@@ -118,13 +119,13 @@ void process_init() {
 
 		pcbs[i].sp = sp;
 		k_pqueue_enqueue(&ready_queue,&pcbs[i]);
-		k_pcb_insert(&pcbs[i], &pcb_lookup_list);
+		if (i!=0)
+			k_pcb_insert(&pcbs[i], pcb_lookup_list);
 	}
-	pcb_lookup_list = pcbs[0];
 }
 
 int k_set_process_priority(int pid, int priority) {
-    pcb *node = k_pcb_lookup_by_pid(pid, &pcb_lookup_list);
+    pcb *node = k_pcb_lookup_by_pid(pid, pcb_lookup_list);
 
     // As per project description section 2.4, if no process exists with the pid passed in return a non-zero int value
     if (node == NULL){
@@ -168,7 +169,7 @@ int k_release_processor() {
 
     // If process queue is empty or the state is not READY execute the null process
     if (new_process == NULL || (new_process->state != READY && new_process->state != NEW)) {
-    	new_process = k_pcb_lookup_by_pid(0, &pcb_lookup_list);
+    	new_process = k_pcb_lookup_by_pid(0, pcb_lookup_list);
     }
 
     if (k_context_switch(new_process)) {
