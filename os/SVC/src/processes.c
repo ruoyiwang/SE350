@@ -7,6 +7,7 @@
 
 #include "process.h"
 #include "uart_polling.h"
+#include "memory.h"
 
 void null_process() {
 	while(1) {
@@ -80,9 +81,15 @@ void test_process_4() {
 }
 
 void test_process_5() {
+  void * memory;
+  int release_success;
 	while(1) {
 		#ifdef DEBUG_0
-		printf("TEST PROCESS 5");
+      memory = request_memory_block();
+      release_success = release_memory_block(memory);
+      if (release_success == 0){
+        printf("memory test success!\n");
+      }
 		#endif
 		release_processor();
 	}
