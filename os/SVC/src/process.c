@@ -44,6 +44,41 @@ void k_pqueue_enqueue(pqueue *queue, pcb *new_pcb)
 	queue->pq_end[priority] = new_pcb;
 }
 
+void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
+{
+	pcb* before = _pcb->prev;
+	pcb* after = _pcb->next;
+	if (_pcb->priority == priority)
+		return;
+	if (after == NULL && before == NULL)
+	{
+		_pcb->priority = priority;
+	}
+	if (after == NULL)
+	{
+		queue->pq_end[_pcb->priority] = before;
+		before->next = NULL;
+		_pcb->priority = priority;
+		k_pqueue_enqueue(queue,_pcb); 
+	}
+	else if (before == NULL)
+	{
+		queue->pq_front[_pcb->priority] = after;
+		after->prev = NULL;
+		_pcb->priority = priority;
+		k_pqueue_enqueue(queue,_pcb); 
+	}
+	else 
+	{
+		before->next = after;
+		after->prev = before;
+		_pcb->priority = priority;
+		k_pqueue_enqueue(queue,_pcb); 
+	}
+	
+}
+
+
 void k_pcb_insert(pcb *block, pcb *node){
     pcb *iterator;
     block->lu_next = NULL;
@@ -101,6 +136,10 @@ void process_init() {
 		/* initialize the first process	exception stack frame */
 		pcbs[i].pid = i;
 		pcbs[i].state = NEW;
+		pcbs[i].next = NULL;
+		pcbs[i].prev = NULL;
+		pcbs[i].lu_next = NULL;
+		
 		if (i!=0)
 			pcbs[i].priority = 2;
 
@@ -131,7 +170,7 @@ int k_set_process_priority(int pid, int priority) {
     if (node == NULL){
         return -1;
     }
-    node->priority = priority;
+    k_pqueue_set_priority(&ready_queue, node, priority);
     return 0;
 }
 
