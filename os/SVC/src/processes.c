@@ -97,6 +97,7 @@ void test_process_5() {
   release_success = release_memory_block(memory);
   if (release_success != 0){
     uart1_put_string("G029_test: test 5 FAIL\n");
+    release_processor();
   }
   uart1_put_string("G029_test: test 5 OK\n");
   release_processor();
