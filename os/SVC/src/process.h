@@ -15,7 +15,7 @@ typedef struct pcb_t{
 	volatile uint32_t pc;
 	uint32_t *sp;
 	volatile uint32_t pid;
-  uint32_t priority;   // priority. Ranges from values 0-4
+  volatile uint32_t priority;   // priority. Ranges from values 0-4
 	volatile process_state state;
 	struct pcb_t *next;
 	struct pcb_t *prev;       // Pointers to previous and next pcb in the stack
@@ -23,14 +23,11 @@ typedef struct pcb_t{
 } pcb;
 
 typedef struct pqueue_t{
-	process_state state;
+	volatile process_state state;
 	pcb *pq_end[4];
 	pcb *pq_front[4];
 } pqueue;
 
-extern pcb* current_process;
-extern pqueue ready_queue;
-extern pcb* pcb_lookup_list;
 
 /*************************************************************************
  *          PCB LINKED LIST DEFINITIONS

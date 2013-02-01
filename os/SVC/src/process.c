@@ -85,7 +85,7 @@ void process_init() {
 
 	pcbs[0].priority = 3;
 	pcb_lookup_list = &pcbs[0];
-	for (i=0; i<8;i++)
+	for (i=0; i<7;i++)
 	{
 		/* initialize the first process	exception stack frame */
 		pcbs[i].pid = i;
@@ -114,24 +114,26 @@ void process_init() {
 }
 
 int k_set_process_priority(int pid, int priority) {
-    pcb *node = pcb_lookup_by_pid(pid, pcb_lookup_list);
+    /*pcb *node = pcb_lookup_by_pid(pid, pcb_lookup_list);
 
     // As per project description section 2.4, if no process exists with the pid passed in return a non-zero int value
     if (node == NULL){
         return -1;
-    }
-    node->priority = priority;
-    return 0;
+    }*/
+    //node->priority = priority;
+    pcbs[pid].priority = priority;
+		return 0;
 }
 
 int k_get_process_priority(int pid){
-    pcb *node = pcb_lookup_by_pid(pid, pcb_lookup_list);
+    /*pcb *node = pcb_lookup_by_pid(pid, pcb_lookup_list);
 
     // As per section 3.5 of project description, if pid is invalid return "-1"
     if(node == NULL){
         return -1;
-    }
-    return node->priority;
+    }*/
+
+	return pcbs[pid].priority;
 }
 
 int k_context_switch(pcb* pcb) {

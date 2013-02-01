@@ -54,7 +54,6 @@ void test_process_3() {
 	int priority;
   //set_process_priority(3, 0);
 	while(1) {
-		/*
 		for(i =0; i<7;i++)
 		{
         priority = get_process_priority(i);
@@ -63,17 +62,8 @@ void test_process_3() {
 				uart1_put_string(" PRIORITY: ");
 			  uart1_put_char('0'+priority);			 
 		}
-		*/
+
 		
-		//-----
-        priority = get_process_priority(6);
-				uart1_put_string("\nPROCESS ");
-			  uart1_put_char('0'+6);
-				uart1_put_string(" PRIORITY: ");
-			  uart1_put_char('0'+priority);			
-		//-----
-		
-		//for ( i = 0; i < 10000; i++){}
 		release_processor();
 	}
 }
@@ -122,7 +112,7 @@ void test_process_5() {
 }
 
 void test_process_6() {
-	int priority = 1;
+	int priority = 3;
 	int i = 0;
 	set_process_priority(6, priority);
 	while(1) {
