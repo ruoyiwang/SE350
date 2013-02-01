@@ -6,6 +6,9 @@
 #include "memory.h"
 #include "uart_polling.h"
 
+int num_passes;         // Holds number of test cases that passed
+int num_fails;          // Hold number of test cases that failed
+
 void null_process() {
 	while(1) {
 		#ifdef DEBUG_0
@@ -63,7 +66,6 @@ void test_process_3() {
 			  uart1_put_char('0'+priority);
 		}
 
-
 		release_processor();
 	}
 }
@@ -78,15 +80,12 @@ void test_process_4() {
 
     if(priority != prioritySet){
         uart1_put_string("G029_test: test 4 FAIL\n");
-        release_processor();
-    }
-    priority = get_process_priority(4);
-    if(priority != 0){
-        uart1_put_string("G029_test: test 4 FAIL\n");
+        num_fails++;
         release_processor();
     }
 
     uart1_put_string("G029_test: test 4 OK\n");
+    num_passes++;
     release_processor();
 }
 
@@ -97,9 +96,11 @@ void test_process_5() {
   release_success = release_memory_block(memory);
   if (release_success != 0){
     uart1_put_string("G029_test: test 5 FAIL\n");
+    num_fails++;
     release_processor();
   }
   uart1_put_string("G029_test: test 5 OK\n");
+  num_passes++;
   release_processor();
 }
 
@@ -107,13 +108,13 @@ void test_process_6() {
 	int priority = 3;
 	int i = 0;
 	set_process_priority(6, priority);
-	while(1) {
-		if (i == 0) {
-            uart1_put_string("G029_test: test 6 OK\n");
-        }
-		else {
-            uart1_put_string("G029_test: test 6 FAIL\n");
-        }
-		release_processor();
-	}
+    if (i == 0) {
+        uart1_put_string("G029_test: test 6 OK\n");
+        num_passes++;
+    }
+    else {
+        uart1_put_string("G029_test: test 6 FAIL\n");
+        num_fails++;
+    }
+    release_processor();
 }
