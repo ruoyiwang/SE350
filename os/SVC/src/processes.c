@@ -60,10 +60,10 @@ void test_process_3() {
 				uart1_put_string("\nPROCESS ");
 			  uart1_put_char('0'+i);
 				uart1_put_string(" PRIORITY: ");
-			  uart1_put_char('0'+priority);			 
+			  uart1_put_char('0'+priority);
 		}
 
-		
+
 		release_processor();
 	}
 }
@@ -71,44 +71,36 @@ void test_process_3() {
 void test_process_4() {
     int priority;
     int prioritySet;    // priority we want to set on the process
-	while(1) {
-				prioritySet = 2;
-        set_process_priority(4, prioritySet);
-        priority = get_process_priority(4);
-				uart1_put_string("\n TEST 4: EXPECTED PRIORITY: 2\n TEST 4: IS PRIORITY 2? ");
-        if(priority == prioritySet){
-            uart1_put_string("YES");
-        }
-        else{
-            uart1_put_string("NO");
-        }
-				uart1_put_string("\n TEST 4: IS PRIORITY 0? ");
-        priority = get_process_priority(4);
-        if(priority == 0){
-            uart1_put_string("YES");
-        }
-        else{
-            uart1_put_string("NO");
-        }
+    prioritySet = 2;
 
-		release_processor();
-	}
+    set_process_priority(4, prioritySet);
+    priority = get_process_priority(4);
+
+    if(priority != prioritySet){
+        uart1_put_string("G029_test: test 4 FAIL\n");
+        release_processor();
+    }
+    priority = get_process_priority(4);
+    if(priority != 0){
+        uart1_put_string("G029_test: test 4 FAIL\n");
+        release_processor();
+    }
+
+    uart1_put_string("G029_test: test 4 OK\n");
+    release_processor();
 }
 
 void test_process_5() {
   void * memory;
   int release_success;
-	while(1) {
-    memory = (void*)request_memory_block();
-    release_success = release_memory_block(memory);
-    if (release_success == 0){
-      uart1_put_string("\nTEST 5: memory test success!\n");
-    }
-    else{
-      uart1_put_string("TEST 5: memory test fail!\n");
-    }
-		release_processor();
-	}
+  memory = (void*)request_memory_block();
+  release_success = release_memory_block(memory);
+  if (release_success != 0){
+    uart1_put_string("G029_test: test 5 FAIL\n");
+    release_processor();
+  }
+  uart1_put_string("G029_test: test 5 OK\n");
+  release_processor();
 }
 
 void test_process_6() {
@@ -117,11 +109,11 @@ void test_process_6() {
 	set_process_priority(6, priority);
 	while(1) {
 		if (i == 0) {
-      uart1_put_string("\nTEST 6: This should print once.\n");
-		}
+            uart1_put_string("G029_test: test 6 OK\n");
+        }
 		else {
-			uart1_put_string("\nTEST 6: If this prints, the test fails.");
-		}
+            uart1_put_string("G029_test: test 6 FAIL\n");
+        }
 		release_processor();
 	}
 }
