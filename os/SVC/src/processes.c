@@ -60,9 +60,9 @@ void test_process_3() {
 		for(i =0; i<7;i++)
 		{
         priority = get_process_priority(i);
-				uart0_put_string("\nPROCESS ");
+				uart0_put_string("\n\rPROCESS ");
 			  uart0_put_char('0'+i);
-				uart0_put_string("\nPRIORITY: ");
+				uart0_put_string(" PRIORITY: ");
 			  uart0_put_char('0'+priority);
 		}
 
@@ -81,12 +81,12 @@ void test_process_4() {
     priority = get_process_priority(4);
 
     if(priority != prioritySet){
-        uart0_put_string("\nG029_test: test 4 FAIL");
+        uart0_put_string("\n\rG029_test: test 4 FAIL");
         num_fails++;
         release_processor();
     }
 
-    uart0_put_string("\nG029_test: test 4 OK");
+    uart0_put_string("\n\rG029_test: test 4 OK");
     num_passes++;
     release_processor();
 	}
@@ -100,11 +100,13 @@ void test_process_5() {
 		memory = (void*)request_memory_block();
 		release_success = release_memory_block(memory);
 		if (release_success != 0){
-			uart0_put_string("\nG029_test: test 5 FAIL");
+			uart0_put_string("\n\rG029_test: test 5 FAIL");
 			release_processor();
 		}
-		uart0_put_string("\nG029_test: test 5 OK");
-		release_processor();
+		else{
+			uart0_put_string("\n\rG029_test: test 5 OK");
+			release_processor();
+		}
 	}
 }
 
@@ -113,11 +115,11 @@ void test_process_6() {
 	int i = 0;
 	set_process_priority(6, priority);
     if (i == 0) {
-        uart0_put_string("\nG029_test: test 6 OK");
+        uart0_put_string("\n\rG029_test: test 6 OK");
         num_passes++;
     }
     else {
-        uart0_put_string("\nG029_test: test 6 FAIL");
+        uart0_put_string("\n\rG029_test: test 6 FAIL");
         num_fails++;
     }
     release_processor();

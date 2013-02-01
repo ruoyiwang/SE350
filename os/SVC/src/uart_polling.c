@@ -123,3 +123,13 @@ int uart_put_string(int n_uart, unsigned char *s)
   }
   return 0;
 }
+
+int uart_put_int(int n_uart, int n)
+{
+  if (n_uart >1 ) return -1;    /* only uart0 is supported for now      */
+  while (n !=0) {              /* loop through each char in the string */
+    uart_put_char(n_uart, '0' + (n%10));/* print the char, then ptr increments  */
+		n = n/10;
+  }
+  return 0;
+}

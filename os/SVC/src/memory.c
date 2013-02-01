@@ -1,9 +1,10 @@
 #include "memory.h"
 #include "process.h"
+#include "uart_polling.h"
 
 void mmu_init(){
 	int i;
-	mmu.free_mem = Image$$RW_IRAM1$$ZI$$Limit;
+	mmu.free_mem = (unsigned int) &Image$$RW_IRAM1$$ZI$$Limit;
 		//this is somewhere between 0x10000000 to 0x10008000
 
 	mmu.max_mem = 0x10008000;
@@ -42,8 +43,9 @@ int k_release_memory_block(void *MemoryBlock){
 	int mem_block_address = (int) MemoryBlock;
 	//if the requested releasig address is outside of my range
 	//return 1 (error)
-	if (mem_block_address > mmu.max_mem || mem_block_address < mmu.free_mem)
+	if (mem_block_address > mmu.max_mem || mem_block_address < mmu.free_mem){	
 		return 1; //you fucked up
+	}
 
 	//calculates the index of the lookup table for that address and then set the flag to be freed
 	index = (mmu.max_mem - mem_block_address) / USR_SZ_STACK;

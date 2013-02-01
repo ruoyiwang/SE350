@@ -20,8 +20,6 @@ pcb* pqueue_dequeue(pqueue *queue)
 	pcb* after;
 	for (i=0; i<4; i++)
 	{
-		queue->pq_front[i]->state = queue->pq_front[i]->state;
-		queue->pq_end[i]->pid = queue->pq_end[i]->pid;
 		if (queue->pq_front[i] == NULL)
 				continue;
 		ret = queue->pq_front[i];
