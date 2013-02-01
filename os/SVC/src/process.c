@@ -199,13 +199,19 @@ int k_release_processor() {
     pcb* new_process = pqueue_dequeue(&ready_queue);
 
     // If process queue is empty or the state is not READY execute the null process
-    if (new_process == NULL || (new_process->state != READY && new_process->state != NEW)) {
+    if (new_process == NULL || (new_process->state != READY && new_process->state != NEW && new_process->state != BLOCKED)) {
     	new_process = pcb_lookup_by_pid(0, pcb_lookup_list);
     }
+		else if (new
 		
     if (k_context_switch(new_process)) {
         return 1;
     }
 
     return 0;
+}
+
+void k_block_current_process()
+{
+	current_process->state = BLOCK;
 }
