@@ -77,16 +77,10 @@ void test_process_4() {
     priority = get_process_priority(4);
 
     if(priority != prioritySet){
-        uart1_put_string("G029_test: test 4 FAIL\n");
+        uart1_put_string("\nG029_test: test 4 FAIL");
         release_processor();
     }
-    priority = get_process_priority(4);
-    if(priority != 0){
-        uart1_put_string("G029_test: test 4 FAIL\n");
-        release_processor();
-    }
-
-    uart1_put_string("G029_test: test 4 OK\n");
+    uart1_put_string("\nG029_test: test 4 OK");
     release_processor();
 }
 
