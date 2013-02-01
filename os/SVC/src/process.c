@@ -30,7 +30,7 @@ pcb* pqueue_dequeue(pqueue *queue)
 			{
 				ret= ret->next;
 			}
-			if(ret == queue->end[i] && ret->state == BLOCK)
+			if(ret == queue->pq_end[i] && ret->state == BLOCK)
 					continue;
 			if (ret == queue->pq_front[i] && ret == queue->pq_end[i])
 			{
@@ -50,7 +50,7 @@ pcb* pqueue_dequeue(pqueue *queue)
 			else
 			{
 				before = ret->prev;
-				after = ret->after;
+				after = ret->next;
 				before->next = after;
 				after->prev = before;
 			}
@@ -229,7 +229,7 @@ int k_release_processor() {
     pcb* new_process = pqueue_dequeue(&ready_queue);
 
     // If process queue is empty or the state is not READY execute the null process
-    if (new_process == NULL || (new_process->state != READY && new_process->state != NEW && new_process->state != BLOCKED)) {
+    if (new_process == NULL || (new_process->state != READY && new_process->state != NEW && new_process->state != BLOCK)) {
     	new_process = pcb_lookup_by_pid(0, pcb_lookup_list);
     }
 		
@@ -240,7 +240,7 @@ int k_release_processor() {
     return 0;
 }
 
-void k_block_current_process()
+void block_current_process()
 {
 	current_process->state = BLOCK;
 }
