@@ -16,7 +16,8 @@ pcb* pqueue_dequeue(pqueue *queue)
 {
 	pcb* ret;
 	int i;
-
+	pcb* before;
+	pcb* after;
 	for (i=0; i<4; i++)
 	{
 		queue->pq_front[i]->state = queue->pq_front[i]->state;
@@ -24,8 +25,37 @@ pcb* pqueue_dequeue(pqueue *queue)
 		if (queue->pq_front[i] == NULL)
 				continue;
 		ret = queue->pq_front[i];
-		queue->pq_front[i] = queue->pq_front[i]->next;
-		queue->pq_front[i]->prev = NULL;
+		if (mmu.memory_available)
+		{
+			while ( ret->state == BLOCK && ret->next != NULL)
+			{
+				ret= ret->next;
+			}
+			if(ret == queue->end[i] && ret->state == BLOCK)
+					continue;
+			if (ret == queue->pq_front[i] && ret == queue->pq_end[i])
+			{
+				queue->pq_front[i] = NULL;
+				queue->pq_end[i] = NULL;
+			}
+			else if (ret == queue->pq_front[i])
+			{
+				queue->pq_front[i] = queue->pq_front[i]->next;
+				queue->pq_front[i]->prev = NULL;
+			}
+			else if (ret == queue->pq_end[i])
+			{
+				queue->pq_end[i] = queue->pq_end[i]->prev;
+				queue->pq_end[i]->next = NULL;
+			}
+			else
+			{
+				before = ret->prev;
+				after = ret->after;
+				before->next = after;
+				after->prev = before;
+			}
+		}
 		return ret;
 	}
 	return NULL;
@@ -204,7 +234,7 @@ int k_release_processor() {
     pcb* new_process = pqueue_dequeue(&ready_queue);
 
     // If process queue is empty or the state is not READY execute the null process
-    if (new_process == NULL || (new_process->state != READY && new_process->state != NEW)) {
+    if (new_process == NULL || (new_process->state != READY && new_process->state != NEW && new_process->state != BLOCKED)) {
     	new_process = pcb_lookup_by_pid(0, pcb_lookup_list);
     }
 		
@@ -213,4 +243,9 @@ int k_release_processor() {
     }
 
     return 0;
+}
+
+void k_block_current_process()
+{
+	current_process->state = BLOCK;
 }
