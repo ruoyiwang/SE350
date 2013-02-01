@@ -11,7 +11,7 @@ pcb pcbs[7];
 
 MMU mmu;
 
-pcb* k_pqueue_dequeue(pqueue *queue)
+pcb* pqueue_dequeue(pqueue *queue)
 {
 	pcb* ret;
 	int i;
@@ -30,7 +30,7 @@ pcb* k_pqueue_dequeue(pqueue *queue)
 	return NULL;
 }
 
-void k_pqueue_enqueue(pqueue *queue, pcb *new_pcb)
+void pqueue_enqueue(pqueue *queue, pcb *new_pcb)
 {
 	volatile int priority = new_pcb->priority;
 	if (queue->pq_front[priority] == NULL)
@@ -42,6 +42,20 @@ void k_pqueue_enqueue(pqueue *queue, pcb *new_pcb)
 	queue->pq_end[priority]->next = new_pcb;
 	new_pcb->prev = queue->pq_end[priority];
 	queue->pq_end[priority] = new_pcb;
+}
+
+void pcb_insert(pcb *block, pcb *node){
+    pcb *iterator;
+    block->lu_next = NULL;
+    if (node == NULL){
+        node = block;
+        return;
+    }
+    iterator = node;
+    while(iterator->lu_next != NULL){
+        iterator = iterator->lu_next;
+    }
+    iterator->lu_next = block;
 }
 
 void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
@@ -59,42 +73,26 @@ void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
 		queue->pq_end[_pcb->priority] = before;
 		before->next = NULL;
 		_pcb->priority = priority;
-		k_pqueue_enqueue(queue,_pcb); 
+		pqueue_enqueue(queue,_pcb); 
 	}
 	else if (before == NULL)
 	{
 		queue->pq_front[_pcb->priority] = after;
 		after->prev = NULL;
 		_pcb->priority = priority;
-		k_pqueue_enqueue(queue,_pcb); 
+		pqueue_enqueue(queue,_pcb); 
 	}
 	else 
 	{
 		before->next = after;
 		after->prev = before;
 		_pcb->priority = priority;
-		k_pqueue_enqueue(queue,_pcb); 
+		pqueue_enqueue(queue,_pcb); 
 	}
 	
 }
 
-
-void k_pcb_insert(pcb *block, pcb *node){
-    pcb *iterator;
-    block->lu_next = NULL;
-    if (node == NULL){
-        node = block;
-        return;
-    }
-    iterator = node;
-    while(iterator->lu_next != NULL){
-        iterator = iterator->lu_next;
-    }
-    iterator->lu_next = block;
-}
-
-
-pcb* k_pcb_lookup_by_pid(int pid, pcb *node){
+pcb* pcb_lookup_by_pid(int pid, pcb *node){
     if(node == NULL){
         return NULL;
     }
@@ -102,25 +100,14 @@ pcb* k_pcb_lookup_by_pid(int pid, pcb *node){
         return node;
     }
     else{
-        return k_pcb_lookup_by_pid(pid, node->lu_next);
+        return pcb_lookup_by_pid(pid, node->lu_next);
     }
-}
-
-int k_pcb_priority_lookup(int pid){
-    pcb *node2 = k_pcb_lookup_by_pid(pid, pcb_lookup_list);
-
-    // As per section 3.5 of project description, if pid is invalid return "-1"
-    if(node2 == NULL){
-        return -1;
-    }
-    return node2->priority;
 }
 
 void process_init() {
 
 	volatile int i, j;
 	uint32_t * sp;
-	volatile uint32_t lolbug = (uint32_t)null_process;
 	pcbs[0].pc = (uint32_t)null_process;
 	pcbs[1].pc = (uint32_t)test_process_1;
 	pcbs[2].pc = (uint32_t)test_process_2;
@@ -136,14 +123,10 @@ void process_init() {
 		/* initialize the first process	exception stack frame */
 		pcbs[i].pid = i;
 		pcbs[i].state = NEW;
-		pcbs[i].next = NULL;
-		pcbs[i].prev = NULL;
-		pcbs[i].lu_next = NULL;
-		
 		if (i!=0)
 			pcbs[i].priority = 2;
 
-		sp  = request_memory_block();
+		sp  = k_request_memory_block();
 		/* 8 bytes alignement adjustment to exception stack frame */
 		if (!(((uint32_t)sp) & 0x04)) {
 				--sp;
@@ -157,32 +140,41 @@ void process_init() {
 		}
 
 		pcbs[i].sp = sp;
-		k_pqueue_enqueue(&ready_queue,&pcbs[i]);
+		pqueue_enqueue(&ready_queue,&pcbs[i]);
 		if (i!=0)
-			k_pcb_insert(&pcbs[i], pcb_lookup_list);
+			pcb_insert(&pcbs[i], pcb_lookup_list);
 	}
 }
 
 int k_set_process_priority(int pid, int priority) {
-    pcb *node = k_pcb_lookup_by_pid(pid, pcb_lookup_list);
+    pcb *node = pcb_lookup_by_pid(pid, pcb_lookup_list);
 
     // As per project description section 2.4, if no process exists with the pid passed in return a non-zero int value
     if (node == NULL){
         return -1;
     }
-    k_pqueue_set_priority(&ready_queue, node, priority);
-    return 0;
+    node->priority = priority;
+	k_pqueue_set_priority(&ready_queue, node, priority);
+   //pcbs[pid].priority = priority;
+		return 0;
 }
 
-int k_get_process_priority(int pid) {
-    return k_pcb_priority_lookup(pid);
+int k_get_process_priority(int pid){
+    /*pcb *node = pcb_lookup_by_pid(pid, pcb_lookup_list);
+
+    // As per section 3.5 of project description, if pid is invalid return "-1"
+    if(node == NULL){
+        return -1;
+    }*/
+
+	return pcbs[pid].priority;
 }
 
 int k_context_switch(pcb* pcb) {
 	if (current_process != NULL) {
 	    current_process->state = READY;
 	    current_process->sp = (uint32_t *) __get_MSP();
-	    k_pqueue_enqueue( &ready_queue, current_process );
+	    pqueue_enqueue( &ready_queue, current_process );
 	}
 
   current_process = pcb;
@@ -204,13 +196,13 @@ int k_context_switch(pcb* pcb) {
 
 // Return 0 if success; 1 if fail
 int k_release_processor() {
-    pcb* new_process = k_pqueue_dequeue(&ready_queue);
+    pcb* new_process = pqueue_dequeue(&ready_queue);
 
     // If process queue is empty or the state is not READY execute the null process
     if (new_process == NULL || (new_process->state != READY && new_process->state != NEW)) {
-    	new_process = k_pcb_lookup_by_pid(0, pcb_lookup_list);
+    	new_process = pcb_lookup_by_pid(0, pcb_lookup_list);
     }
-
+		
     if (k_context_switch(new_process)) {
         return 1;
     }

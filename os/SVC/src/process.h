@@ -15,7 +15,7 @@ typedef struct pcb_t{
 	volatile uint32_t pc;
 	uint32_t *sp;
 	volatile uint32_t pid;
-  uint32_t priority;   // priority. Ranges from values 0-4
+  volatile uint32_t priority;   // priority. Ranges from values 0-4
 	volatile process_state state;
 	struct pcb_t *next;
 	struct pcb_t *prev;       // Pointers to previous and next pcb in the stack
@@ -23,43 +23,31 @@ typedef struct pcb_t{
 } pcb;
 
 typedef struct pqueue_t{
-	process_state state;
+	volatile process_state state;
 	pcb *pq_end[4];
 	pcb *pq_front[4];
 } pqueue;
 
-extern pcb* current_process;
-extern pqueue ready_queue;
-extern pcb* pcb_lookup_list;
 
 /*************************************************************************
  *          PCB LINKED LIST DEFINITIONS
  *************************************************************************/
-pcb* k_pcb_lookup_by_pid(int pid, pcb *node);
-#define pcb_lookup_by_pid(pid, node) _pcb_lookup_by_pid((U32)pcb_lookup_by_pid, pid, node)
-pcb* _pcb_lookup_by_pid(U32 p_func, int pid, pcb *node)  __SVC_0;
+pcb* pcb_lookup_by_pid(int pid, pcb *node);
+//#define pcb_lookup_by_pid(pid, node) _pcb_lookup_by_pid((U32)k_pcb_lookup_by_pid, pid, node)
+//pcb* _pcb_lookup_by_pid(U32 p_func, int pid, pcb *node)  __SVC_0;
 
 // Insert pcb into linked list
 void pcb_insert(pcb *block, pcb *node);
 
-// Priority lookup based on process id
-int k_pcb_priority_lookup(int pid);
-#define pcb_priority_lookup(pid) _pcb_priority_lookup((U32)pcb_priority_lookup, pid)
-int _pcb_priority_lookup(U32 p_func, int pid)  __SVC_0;
+void process_init(void);
 
-void process_init();
+pcb* pqueue_dequeue(pqueue *queue);
+//#define pqueue_dequeue(queue) _pqueue_dequeue((U32)k_pqueue_dequeue, queue)
+//pcb* _pqueue_dequeue(U32 p_func, pqueue *queue)  __SVC_0;
 
-pcb* k_pqueue_dequeue(pqueue *queue);
-#define pqueue_dequeue(queue) _pqueue_dequeue((U32)k_pqueue_dequeue, queue)
-pcb* _pqueue_dequeue(U32 p_func, pqueue *queue)  __SVC_0;
-
-void k_pqueue_enqueue(pqueue *queue, pcb *new_pcb);
-#define pqueue_enqueue(queue, new_pcb) _pqueue_enqueue((U32)k_pqueue_enqueue, queue, new_pcb)
-int __SVC_0 _pqueue_enqueue(U32 p_func, pqueue *queue, pcb *new_pcb);
-
-void k_pqueue_set_priority(pqueue *queue, pcb *new_pcb, int priority);
-#define pqueue_set_priority(queue, new_pcb, priority) _pqueue_set_priority((U32)k_pqueue_set_priority, queue, new_pcb, priority)
-int __SVC_0 _pqueue_set_priority(U32 p_func, pqueue *queue, pcb *new_pcb, int priority);
+void pqueue_enqueue(pqueue *queue, pcb *new_pcb);
+//#define pqueue_enqueue(new_pcb, queue) _pqueue_enqueue((U32)k_pqueue_enqueue, queue, new_pcb)
+//int __SVC_0 _pqueue_enqueue(U32 p_func, pqueue *queue, pcb *new_pcb);
 
 int k_set_process_priority(int pid, int priority);
 #define set_process_priority(pid, priority) _set_process_priority((U32)k_set_process_priority, pid, priority)

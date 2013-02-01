@@ -3,6 +3,7 @@
 #endif
 
 #include "process.h"
+#include "memory.h"
 #include "uart_polling.h"
 
 void null_process() {
@@ -49,17 +50,20 @@ void test_process_2() {
 }
 
 void test_process_3() {
-	int i, priority;
+	int i;
+	int priority;
   //set_process_priority(3, 0);
 	while(1) {
-		//for(i =1; i<7;i++)
-		//{
-        priority = get_process_priority(5);
+		for(i =0; i<7;i++)
+		{
+        priority = get_process_priority(i);
 				uart1_put_string("\nPROCESS ");
-			  uart1_put_char('0'+6);
+			  uart1_put_char('0'+i);
 				uart1_put_string(" PRIORITY: ");
 			  uart1_put_char('0'+priority);			 
-		//}
+		}
+
+		
 		release_processor();
 	}
 }
