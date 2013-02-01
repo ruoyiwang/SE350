@@ -18,6 +18,7 @@ typedef struct mmu_t{
 	unsigned int max_mem;
 	unsigned int lookup_table_size;
 	unsigned int actual_size;
+	char memory_available;	//1 is there is avail mem, 0 is there isn't
 } MMU;
 
 extern MMU mmu;	//declarations

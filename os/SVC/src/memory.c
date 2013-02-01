@@ -9,6 +9,7 @@ void mmu_init(){
 	mmu.max_mem = 0x10008000;
 	mmu.lookup_table_size = 256;
 	mmu.actual_size = (mmu.max_mem - mmu.free_mem) / USR_SZ_STACK;
+	mmu.memory_available = 1;	//set mem available to true
 
 	//set all flags in the lookup table to 0
 	for (i = 0; i < mmu.lookup_table_size; i++){
@@ -29,6 +30,8 @@ void* k_request_memory_block(){
 		}
 		//above loop loops through entire map for an empty spot
 		//if I can't find it, I end up here then I release
+		mmu.memory_available = 0;	//no more mem available
+		k_block_current_proccess();	//block the current process
 		k_release_processor();
 	}
 	
@@ -45,6 +48,7 @@ int k_release_memory_block(void *MemoryBlock){
 	//calculates the index of the lookup table for that address and then set the flag to be freed
 	index = (mmu.max_mem - mem_block_address) / USR_SZ_STACK;
 	mmu.lookup_table[index] = 0;
+	mmu.memory_available = 1;		//when we release mem, there's mem avaialble again
 	return 0;
 }
 
