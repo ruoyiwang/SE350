@@ -27,10 +27,10 @@ void test_process_1() {
 #ifdef DEBUG_0
       printf("\n\rproc1: ret_val=%d. ", ret_val);
 #else
-      uart1_put_string("\n\rTEST 1: ");
+      uart0_put_string("\n\rTEST 1: ");
 #endif /* DEBUG_0 */
     }
-    uart1_put_char('A' + i%26);
+    uart0_put_char('A' + i%26);
     i++;
   }
 }
@@ -44,10 +44,10 @@ void test_process_2() {
 #ifdef DEBUG_0
       printf("\n\rproc2: ret_val=%d. ", ret_val);
 #else
-      uart1_put_string("\n\rTEST 2: ");
+      uart0_put_string("\n\rTEST 2: ");
 #endif  /* DEBUG_0 */
     }
-    uart1_put_char('a' + i%26);
+    uart0_put_char('a' + i%26);
     i++;
   }
 }
@@ -60,10 +60,10 @@ void test_process_3() {
 		for(i =0; i<7;i++)
 		{
         priority = get_process_priority(i);
-				uart1_put_string("\nPROCESS ");
-			  uart1_put_char('0'+i);
-				uart1_put_string(" PRIORITY: ");
-			  uart1_put_char('0'+priority);
+				uart0_put_string("\nPROCESS ");
+			  uart0_put_char('0'+i);
+				uart0_put_string(" PRIORITY: ");
+			  uart0_put_char('0'+priority);
 		}
 
 		release_processor();
@@ -81,12 +81,12 @@ void test_process_4() {
     priority = get_process_priority(4);
 
     if(priority != prioritySet){
-        uart1_put_string("G029_test: test 4 FAIL\n");
+        uart0_put_string("G029_test: test 4 FAIL\n");
         num_fails++;
         release_processor();
     }
 
-    uart1_put_string("G029_test: test 4 OK\n");
+    uart0_put_string("G029_test: test 4 OK\n");
     num_passes++;
     release_processor();
 	}
@@ -100,10 +100,10 @@ void test_process_5() {
 		memory = (void*)request_memory_block();
 		release_success = release_memory_block(memory);
 		if (release_success != 0){
-			uart1_put_string("G029_test: test 5 FAIL\n");
+			uart0_put_string("G029_test: test 5 FAIL\n");
 			release_processor();
 		}
-		uart1_put_string("G029_test: test 5 OK\n");
+		uart0_put_string("G029_test: test 5 OK\n");
 		release_processor();
 	}
 }
@@ -113,11 +113,11 @@ void test_process_6() {
 	int i = 0;
 	set_process_priority(6, priority);
     if (i == 0) {
-        uart1_put_string("G029_test: test 6 OK\n");
+        uart0_put_string("G029_test: test 6 OK\n");
         num_passes++;
     }
     else {
-        uart1_put_string("G029_test: test 6 FAIL\n");
+        uart0_put_string("G029_test: test 6 FAIL\n");
         num_fails++;
     }
     release_processor();
