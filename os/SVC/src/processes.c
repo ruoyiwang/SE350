@@ -71,8 +71,10 @@ void test_process_3() {
 void test_process_4() {
     int priority;
     int prioritySet;    // priority we want to set on the process
-    prioritySet = 2;
 
+	while (1)
+	{
+    prioritySet = 2;
     set_process_priority(4, prioritySet);
     priority = get_process_priority(4);
 
@@ -82,19 +84,23 @@ void test_process_4() {
     }
     uart1_put_string("\nG029_test: test 4 OK");
     release_processor();
+	}
 }
 
 void test_process_5() {
   void * memory;
   int release_success;
-  memory = (void*)request_memory_block();
-  release_success = release_memory_block(memory);
-  if (release_success != 0){
-    uart1_put_string("G029_test: test 5 FAIL\n");
-    release_processor();
-  }
-  uart1_put_string("G029_test: test 5 OK\n");
-  release_processor();
+	while(1)
+	{
+		memory = (void*)request_memory_block();
+		release_success = release_memory_block(memory);
+		if (release_success != 0){
+			uart1_put_string("G029_test: test 5 FAIL\n");
+			release_processor();
+		}
+		uart1_put_string("G029_test: test 5 OK\n");
+		release_processor();
+	}
 }
 
 void test_process_6() {

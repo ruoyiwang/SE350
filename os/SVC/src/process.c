@@ -25,7 +25,7 @@ pcb* pqueue_dequeue(pqueue *queue)
 		if (queue->pq_front[i] == NULL)
 				continue;
 		ret = queue->pq_front[i];
-		if (mmu.memory_available)
+		if (!mmu.memory_available)
 		{
 			while ( ret->state == BLOCK && ret->next != NULL)
 			{
@@ -56,6 +56,11 @@ pcb* pqueue_dequeue(pqueue *queue)
 				after->prev = before;
 			}
 		}
+		else 
+		{
+				queue->pq_front[i] = queue->pq_front[i]->next;
+				queue->pq_front[i]->prev = NULL;			
+		}
 		return ret;
 	}
 	return NULL;
@@ -72,6 +77,7 @@ void pqueue_enqueue(pqueue *queue, pcb *new_pcb)
 	}
 	queue->pq_end[priority]->next = new_pcb;
 	new_pcb->prev = queue->pq_end[priority];
+	new_pcb->next = NULL;
 	queue->pq_end[priority] = new_pcb;
 }
 
@@ -184,7 +190,6 @@ int k_set_process_priority(int pid, int priority) {
     if (node == NULL){
         return -1;
     }
-    node->priority = priority;
 		k_pqueue_set_priority(&ready_queue, node, priority);
 
 		return 0;
