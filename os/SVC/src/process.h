@@ -9,7 +9,7 @@ typedef unsigned int U32;
 #define __SVC_0  __svc_indirect(0)
 
 #include <stdint.h>
-typedef enum {NEW, READY, RUN} process_state;
+typedef enum {NEW, READY, BLOCK, RUN} process_state;
 
 typedef struct pcb_t{
 	volatile uint32_t pc;
@@ -65,6 +65,8 @@ int __SVC_0 _context_switch(U32 p_func, pcb* pcb);
 extern int k_release_processor(void);
 #define release_processor() _release_processor((U32)k_release_processor)
 int __SVC_0 _release_processor(U32 p_func);
+
+void block_current_process(void);
 
 extern void __rte(void);
 extern void null_process(void);
