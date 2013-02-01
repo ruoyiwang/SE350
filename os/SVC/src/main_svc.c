@@ -24,7 +24,7 @@ int main()
 
   SystemInit();  /* initialize the system */
   __disable_irq();
-  uart1_init();
+  uart0_init();
 	mmu_init();
   process_init();
   __enable_irq();
