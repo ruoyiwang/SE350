@@ -31,7 +31,7 @@ void* k_request_memory_block(){
 		//above loop loops through entire map for an empty spot
 		//if I can't find it, I end up here then I release
 		mmu.memory_available = 0;	//no more mem available
-		block_current_proccess();	//block the current process
+		block_current_process();	//block the current process
 		k_release_processor();
 	}
 	
