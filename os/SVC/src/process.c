@@ -2,12 +2,13 @@
 #include "memory.h"
 #include <LPC17xx.h>
 #include "uart_polling.h"
+#define NUM_PROCS 7
 
 pcb* current_process;
 pqueue ready_queue;
 pcb *pcb_lookup_list;
 
-pcb pcbs[7];
+pcb pcbs[NUM_PROCS];
 
 MMU mmu;
 
@@ -148,7 +149,7 @@ void process_init() {
 
 	pcbs[0].priority = 3;
 	pcb_lookup_list = &pcbs[0];
-	for (i=0; i<7;i++)
+	for (i=0; i<NUM_PROCS;i++)
 	{
 		/* initialize the first process	exception stack frame */
 		pcbs[i].pid = i;
@@ -184,8 +185,8 @@ int k_set_process_priority(int pid, int priority) {
         return -1;
     }
     node->priority = priority;
-	k_pqueue_set_priority(&ready_queue, node, priority);
-   //pcbs[pid].priority = priority;
+		k_pqueue_set_priority(&ready_queue, node, priority);
+
 		return 0;
 }
 
@@ -195,9 +196,13 @@ int k_get_process_priority(int pid){
     // As per section 3.5 of project description, if pid is invalid return "-1"
     if(node == NULL){
         return -1;
-    }*/
-
-	return pcbs[pid].priority;
+    }
+		*/
+	
+		if (pid > NUM_PROCS || pid < 0) {
+			return -1;
+		}
+		return pcbs[pid].priority;
 }
 
 int k_context_switch(pcb* pcb) {
