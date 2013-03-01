@@ -50,7 +50,10 @@ int k_release_memory_block(void *MemoryBlock){
 	//calculates the index of the lookup table for that address and then set the flag to be freed
 	index = (mmu.max_mem - mem_block_address) / USR_SZ_STACK;
 	mmu.lookup_table[index] = 0;
-	mmu.memory_available = 1;		//when we release mem, there's mem avaialble again
+	if (mmu.memory_available == 0){
+		mmu.memory_available = 1;		//when we release mem, there's mem avaialble again
+		k_release_processor();		
+	}
 	return 0;
 }
 
