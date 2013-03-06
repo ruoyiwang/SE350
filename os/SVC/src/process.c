@@ -215,7 +215,7 @@ int k_context_switch(pcb* pcb) {
 	    pqueue_enqueue( &ready_queue, current_process );
 	}
 
-  current_process = pcb;
+current_process = pcb;
 
 	if (current_process->state == NEW) {
     current_process->state = RUN;

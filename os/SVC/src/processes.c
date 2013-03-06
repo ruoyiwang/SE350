@@ -18,6 +18,11 @@ void null_process() {
 	}
 }
 
+// increment the timer
+void timer_iprocess(){
+  g_timer_count++ ;
+}
+
 void test_process_1() {
   volatile int i =0;
   volatile int ret_val = 10;

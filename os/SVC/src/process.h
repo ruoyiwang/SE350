@@ -9,7 +9,7 @@ typedef unsigned int U32;
 #define __SVC_0  __svc_indirect(0)
 
 #include <stdint.h>
-typedef enum {NEW, READY, BLOCK, RUN} process_state;
+typedef enum {NEW, READY, BLOCK, RUN, INTERRUPT} process_state;
 
 typedef struct pcb_t{
 	volatile uint32_t pc;
