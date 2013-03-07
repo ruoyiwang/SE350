@@ -18,7 +18,6 @@ typedef struct envelope_t{
 	int dest_id;
 	int message_length;
 	envelope_t* next;
-	envelope_t* prev;
 } envelope;
 
 typedef struct mailbox_t{
@@ -61,12 +60,18 @@ pcb* pqueue_dequeue(pqueue *queue);
 //pcb* _pqueue_dequeue(U32 p_func, pqueue *queue)  __SVC_0;
 
 void pqueue_enqueue(pqueue *queue, pcb *new_pcb);
+
+void atomic(bool onOff);
 //#define pqueue_enqueue(new_pcb, queue) _pqueue_enqueue((U32)k_pqueue_enqueue, queue, new_pcb)
 //int __SVC_0 _pqueue_enqueue(U32 p_func, pqueue *queue, pcb *new_pcb);
 
-int k_set_process_priority(int pid, int priority);
-#define set_process_priority(pid, priority) _set_process_priority((U32)k_set_process_priority, pid, priority)
-int __SVC_0 _set_process_priority(U32 p_func, int pid, int priority);
+void k_send_message(int dest_id, envelope* env);
+#define send_message(dest_id, env) _send_message((U32)k_send_message, dest_id, env)
+void __SVC_0 _send_message(U32 p_func, int dest_id, envelope* env);
+
+envelope* k_receive_message();
+#define receive_message() _receive_message((U32)k_receive_message)
+envelope* __SVC_0 _receive_message(U32 p_func);
 
 int k_get_process_priority(int pid);
 #define get_process_priority(pid) _get_process_priority((U32)k_get_process_priority, pid)

@@ -12,9 +12,20 @@ pcb pcbs[NUM_PROCS];
 
 MMU mmu;
 
-void send_message(int dest_id, envelope* env)
+void atomic (bool onOff)
 {
-	atomic(on);
+	if (onOff)
+	{
+  		__disable_irq();
+	}
+	else
+	{
+		__enable_irq();
+	}
+}
+void k_send_message(int dest_id, envelope* env)
+{
+	atomic(1);
 	pcb* dest_pcb = pcb_lookup_by_pid(dest_id, pcb_lookup_list);
 	if (dest_pcb->mb->end->next == NULL)
 	{
@@ -24,16 +35,29 @@ void send_message(int dest_id, envelope* env)
 	else
 	{
 		dest_pcb->mb->end->next = env;
-		env->prev = dest_pcb->mb->end;
 		dest_pcb->mb->end = env;
 	}
-
-	atomic(off);
+	if (dest_pcb->state == MESSAGE_BLOCK)
+	{
+		dest_pcb->state = READY;
+	}
+	atomic(0);
 }
 
-envelope* receive_message()
+envelope* k_receive_message()
 {
-	
+	atomic(1);
+	if (current_process->mb->front = NULL)
+	{
+		current->state == MESSAGE_BLOCK;
+		atomic(0);
+		release_processor();
+		atomic(1);
+	}
+	envelope* ret = current_process->mb->front;
+	current_process->mb->front = current_process->mb->front->next;
+	atomic(0);
+	return ret;
 }
 
 pcb* pqueue_dequeue(pqueue *queue)
