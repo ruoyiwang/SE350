@@ -150,6 +150,8 @@ void k_UART0_IRQHandler(void)
 	// Set status of current process to interrupted
 	current_process->state = INTERRUPT;
 	saved_process = current_process;
+
+	interrupt_process->state = WAITING_FOR_INTERRUPT;
 	/* Reading IIR automatically acknowledges the interrupt */
 	IIR_IntId = (pUart->IIR) >> 1 ; /* skip pending bit in IIR */
 
@@ -159,17 +161,9 @@ void k_UART0_IRQHandler(void)
 		if (g_UART0_count == BUFSIZE) {
 			g_UART0_count = 0; /* buffer overflow */
 		}	
-	} else if (IIR_IntId & IIR_THRE) { 
-		/* THRE Interrupt, transmit holding register empty*/
-		
-		LSR_Val = pUart->LSR;
-		if(LSR_Val & LSR_THRE) {
-			g_UART0_TX_empty = 1; /* ready to transmit */ 
-		} else {  
-			g_UART0_TX_empty = 0; /* not ready to transmit */
-		}
-	    
-	} else if (IIR_IntId & IIR_RLS) {
+	} else if (IIR_IntId & IIR_RLS) { /* Receive Line Status id = 011 */
+		// LSR = Line Status Register. Contains flags for transmit and 
+		// receive status, including line errors.
 		LSR_Val = pUart->LSR;
 		if (LSR_Val  & (LSR_OE|LSR_PE|LSR_FE|LSR_RXFE|LSR_BI) ) {
 			/* There are errors or break interrupt 
@@ -187,11 +181,17 @@ void k_UART0_IRQHandler(void)
 			g_UART0_buffer[g_UART0_count++] = pUart->RBR; 
 			if ( g_UART0_count == BUFSIZE ) {
 				g_UART0_count = 0;  /* buffer overflow */
-			}	
+			}
+			k_context_switch(interrupt_process);	
 		}	    
 	} else { /* IIR_CTI and reserved combination are not implemented */
 		return;
 	}	
+
+	// We now have to restore context of the current process
+	current_process = saved_process;
+	interrupt_process->state = RUN;
+	k_context_switch (current_process);
 }
 
 void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len )

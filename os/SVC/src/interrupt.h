@@ -41,19 +41,18 @@
    LCR[1:0]=11 8-bit char len
    See table 279, pg306 LPC17xx_UM
 */
-#define UART_8N1  0x83 /* 8 bits, no Parity, 1 Stop bit */
-			
+#define UART_8N1  0x83 /* 8 bits, no Parity, 1 Stop bit */			
 #define uart0_init() uart_init(0)
+#define BIT(X)    ( 1<<X )
 
 typedef unsigned int U32;
 
-#define BIT(X)    ( 1<<X )
+typedef enum {RUN, WAITING_FOR_INTERRUPT} iprocess_state;   
 
 typedef struct interrupt{
-	char* command;
-	// Each interrupt contains a pcb
-	pcb pcb;
-
+	// The i-process contains a pcb for interprocess communication
+	pcb* pcb;
+   iprocess_state state;
 } i-process;
      
 int uart_init(int n_uart); /* initialize the n_uart, interrupt driven */
@@ -62,12 +61,6 @@ int uart_init(int n_uart); /* initialize the n_uart, interrupt driven */
 void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len );
 
 #endif /* ! _UART_H_ */
-
-// Initialize the interrupts
-/*extern void k_init_interrupts();
-#define init_interrupts() _init_interrupts((U32)k_init_interrupts)
-extern void __SVC_0 _init_interrupts(U32 p_func);
-*/
 
 extern void k_UART0_IRQHandler();
 #define UART0_IRQHandler() _UART0_IRQHandler((U32)k_UART0_IRQHandler)

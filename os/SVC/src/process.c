@@ -1,5 +1,6 @@
 #include "process.h"
 #include "memory.h"
+#include "interrupt.h"
 #include <LPC17xx.h>
 #include "uart_polling.h"
 #define NUM_PROCS 7
@@ -9,6 +10,9 @@ pqueue ready_queue;
 pcb *pcb_lookup_list;
 
 pcb pcbs[NUM_PROCS];
+
+i-process* interrupt_process;
+i-process* timer;
 
 MMU mmu;
 
@@ -202,6 +206,37 @@ void process_init() {
 
 	pcbs[0].priority = 3;
 	pcb_lookup_list = &pcbs[0];
+
+	// setup the interrupt process;
+	interrupt_process->pcb->pid = 7;
+	interrupt_process = (uint32_t)i_process_routine;
+	interrupt_process->state = RUN;
+	interrupt_process->pcb->priority=0;
+	sp  = k_request_memory_block();
+	/* 8 bytes alignement adjustment to exception stack frame */
+	if (!(((uint32_t)sp) & 0x04)) {
+			--sp;
+	}
+
+	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
+	*(--sp)  = (uint32_t)interrupt_process;  /* PC contains the entry point of the process */
+	*(--sp) = 0x0;
+	interrupt_process->pcb->sp = sp;
+
+	timer->pcb->pid = 8;
+	timer->state = RUN;
+	timer->pcb->priority=0;
+	sp  = k_request_memory_block();
+	/* 8 bytes alignement adjustment to exception stack frame */
+	if (!(((uint32_t)sp) & 0x04)) {
+			--sp;
+	}
+
+	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
+	*(--sp)  = (uint32_t)timer;  /* PC contains the entry point of the process */
+	*(--sp) = 0x0;
+	timer->pcb->sp = sp;
+
 	for (i=0; i<NUM_PROCS;i++)
 	{
 		/* initialize the first process	exception stack frame */
