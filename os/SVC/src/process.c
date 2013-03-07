@@ -12,6 +12,30 @@ pcb pcbs[NUM_PROCS];
 
 MMU mmu;
 
+void send_message(int dest_id, envelope* env)
+{
+	atomic(on);
+	pcb* dest_pcb = pcb_lookup_by_pid(dest_id, pcb_lookup_list);
+	if (dest_pcb->mb->end->next == NULL)
+	{
+		dest_pcb->mb->front = env;
+		dest_pcb->mb->end = env;
+	}
+	else
+	{
+		dest_pcb->mb->end->next = env;
+		env->prev = dest_pcb->mb->end;
+		dest_pcb->mb->end = env;
+	}
+
+	atomic(off);
+}
+
+envelope* receive_message()
+{
+	
+}
+
 pcb* pqueue_dequeue(pqueue *queue)
 {
 	pcb* ret;

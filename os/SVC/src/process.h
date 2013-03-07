@@ -9,7 +9,22 @@ typedef unsigned int U32;
 #define __SVC_0  __svc_indirect(0)
 
 #include <stdint.h>
-typedef enum {NEW, READY, BLOCK, RUN, INTERRUPT} process_state;
+typedef enum {NEW, READY, MEMORY_BLOCK, MESSAGE_BLOCK, RUN, INTERRUPT} process_state;
+
+typedef struct envelope_t{
+	void* message;
+	message_type type;
+	int src_id;
+	int dest_id;
+	int message_length;
+	envelope_t* next;
+	envelope_t* prev;
+} envelope;
+
+typedef struct mailbox_t{
+	envelope* front;
+	envelope* end;
+} mailbox;
 
 typedef struct pcb_t{
 	volatile uint32_t pc;
@@ -20,6 +35,7 @@ typedef struct pcb_t{
 	struct pcb_t *next;
 	struct pcb_t *prev;       // Pointers to previous and next pcb in the stack
 	struct pcb_t *lu_next;
+	mailbox mb;
 } pcb;
 
 typedef struct pqueue_t{
