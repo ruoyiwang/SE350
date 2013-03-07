@@ -56,6 +56,7 @@ envelope* k_receive_message()
 	}
 	envelope* ret = current_process->mb->front;
 	current_process->mb->front = current_process->mb->front->next;
+	ret->next = NULL;
 	atomic(0);
 	return ret;
 }
