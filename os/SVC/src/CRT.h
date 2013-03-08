@@ -2,7 +2,7 @@
 #include "memory.h"
 #include "uart_irq.c";
 #include <LPC17xx.h>
-#include "uart_polling.h"
+#include "interrupt.h"
 
 #ifndef __CRT_DISPLAY_PROCESS__
 #define __CRT_DISPLAY_PROCESS__
