@@ -18,7 +18,7 @@ typedef struct envelope_t{
 	int src_id;
 	int dest_id;
 	int message_length;
-	envelope_t* next;
+	struct envelope_t* next;
 } envelope;
 
 typedef struct mailbox_t{
@@ -35,7 +35,7 @@ typedef struct pcb_t{
 	struct pcb_t *next;
 	struct pcb_t *prev;       // Pointers to previous and next pcb in the stack
 	struct pcb_t *lu_next;
-	mailbox mb;
+	mailbox *mb;
 } pcb;
 
 typedef struct pqueue_t{
@@ -43,6 +43,10 @@ typedef struct pqueue_t{
 	pcb *pq_end[4];
 	pcb *pq_front[4];
 } pqueue;
+
+extern pcb* current_process;
+
+extern pcb *pcb_lookup_list;
 
 /*************************************************************************
  *          PCB LINKED LIST DEFINITIONS
@@ -62,7 +66,7 @@ pcb* pqueue_dequeue(pqueue *queue);
 
 void pqueue_enqueue(pqueue *queue, pcb *new_pcb);
 
-void atomic(bool onOff);
+void atomic(int onOff);
 //#define pqueue_enqueue(new_pcb, queue) _pqueue_enqueue((U32)k_pqueue_enqueue, queue, new_pcb)
 //int __SVC_0 _pqueue_enqueue(U32 p_func, pqueue *queue, pcb *new_pcb);
 
@@ -70,7 +74,7 @@ void k_send_message(int dest_id, envelope* env);
 #define send_message(dest_id, env) _send_message((U32)k_send_message, dest_id, env)
 void __SVC_0 _send_message(U32 p_func, int dest_id, envelope* env);
 
-envelope* k_receive_message();
+envelope* k_receive_message(void);
 #define receive_message() _receive_message((U32)k_receive_message)
 envelope* __SVC_0 _receive_message(U32 p_func);
 

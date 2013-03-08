@@ -1,0 +1,5 @@
+--cpu Cortex-M3 ".\flash\startup_lpc17xx.o" ".\flash\system_lpc17xx.o" ".\flash\uart_polling.o" ".\flash\main_svc.o" ".\flash\rtx.o" ".\flash\retarget.o" ".\flash\hal.o" ".\flash\process.o" ".\flash\processes.o" ".\flash\memory.o" ".\flash\interrupt.o" ".\flash\iprocesses.o" ".\flash\keyboard.o" ".\flash\timer.o" 
+--library_type=microlib --strict --scatter ".\flash\SVC.sct" 
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+ --list ".\lst\SVC.map" -o .\flash\SVC.axf

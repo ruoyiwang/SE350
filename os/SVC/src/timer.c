@@ -10,10 +10,9 @@
 #include "timer.h"
 #include "process.h"
 
-#define BIT(X) (1<<X)
+pcb* timer_saved_process;
 
-volatile uint32_t g_timer_count = 0; // increment every 1 ms
-pcb* saved_process;
+volatile uint32_t g_timer_count = 0;
 
 /**
  * @brief: initialize timer. Only timer 0 is supported
@@ -91,7 +90,7 @@ uint32_t timer_init(uint8_t n_timer)
 	pTimer->TCR = 1;
 
 	// Create the iprocess for the timer
-	timer->pcb->pc = (uint32_t)timer_process;
+	timer->pcb->pc = (uint32_t)timer_iprocess;
 	return 0;
 }
 
@@ -118,7 +117,7 @@ void k_TIMER0_IRQHandler(void)
 	__disable_irq();
 	// Set status of current Prescaleocess to interrupted
 	current_process->state = INTERRUPT;
-	saved_process = current_process;
+	timer_saved_process = current_process;
 	/* ack inttrupt, see section  21.6.1 on pg 493 of LPC17XX_UM */
 	LPC_TIM0->IR = BIT(0);  
 
@@ -126,7 +125,7 @@ void k_TIMER0_IRQHandler(void)
 
 	__enable_irq();
 	//code to save context of interrupt handler (i_process)
-	current_process = saved_process;
+	current_process = timer_saved_process;
 	k_context_switch (current_process);
 	//perform a return from exception sequence
 	//this restarts the original process before i_handler

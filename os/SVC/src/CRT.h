@@ -1,6 +1,6 @@
 #include "process.h"
 #include "memory.h"
-#include "uart_irq.c";
+//#include "uart_irq.h";
 #include <LPC17xx.h>
 #include "interrupt.h"
 
@@ -10,12 +10,12 @@
 extern int display_message_ready;
 
 void crt_displpay_process(){
-	envelope * message_envelop = null;
+	envelope * message_envelop = NULL;
 	message_envelop = receive_message();
-	while(message_envelop != null){
+	while(message_envelop != NULL){
 		//pretty much as long as I get messages, I do this shit
 		//will only care if the message is a display request, or else I just delete the message wihtout handling it
-		if (message_envelop->message_type == DISPLAY_REQUEST){
+		if (message_envelop->type == DISPLAY_REQUEST){
 			//handle the message
 			//notice here I am actually just changing the msg info and gonna pass it on anyways
 			message_envelop->src_id = current_process->pid;

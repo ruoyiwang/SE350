@@ -1,22 +1,18 @@
 #include "process.h"
-#include "memory.h"
 #include "interrupt.h"
+#include "memory.h"
 #include <LPC17xx.h>
 #include "uart_polling.h"
 #define NUM_PROCS 7
 
 pcb* current_process;
 pqueue ready_queue;
-pcb *pcb_lookup_list;
-
+MMU mmu;
 pcb pcbs[NUM_PROCS];
-
 i_process* interrupt_process;
 i_process* timer;
 
-MMU mmu;
-
-void atomic (bool onOff)
+void atomic (int onOff)
 {
 	if (onOff)
 	{
@@ -29,8 +25,9 @@ void atomic (bool onOff)
 }
 void k_send_message(int dest_id, envelope* env)
 {
+	pcb* dest_pcb;
 	atomic(1);
-	pcb* dest_pcb = pcb_lookup_by_pid(dest_id, pcb_lookup_list);
+	dest_pcb = pcb_lookup_by_pid(dest_id, pcb_lookup_list);
 	if (dest_pcb->mb->end->next == NULL)
 	{
 		dest_pcb->mb->front = env;
@@ -50,15 +47,16 @@ void k_send_message(int dest_id, envelope* env)
 
 envelope* k_receive_message()
 {
+	envelope* ret;
 	atomic(1);
-	if (current_process->mb->front = NULL)
+	if (current_process->mb->front == NULL)
 	{
-		current->state == MESSAGE_BLOCK;
+		current_process->state == MESSAGE_BLOCK;
 		atomic(0);
 		release_processor();
 		atomic(1);
 	}
-	envelope* ret = current_process->mb->front;
+	ret = current_process->mb->front;
 	current_process->mb->front = current_process->mb->front->next;
 	ret->next = NULL;
 	atomic(0);
@@ -215,7 +213,7 @@ void process_init() {
 	// setup the interrupt process;
 	interrupt_process->pcb->pid = 7;
 	interrupt_process->pcb->pc = (uint32_t)i_process_routine;
-	interrupt_process->state = RUN;
+	interrupt_process->state = RUNNING;
 	interrupt_process->pcb->priority=0;
 	sp  = k_request_memory_block();
 	/* 8 bytes alignement adjustment to exception stack frame */
@@ -230,7 +228,7 @@ void process_init() {
 
 	timer->pcb->pid = 8;
 	timer->pcb->pc = (uint32_t)timer_iprocess;
-	timer->state = RUN;
+	timer->state = RUNNING;
 	timer->pcb->priority=0;
 	sp  = k_request_memory_block();
 	/* 8 bytes alignement adjustment to exception stack frame */
@@ -327,7 +325,7 @@ int k_release_processor() {
     pcb* new_process = pqueue_dequeue(&ready_queue);
 
     // If process queue is empty or the state is not READY execute the null process
-    if (new_process == NULL || (new_process->state != READY && new_process->state != NEW && new_process->state != BLOCK)) {
+    if (new_process == NULL || (new_process->state != READY && new_process->state != NEW && new_process->state != MEMORY_BLOCK && new_process->state != MESSAGE_BLOCK)) {
     	new_process = pcb_lookup_by_pid(0, pcb_lookup_list);
     }
 		

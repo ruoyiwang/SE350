@@ -63,9 +63,40 @@ int uart_init(int n_uart) {
   pUart->DLM = 0;
   pUart->DLL = 9;
   pUart->FDR = 0x21;        /* FR = 1.507 ~ 1/2, DivAddVal = 1, MulVal = 2  */
-                            /* FR = 1.507 = 25MHZ/(16*9*115200)             */
-  pUart->LCR &= ~(BIT(7));  /* disable the Divisior Latch Access Bit DLAB=0 */
+                            /* FR = 1.507 = 25MHZ/(16*9*115200)             */  
+	
+	/*
+	----------------------------------------------------- 
+	Step 4: FIFO setup.
+	       see table 278 on pg305 in LPC17xx_UM
+	-----------------------------------------------------
+        enable Rx and Tx FIFOs, clear Rx and Tx FIFOs
+	Trigger level 0 (1 char per interrupt)
+	*/
+	
+	pUart->FCR = 0x07;
 
+	/* Step 5 was done between step 2 and step 4 a few lines above */
+
+	/*
+	----------------------------------------------------- 
+	Step 6 Interrupt setting and enabling
+	-----------------------------------------------------
+	*/
+	/* Step 6a: 
+	   Enable interrupt bit(s) wihtin the specific peripheral register.
+           Interrupt Sources Setting: RBR, THRE or RX Line Stats
+	   See Table 50 on pg73 in LPC17xx_UM for all possible UART0 interrupt sources
+	   See Table 275 on pg 302 in LPC17xx_UM for IER setting 
+	*/
+	/* disable the Divisior Latch Access Bit DLAB=0 */
+	pUart->LCR &= ~(BIT(7)); 
+	
+	pUart->IER = IER_RBR | IER_THRE | IER_RLS; 
+
+	/* Step 6b: enable the UART interrupt from the system level */
+	NVIC_EnableIRQ(UART0_IRQn); /* CMSIS function */
+	
   return 0;
 }
 

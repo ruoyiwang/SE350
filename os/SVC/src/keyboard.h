@@ -3,10 +3,10 @@
 
 typedef struct kcd_node_t {
 	int pid;
-	kcd_node* next;
+	struct kcd_node_t* next;
 	char command[32];
 } kcd_node;
 
-void kcd();
+void kcd(void);
 
 #endif

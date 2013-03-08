@@ -1,5 +1,4 @@
 #include "interrupt.h"
-#include "process.h"
 #ifdef DEBUG_HOTKEYS
 
 typedef unsigned int U32;
