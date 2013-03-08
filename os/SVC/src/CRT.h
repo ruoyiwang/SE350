@@ -10,9 +10,9 @@
 extern int display_message_ready;
 
 void crt_displpay_process(){
-	envelope * message_envelop = null;
+	envelope * message_envelop = NULL;
 	message_envelop = receive_message();
-	while(message_envelop != null){
+	while(message_envelop != NULL){
 		//pretty much as long as I get messages, I do this shit
 		//will only care if the message is a display request, or else I just delete the message wihtout handling it
 		if (message_envelop->type == DISPLAY_REQUEST){

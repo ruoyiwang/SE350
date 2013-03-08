@@ -129,3 +129,28 @@ src\iprocesses.c(36): error:  #20: identifier "crt_string" is undefined
 compiling timer.c...
 src\process.h(79): warning:  #815-D: type qualifier on return type is meaningless
 Target not created
+Build target 'SVC SIM'
+compiling iprocesses.c...
+src\process.h(79): warning:  #815-D: type qualifier on return type is meaningless
+src\CRT.h(15): error:  #20: identifier "null" is undefined
+src\CRT.h(35): warning:  #223-D: function "UART0_IRQHandler" declared implicitly
+src\iprocesses.c(17): error:  #513: a value of type "uint8_t" cannot be assigned to an entity of type "void *"
+src\iprocesses.c(19): error:  #20: identifier "kcd_process_id" is undefined
+src\iprocesses.c(36): error:  #20: identifier "crt_string" is undefined
+Target not created
+Build target 'SVC SIM'
+compiling iprocesses.c...
+src\process.h(79): warning:  #815-D: type qualifier on return type is meaningless
+src\CRT.h(35): warning:  #223-D: function "UART0_IRQHandler" declared implicitly
+src\iprocesses.c(17): error:  #513: a value of type "uint8_t" cannot be assigned to an entity of type "void *"
+src\iprocesses.c(19): error:  #20: identifier "kcd_process_id" is undefined
+src\iprocesses.c(36): error:  #20: identifier "crt_string" is undefined
+Target not created
+Build target 'SVC SIM'
+compiling iprocesses.c...
+src\process.h(79): warning:  #815-D: type qualifier on return type is meaningless
+src\CRT.h(35): warning:  #223-D: function "UART0_IRQHandler" declared implicitly
+src\iprocesses.c(17): error:  #513: a value of type "uint8_t" cannot be assigned to an entity of type "void *"
+src\iprocesses.c(19): error:  #20: identifier "kcd_process_id" is undefined
+src\iprocesses.c(36): error:  #20: identifier "crt_string" is undefined
+Target not created
