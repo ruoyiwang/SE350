@@ -11,6 +11,8 @@
 
 int display_message_ready;
 
+void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len );
+
 void i_process_routine(void){
 	// make an empty envelope to for the crt msgs
 	envelope* crt_message = NULL;
