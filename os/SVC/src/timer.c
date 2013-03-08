@@ -14,7 +14,6 @@
 
 volatile uint32_t g_timer_count = 0; // increment every 1 ms
 pcb* saved_process;
-timer_iprocess* timer;
 
 /**
  * @brief: initialize timer. Only timer 0 is supported
@@ -96,6 +95,11 @@ uint32_t timer_init(uint8_t n_timer)
 	return 0;
 }
 
+// increment the timer
+void timer_iprocess(void){
+  g_timer_count++ ;
+}
+
 /**
  * @brief: use CMSIS ISR for TIMER0 IRQ Handler
  * NOTE: This example shows how to save/restore all registers rather than just
@@ -106,9 +110,9 @@ uint32_t timer_init(uint8_t n_timer)
 __asm void TIMER0_IRQHandler(void)
 {
 	PRESERVE8
-	IMPORT c_TIMER0_IRQHandler
+	IMPORT k_TIMER0_IRQHandler
 	PUSH{r4-r11, lr}
-	BL c_TIMER0_IRQHandler
+	BL k_TIMER0_IRQHandler
 	POP{r4-r11, pc}
 } 
 /**
@@ -122,12 +126,12 @@ void k_TIMER0_IRQHandler(void)
 	/* ack inttrupt, see section  21.6.1 on pg 493 of LPC17XX_UM */
 	LPC_TIM0->IR = BIT(0);  
 
-	// Do a context switch to the timer
-	k_context_switch(timer->pcb);
+	timer->state = WAITING_FOR_INTERRUPT;
+	timer_iprocess();
 
 	//code to save context of interrupt handler (i_process)
 	current_process = saved_process;
-	context_switch (current_process);
+	k_context_switch (current_process);
 	//perform a return from exception sequence
 	//this restarts the original process before i_handler
 }
