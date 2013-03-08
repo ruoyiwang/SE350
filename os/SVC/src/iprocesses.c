@@ -36,7 +36,7 @@ void i_process_routine(void){
 		crt_message = receive_message();
 
 		//check of message type
-		while (crt_message->message_type != DISPLAY_REQUEST){
+		while (crt_message->type != DISPLAY_REQUEST){
 			//if it's not a display request, silently kill it
 			release_memory_block(crt_message);
 			crt_message = receive_message();
@@ -44,14 +44,14 @@ void i_process_routine(void){
 
 		// TODO: get the message length
 		message_length = 0;
-		message_pointer = message_envelop->message;
+		message_pointer = crt_message->message;
 		while (message_pointer != '\0'){
 			message_length++;
 		}
-		uart_send_string(0, (uint8_t) message_envelop->message, message_length);
+		uart_send_string(0, (uint8_t *) crt_message->message, message_length);
 
 		// Code for displaying char to uart0
-		uart0_put_string(crt_string);
+		//uart0_put_string(crt_message->message);
 	}
 	//else we know that we send a keyboard input
 	else{
