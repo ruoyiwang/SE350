@@ -1,3 +1,6 @@
+#ifndef INTERRUPT_H
+#define INTERRUPT_H
+
 #include "process.h"
 #include "debug_hotkeys.h"
 #include <stdint.h>	/* typedefs */
@@ -5,9 +8,6 @@
 #ifndef DEBUG_0
 #include <stdio.h>
 #endif
-
-#ifndef INTERRUPT_H
-#define INTERRUPT_H
 
 /* The following macros are from NXP uart.h */
 #define IER_RBR		0x01
@@ -54,7 +54,7 @@
 
 typedef unsigned int U32;
 
-typedef enum {RUN, WAITING_FOR_INTERRUPT} iprocess_state;   
+typedef enum {RUNNING, WAITING_FOR_INTERRUPT} iprocess_state;   
 
 typedef struct interrupt_t{
 	// The i-process contains a pcb for interprocess communication
@@ -69,12 +69,13 @@ void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len );
 
 extern i_process* interrupt_process;
 
-extern void k_UART0_IRQHandler();
-#define UART0_IRQHandler() _UART0_IRQHandler((U32)k_UART0_IRQHandler)
-extern void __SVC_0 _UART0_IRQHandler(U32 p_func);
+extern void k_UART0_IRQHandler(void);
  
 extern void print_ready_queue_priority(void);
 extern void print_memory_blocked_queue_priority(void);
 extern void print_message_blocked_queue_priority(void);
 
+extern volatile uint8_t g_UART0_TX_empty=1;
+extern volatile uint8_t g_UART0_buffer[BUFSIZE];
+extern volatile uint32_t g_UART0_count = 0;
 #endif

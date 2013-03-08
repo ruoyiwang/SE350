@@ -8,8 +8,15 @@
 ### List of Objects: adding '".\flash\rtx.o"'
 ### List of Objects: adding '".\flash\retarget.o"'
 ### List of Objects: adding '".\flash\hal.o"'
+### List of Objects: adding '".\flash\process.o"'
+### List of Objects: adding '".\flash\processes.o"'
+### List of Objects: adding '".\flash\memory.o"'
+### List of Objects: adding '".\flash\interrupt.o"'
+### List of Objects: adding '".\flash\iprocesses.o"'
+### List of Objects: adding '".\flash\keyboard.o"'
+### List of Objects: adding '".\flash\timer.o"'
 ### ADS-LD Command completed:
---cpu Cortex-M3 ".\flash\startup_lpc17xx.o" ".\flash\system_lpc17xx.o" ".\flash\uart_polling.o" ".\flash\main_svc.o" ".\flash\rtx.o" ".\flash\retarget.o" ".\flash\hal.o" 
+--cpu Cortex-M3 ".\flash\startup_lpc17xx.o" ".\flash\system_lpc17xx.o" ".\flash\uart_polling.o" ".\flash\main_svc.o" ".\flash\rtx.o" ".\flash\retarget.o" ".\flash\hal.o" ".\flash\process.o" ".\flash\processes.o" ".\flash\memory.o" ".\flash\interrupt.o" ".\flash\iprocesses.o" ".\flash\keyboard.o" ".\flash\timer.o" 
 --library_type=microlib --strict --scatter ".\flash\SVC.sct" 
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
 --info sizes --info totals --info unused --info veneers 
@@ -17,10 +24,10 @@
 ### ADS-LD Output File: '.\flash\SVC.axf'
 ### ADS-LD Command File: '.\flash\SVC.lnp'
 ### Checking for dirty Components...
-### Creating CmdFile '.\flash\SVC.lnp', Handle=0x0000061C
+### Creating CmdFile '.\flash\SVC.lnp', Handle=0x0000074C
 ### Writing '.lnp' file
 ### ADS-LD Command file '.\flash\SVC.lnp' is ready.
 ### ADS-LD: About to start ADS-LD Thread.
-### ADS-LD: executed with 0 errors
+### ADS-LD: executed with 4 errors
 ### Updating obj list
 ### LDADS_file() completed.

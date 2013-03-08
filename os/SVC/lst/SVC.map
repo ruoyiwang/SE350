@@ -1,0 +1,129 @@
+ARM Linker, 5.02 [Build 28] [MDK-ARM Lite]
+
+==============================================================================
+
+Section Cross References
+
+    startup_lpc17xx.o(RESET) refers to startup_lpc17xx.o(STACK) for __initial_sp
+    startup_lpc17xx.o(RESET) refers to startup_lpc17xx.o(.text) for Reset_Handler
+    startup_lpc17xx.o(RESET) refers to hal.o(.emb_text) for SVC_Handler
+    startup_lpc17xx.o(RESET) refers to timer.o(.emb_text) for TIMER0_IRQHandler
+    startup_lpc17xx.o(RESET) refers to interrupt.o(.emb_text) for UART0_IRQHandler
+    startup_lpc17xx.o(.text) refers to entry.o(.ARM.Collect$$$$00000000) for __main
+    system_lpc17xx.o(.text) refers to system_lpc17xx.o(.data) for SystemFrequency
+    main_svc.o(.text) refers to system_lpc17xx.o(.text) for SystemInit
+    main_svc.o(.text) refers to uart_polling.o(.text) for uart_init
+    main_svc.o(.text) refers to memory.o(.text) for mmu_init
+    main_svc.o(.text) refers to process.o(.text) for process_init
+    retarget.o(.text) refers to uart_polling.o(.text) for uart_put_char
+    process.o(.text) refers to hal.o(.emb_text) for __rte
+    process.o(.text) refers to memory.o(.text) for k_request_memory_block
+    process.o(.text) refers to process.o(.data) for current_process
+    process.o(.text) refers to process.o(.bss) for ready_queue
+    process.o(.text) refers to processes.o(.text) for null_process
+    processes.o(.text) refers to uart_polling.o(.text) for uart_put_string
+    processes.o(.text) refers to process.o(.text) for k_release_processor
+    processes.o(.text) refers to processes.o(.data) for num_fails
+    processes.o(.text) refers to memory.o(.text) for k_request_memory_block
+    memory.o(.text) refers to process.o(.text) for block_current_process
+    memory.o(.text) refers to process.o(.bss) for mmu
+    interrupt.o(.emb_text) refers to interrupt.o(.text) for k_UART0_IRQHandler
+    interrupt.o(.text) refers to process.o(.text) for k_context_switch
+    interrupt.o(.text) refers to process.o(.data) for current_process
+    interrupt.o(.text) refers to interrupt.o(.data) for saved_process
+    interrupt.o(.text) refers to interrupt.o(.bss) for g_UART0_buffer
+    keyboard.o(.text) refers to keyboard.o(.data) for command_root
+    keyboard.o(.text) refers to memory.o(.text) for k_request_memory_block
+    keyboard.o(.text) refers to process.o(.text) for k_receive_message
+    timer.o(.emb_text) refers to timer.o(.text) for k_TIMER0_IRQHandler
+    timer.o(.text) refers to process.o(.text) for k_context_switch
+    timer.o(.text) refers to timer.o(.data) for g_timer_count
+    timer.o(.text) refers to process.o(.data) for timer
+    entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry7b.o(.ARM.Collect$$$$00000008) for _main_clock
+    entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry8.o(.ARM.Collect$$$$00000009) for _main_init
+    entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry5.o(.ARM.Collect$$$$00000004) for _main_scatterload
+    entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry2.o(.ARM.Collect$$$$00000001) for _main_stk
+    entry2.o(.ARM.Collect$$$$00000001) refers to entry2.o(.ARM.Collect$$$$00002712) for __lit__00000000
+    entry2.o(.ARM.Collect$$$$00002712) refers to startup_lpc17xx.o(STACK) for __initial_sp
+    entry2.o(__vectab_stack_and_reset_area) refers to startup_lpc17xx.o(STACK) for __initial_sp
+    entry2.o(__vectab_stack_and_reset_area) refers to entry.o(.ARM.Collect$$$$00000000) for __main
+    entry5.o(.ARM.Collect$$$$00000004) refers to init.o(.text) for __scatterload
+    entry8.o(.ARM.Collect$$$$00000009) refers to main_svc.o(.text) for main
+    init.o(.text) refers to entry5.o(.ARM.Collect$$$$00000004) for __main_after_scatterload
+
+
+==============================================================================
+
+Removing Unused input sections from the image.
+
+    Removing startup_lpc17xx.o(HEAP), (0 bytes).
+    Removing system_lpc17xx.o(.rev16_text), (4 bytes).
+    Removing system_lpc17xx.o(.revsh_text), (4 bytes).
+    Removing uart_polling.o(.rev16_text), (4 bytes).
+    Removing uart_polling.o(.revsh_text), (4 bytes).
+    Removing main_svc.o(.rev16_text), (4 bytes).
+    Removing main_svc.o(.revsh_text), (4 bytes).
+    Removing retarget.o(.text), (86 bytes).
+    Removing retarget.o(.data), (8 bytes).
+    Removing process.o(.rev16_text), (4 bytes).
+    Removing process.o(.revsh_text), (4 bytes).
+    Removing interrupt.o(.rev16_text), (4 bytes).
+    Removing interrupt.o(.revsh_text), (4 bytes).
+    Removing keyboard.o(.text), (244 bytes).
+    Removing keyboard.o(.data), (4 bytes).
+    Removing timer.o(.rev16_text), (4 bytes).
+    Removing timer.o(.revsh_text), (4 bytes).
+
+17 unused section(s) (total 390 bytes) removed from the image.
+
+==============================================================================
+
+Memory Map of the image
+
+  Image Entry point : 0x00000000
+
+  Load Region LR_IROM1 (Base: 0x00000000, Size: 0x00000f68, Max: 0x00080000, ABSOLUTE)
+
+    Execution Region ER_IROM1 (Base: 0x00000000, Size: 0x00000f3c, Max: 0x00080000, ABSOLUTE)
+
+    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
+
+    0x00000000   0x000000cc   Data   RO            3    RESET               startup_lpc17xx.o
+    0x000000cc   0x00000000   Code   RO          319  * .ARM.Collect$$$$00000000  mc_w.l(entry.o)
+    0x000000cc   0x00000004   Code   RO          322    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
+    0x000000d0   0x00000004   Code   RO          325    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
+    0x000000d4   0x00000000   Code   RO          327    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
+    0x000000d4   0x00000008   Code   RO          328    .ARM.Collect$$$$00000009  mc_w.l(entry8.o)
+    0x000000dc   0x00000004   Code   RO          323    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
+    0x000000e0   0x0000002a   Code   RO          148    .emb_text           hal.o
+    0x0000010a   0x00000002   PAD
+    0x0000010c   0x0000000c   Code   RO          237    .emb_text           interrupt.o
+    0x00000118   0x0000000c   Code   RO          290    .emb_text           timer.o
+    0x00000124   0x0000001c   Code   RO            5    .text               startup_lpc17xx.o
+    0x00000140   0x00000130   Code   RO           59    .text               uart_polling.o
+    0x00000270   0x00000058   Code   RO           86    .text               main_svc.o
+    0x000002c8   0x00000024   Code   RO          329    .text               mc_w.l(init.o)
+    0x000002ec   0x00000000   Data   RO          331    Region$$Table       anon$$obj.o
+    0x000002ec   0x00000010   PAD
+    0x000002fc   0x00000004   Code   RO            4    .ARM.__at_0x02FC    startup_lpc17xx.o
+    0x00000300   0x0000021c   Code   RO           15    .text               system_lpc17xx.o
+    0x0000051c   0x0000054c   Code   RO          157    .text               process.o
+    0x00000a68   0x0000026c   Code   RO          200    .text               processes.o
+    0x00000cd4   0x000000d8   Code   RO          215    .text               memory.o
+    0x00000dac   0x000000f8   Code   RO          238    .text               interrupt.o
+    0x00000ea4   0x00000098   Code   RO          291    .text               timer.o
+
+
+    Execution Region RW_IRAM1 (Base: 0x10000000, Size: 0x000004a0, Max: 0x00008000, ABSOLUTE)
+
+    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
+
+    0x10000000   0x00000004   Data   RW           16    .data               system_lpc17xx.o
+    0x10000004   0x0000000c   Data   RW          159    .data               process.o
+    0x10000010   0x00000008   Data   RW          201    .data               processes.o
+    0x10000018   0x0000000c   Data   RW          240    .data               interrupt.o
+    0x10000024   0x00000008   Data   RW          292    .data               timer.o
+    0x1000002c   0x00000234   Zero   RW          158    .bss                process.o
+    0x10000260   0x00000040   Zero   RW          239    .bss                interrupt.o
+    0x100002a0   0x00000200   Zero   RW            1    STACK               startup_lpc17xx.o
+

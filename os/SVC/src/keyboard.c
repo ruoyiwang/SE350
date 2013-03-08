@@ -1,24 +1,27 @@
 #include "keyboard.h"
 #include "memory.h"
+#include "process.h"
 
 kcd_node* command_root;
 
-int atoi(void* input) {
+/*int atoi(void* input) {
 	char c;
 	int n = -1;
 	int i = 0;
-
-	while (c = (char)*(input + i)) {
+	
+	c = (char)(*(input + i));
+	while (c) {
 		if (c < '0' || c > '9') {
 			return n;
 		}
 		n = n*10;
 		n = n + (c - '0');
 		i++;
+		c = = (char)*(input + i);
 	}
 
 	return n;
-}
+}*/
 
 void kcd_register(char* command, int pid) {
 	kcd_node* tmp = command_root;
@@ -30,8 +33,8 @@ void kcd_register(char* command, int pid) {
 	}
 
 	tmp = (kcd_node*)request_memory_block();
-	while (tmpc && tmpc != ' ') {
-		tmpc->command[i] = *tmpc;
+	while (*tmpc && *tmpc != ' ') {
+		tmp->command[i] = *tmpc;
 		tmpc++;
 		i++;
 	}
@@ -47,13 +50,13 @@ int kcd_lookup(char* command) {
 		i = -1;
 		do {
 			i++;
-			if (tmp->command[i] != *(command+i)) {
+			if (tmp->command[i] != *(tmpc+i)) {
 				break;
 			}
-			if (tmp->command[i] == '\0' && *(command+i) == '\0') {
+			if (tmp->command[i] == '\0' && *(tmpc+i) == '\0') {
 				return tmp->pid;
 			}
-		} while (tmp->command[i] != '\0' && *(command+i) != '\0');
+		} while (tmp->command[i] != '\0' && *(tmpc+i) != '\0');
 		tmp = tmp->next;
 	}
 
@@ -61,35 +64,33 @@ int kcd_lookup(char* command) {
 }
 
 void kcd() {
-	void* input;
-	MessageEnvelope *m;
+	char* input;
+	envelope *m;
 	message_type mt;
 	int src_id;
-	char c;
-	key_command kc;
 
 	command_root = NULL;
 
 	while (1) {
-		m = (MessageEnvelope *)receive_message();
-		input = m->message;
+		m = (envelope *)receive_message();
+		input = (char*)m->message;
 		mt = m->type;
 		src_id = m->src_id;
 
 		if (mt == COMMAND_REGISTRATION) {
-			if ((char)*(input) == '%') {
-				if ((char *)(input + 1)) {
-					kcd_register((char)*(input + 1), src_id);
+			if ((*input)== '%') {
+				if (*(input + 1)) {
+					kcd_register(input + 1, src_id);
 				}
 			}
 		}
 		else if (mt == KEYBOARD_INPUT) {
-			if ((char)*(input) == '%') {
+			if (*input == '%') {
 				// Send message to PID registered to the command
-				if ((char)*(input + 1)) {
-					src_id = kcd_lookup((char)*(input + 1));
+				if (*(input + 1)) {
+					src_id = kcd_lookup(input + 1);
 					if (src_id != -1) {
-						send_message(input, src_id);
+						send_message(src_id, m);
 					}
 				}
 			}

@@ -1,6 +1,6 @@
 #include "process.h"
 #include "memory.h"
-#include "uart_irq.c";
+//#include "uart_irq.h";
 #include <LPC17xx.h>
 #include "interrupt.h"
 

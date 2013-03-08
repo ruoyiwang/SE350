@@ -2,8 +2,6 @@
 #include <stdio.h>
 #endif
 
-#ifdef IPROCESSES
-
 #include "process.h"
 #include "memory.h"
 #include "uart_polling.h"
@@ -68,5 +66,3 @@ void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len )
 void timer_iprocess(void){
   g_timer_count++ ;
 }
-
-#endif
