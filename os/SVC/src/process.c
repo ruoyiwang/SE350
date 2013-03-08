@@ -74,40 +74,45 @@ pcb* pqueue_dequeue(pqueue *queue)
 		ret = queue->pq_front[i];
 		if (!mmu.memory_available)
 		{
-			while ( ret->state == BLOCK && ret->next != NULL)
+			while ( (ret->state == MEMORY_BLOCK||ret->state == MESSAGE_BLOCK) && ret->next != NULL)
 			{
 				ret= ret->next;
 			}
-			if(ret == queue->pq_end[i] && ret->state == BLOCK)
+			if(ret == queue->pq_end[i] && (ret->state == MEMORY_BLOCK||ret->state == MESSAGE_BLOCK))
 					continue;
-			if (ret == queue->pq_front[i] && ret == queue->pq_end[i])
-			{
-				queue->pq_front[i] = NULL;
-				queue->pq_end[i] = NULL;
-			}
-			else if (ret == queue->pq_front[i])
-			{
-				queue->pq_front[i] = queue->pq_front[i]->next;
-				queue->pq_front[i]->prev = NULL;
-			}
-			else if (ret == queue->pq_end[i])
-			{
-				queue->pq_end[i] = queue->pq_end[i]->prev;
-				queue->pq_end[i]->next = NULL;
-			}
-			else
-			{
-				before = ret->prev;
-				after = ret->next;
-				before->next = after;
-				after->prev = before;
-			}
 		}
-		else 
+		else
 		{
-				queue->pq_front[i] = queue->pq_front[i]->next;
-				queue->pq_front[i]->prev = NULL;			
+			while (ret->state == MESSAGE_BLOCK && ret->next != NULL)
+			{
+				ret= ret->next;
+			}
+			if(ret == queue->pq_end[i] && ret->state == MESSAGE_BLOCK)
+					continue;			
 		}
+		if (ret == queue->pq_front[i] && ret == queue->pq_end[i])
+		{
+			queue->pq_front[i] = NULL;
+			queue->pq_end[i] = NULL;
+		}
+		else if (ret == queue->pq_front[i])
+		{
+			queue->pq_front[i] = queue->pq_front[i]->next;
+			queue->pq_front[i]->prev = NULL;
+		}
+		else if (ret == queue->pq_end[i])
+		{
+			queue->pq_end[i] = queue->pq_end[i]->prev;
+			queue->pq_end[i]->next = NULL;
+		}
+		else
+		{
+			before = ret->prev;
+			after = ret->next;
+			before->next = after;
+			after->prev = before;
+		}
+
 		return ret;
 	}
 	return NULL;
