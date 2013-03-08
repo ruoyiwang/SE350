@@ -2,10 +2,15 @@
 #include <stdio.h>
 #endif
 
+#ifdef IPROCESSES
+
 #include "process.h"
 #include "memory.h"
 #include "uart_polling.h"
 #include "interrupt.h"
+#include "CRT.h"
+
+int display_message_ready;
 
 void i_process_routine(void){
 	// Create an envelope for the kcd message send
@@ -19,8 +24,15 @@ void i_process_routine(void){
 		// Code for sending a message to the KCD for a command registration
 		kcd_command->message_type = COMMAND_REGISTRATION;
 		send_message(kcd_command->dest_id, kcd_command);
-	}
-	else if(roys flag set){
+	}	
+	else if(display_message_ready){		//if there's a message ready for me to print to CRT
+			//above var is the old "roys flag set"
+		//TODO: receive the message from mail box
+
+		//TODO: check of message type
+
+		//TODO: get the message
+
 		// Code for displaying char to uart0
 		uart0_put_string(crt_string);
 	}
@@ -56,3 +68,5 @@ void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len )
 void timer_iprocess(void){
   g_timer_count++ ;
 }
+
+#endif
