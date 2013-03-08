@@ -44,16 +44,19 @@
 #define UART_8N1  0x83 /* 8 bits, no Parity, 1 Stop bit */			
 #define uart0_init() uart_init(0)
 #define BIT(X)    ( 1<<X )
+#define ENTER 0xd // Ascii value for carriage return i.e enter key
+#define command 0x25 // ascii value for the % sign
+
 
 typedef unsigned int U32;
 
 typedef enum {RUN, WAITING_FOR_INTERRUPT} iprocess_state;   
 
-typedef struct interrupt{
+typedef struct interrupt_t{
 	// The i-process contains a pcb for interprocess communication
 	pcb* pcb;
    iprocess_state state;
-} i-process;
+} i_process;
      
 int uart_init(int n_uart); /* initialize the n_uart, interrupt driven */
 

@@ -4,6 +4,10 @@
 volatile uint8_t g_UART0_TX_empty=1;
 volatile uint8_t g_UART0_buffer[BUFSIZE];
 volatile uint32_t g_UART0_count = 0;
+/* Use this flag to figure out if the user is sending a command
+If they typed % then we are receiving a command. Once they press enter then
+we know to send the command to kcd as a command registration and not a hotkey */
+volatile boolean is_command = false; 
 
 pcb* saved_process;
 
@@ -157,10 +161,27 @@ void k_UART0_IRQHandler(void)
 
 	if (IIR_IntId & IIR_RDA) { /* Receive Data Avaialbe */
 		/* read UART. Read RBR will clear the interrupt */
+
+		// If user presses enter then we enter the i-process
+		if(pUart->RBR == ENTER){
+			k_context_switch(interrupt_process);	
+		}
+
 		g_UART0_buffer[g_UART0_count++] = pUart->RBR;
 		if (g_UART0_count == BUFSIZE) {
 			g_UART0_count = 0; /* buffer overflow */
-		}	
+		}
+			
+	} else if (IIR_IntId & IIR_THRE) { 
+		/* THRE Interrupt, transmit holding register empty*/
+		
+		LSR_Val = pUart->LSR;
+		if(LSR_Val & LSR_THRE) {
+			g_UART0_TX_empty = 1; /* ready to transmit */ 
+		} else {  
+			g_UART0_TX_empty = 0; /* not ready to transmit */
+		}
+	    
 	} else if (IIR_IntId & IIR_RLS) { /* Receive Line Status id = 011 */
 		// LSR = Line Status Register. Contains flags for transmit and 
 		// receive status, including line errors.
@@ -178,11 +199,15 @@ void k_UART0_IRQHandler(void)
 		*/
 		if (LSR_Val & LSR_RDR) { /* Receive Data Ready */
 			/* read from the uart */
+	        // If user presses enter then we enter the i-process
+			if(pUart->RBR == ENTER){
+				k_context_switch(interrupt_process);	
+			}
+
 			g_UART0_buffer[g_UART0_count++] = pUart->RBR; 
 			if ( g_UART0_count == BUFSIZE ) {
 				g_UART0_count = 0;  /* buffer overflow */
-			}
-			k_context_switch(interrupt_process);	
+			}	
 		}	    
 	} else { /* IIR_CTI and reserved combination are not implemented */
 		return;
@@ -194,24 +219,4 @@ void k_UART0_IRQHandler(void)
 	k_context_switch (current_process);
 }
 
-void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len )
-{
-	LPC_UART_TypeDef *pUart;
-
-	if(n_uart == 0 ) { /* UART0 is implemented */
-		pUart = (LPC_UART_TypeDef *)LPC_UART0;
-	} else { /* other UARTs are not implemented */
-		return;
-	}
-
-	while ( len != 0 ) {
-		/* THRE status, contain valid data  */
-		while ( !(g_UART0_TX_empty & 0x01) );	
-		pUart->THR = *p_buffer;
-		g_UART0_TX_empty = 0;  // not empty in the THR until it shifts out
-		p_buffer++;
-		len--;
-	}
-	return;
-}
 
