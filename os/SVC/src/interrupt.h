@@ -75,7 +75,7 @@ extern void print_ready_queue_priority(void);
 extern void print_memory_blocked_queue_priority(void);
 extern void print_message_blocked_queue_priority(void);
 
-extern volatile uint8_t g_UART0_TX_empty=1;
+extern volatile uint8_t g_UART0_TX_empty;
 extern volatile uint8_t g_UART0_buffer[BUFSIZE];
-extern volatile uint32_t g_UART0_count = 0;
+extern volatile uint32_t g_UART0_count;
 #endif

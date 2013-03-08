@@ -15,7 +15,7 @@ void crt_displpay_process(){
 	while(message_envelop != null){
 		//pretty much as long as I get messages, I do this shit
 		//will only care if the message is a display request, or else I just delete the message wihtout handling it
-		if (message_envelop->message_type == DISPLAY_REQUEST){
+		if (message_envelop->type == DISPLAY_REQUEST){
 			//handle the message
 			//notice here I am actually just changing the msg info and gonna pass it on anyways
 			message_envelop->src_id = current_process->pid;

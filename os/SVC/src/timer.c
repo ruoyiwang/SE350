@@ -10,8 +10,9 @@
 #include "timer.h"
 #include "process.h"
 
-volatile uint32_t g_timer_count = 0; // increment every 1 ms
 pcb* timer_saved_process;
+
+volatile uint32_t g_timer_count = 0;
 
 /**
  * @brief: initialize timer. Only timer 0 is supported

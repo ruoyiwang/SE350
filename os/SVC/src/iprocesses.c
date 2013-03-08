@@ -6,6 +6,7 @@
 #include "memory.h"
 #include "uart_polling.h"
 #include "interrupt.h"
+#include "timer.h"
 #include "CRT.h"
 
 int display_message_ready;
@@ -20,7 +21,7 @@ void i_process_routine(void){
 	// If the first char in the buffer is 0x25 i.e '%', then we send a command registration
 	if(g_UART0_buffer[0] == 0x25){
 		// Code for sending a message to the KCD for a command registration
-		kcd_command->message_type = COMMAND_REGISTRATION;
+		kcd_command->type = COMMAND_REGISTRATION;
 		send_message(kcd_command->dest_id, kcd_command);
 	}	
 	else if(display_message_ready){		//if there's a message ready for me to print to CRT
@@ -37,7 +38,7 @@ void i_process_routine(void){
 	//else we know that we send a keyboard input
 	else{
 		// Code for sending a message to the KCD for a command registration
-		kcd_command->message_type = KEYBOARD_INPUT;
+		kcd_command->type = KEYBOARD_INPUT;
 		send_message(kcd_command->dest_id, kcd_command);
 	}	
 }
@@ -64,5 +65,5 @@ void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len )
 }
 // increment the timer
 void timer_iprocess(void){
-  g_timer_count++ ;
+   g_timer_count++ ;
 }
