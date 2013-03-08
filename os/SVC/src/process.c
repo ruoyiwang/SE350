@@ -340,5 +340,5 @@ int k_release_processor() {
 
 void block_current_process()
 {
-	current_process->state = BLOCK;
+	current_process->state = MEMORY_BLOCK;
 }
