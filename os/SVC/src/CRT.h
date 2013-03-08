@@ -5,6 +5,9 @@
 
 #ifndef __CRT_DISPLAY_PROCESS__
 #define __CRT_DISPLAY_PROCESS__
+
+extern int display_message_ready;
+
 void crt_displpay_process(){
 	envelope * message_envelop = null;
 	message_envelop = receive_message();
@@ -18,13 +21,20 @@ void crt_displpay_process(){
 			message_envelop->dest_id = "i-process' pid";
 			//message_envelop->message_type = "some message type needed";
 			//for now use the same request
-		
+
+			//tell the global var that I have a display request in mailbox
+			display_message_ready = 1;
+
 			//send message to i-process that contains the message and shit
 			send_message(message_envelop->dest_id, message_envelop);
+
+			//TODO: need to raise a hardware interupt
+
 		}
 
 		release_memory_block(message_envelop);
-		message_envelop = receive_message();		
+		message_envelop = receive_message();
+		display_message_ready = 0;
 	}
 }
 
