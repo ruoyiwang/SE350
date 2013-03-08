@@ -13,6 +13,8 @@
 int display_message_ready;
 
 void i_process_routine(void){
+	// make an empty envelope to for the crt msgs
+	envelope* crt_message = NULL;
 	// Create an envelope for the kcd message send
 	envelope* kcd_command = k_request_memory_block();
 	kcd_command->message = g_UART0_buffer[0];
@@ -25,13 +27,19 @@ void i_process_routine(void){
 		kcd_command->message_type = COMMAND_REGISTRATION;
 		send_message(kcd_command->dest_id, kcd_command);
 	}	
-	else if(display_message_ready){		//if there's a message ready for me to print to CRT
+	else if(display_message_ready == 1){		//if there's a message ready for me to print to CRT
 			//above var is the old "roys flag set"
-		//TODO: receive the message from mail box
+		//receive the message from mail box
+		crt_message = receive_message();	//or should it be k_
 
-		//TODO: check of message type
+		//check of message type
+		if (message_envelop->message_type != DISPLAY_REQUEST){
+			return;
+		}
+		// TODO: confirm if I should consume the message
 
-		//TODO: get the message
+		// TODO: get the message
+		uart_send_string(0, (uint8_t) message_envelop->message, 0);
 
 		// Code for displaying char to uart0
 		uart0_put_string(crt_string);
@@ -52,6 +60,10 @@ void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len )
 		pUart = (LPC_UART_TypeDef *)LPC_UART0;
 	} else { /* other UARTs are not implemented */
 		return;
+	}
+
+	if (len == 0){	//special case where I don't know the lenth
+		
 	}
 
 	while ( len != 0 ) {
