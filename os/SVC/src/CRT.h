@@ -19,7 +19,9 @@ void crt_displpay_process(){
 			//handle the message
 			//notice here I am actually just changing the msg info and gonna pass it on anyways
 			message_envelop->src_id = current_process->pid;
-			message_envelop->dest_id = "i-process' pid";
+
+			//7 is the process id for the i-process
+			message_envelop->dest_id = 7;
 			//message_envelop->message_type = "some message type needed";
 			//for now use the same request
 
