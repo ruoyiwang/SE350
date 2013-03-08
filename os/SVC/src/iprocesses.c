@@ -13,20 +13,23 @@ void i_process_routine(void){
 	kcd_command->message = g_UART0_buffer[0];
 	kcd_command->src_id = interrupt_process->pcb->pid;
 	kcd_command->dest_id = kcd_process_id;
-	if(g_UART0_buffer[0] == command){
+
+	// If the first char in the buffer is 0x25 i.e '%', then we send a command registration
+	if(g_UART0_buffer[0] == 0x25){
 		// Code for sending a message to the KCD for a command registration
 		kcd_command->message_type = COMMAND_REGISTRATION;
 		send_message(kcd_command->dest_id, kcd_command);
 	}
-	else if(g_UART0_buffer[0] != command){
-		// Code for sending a message to the KCD for a command registration
-		kcd_command->message_type = KEYBOARD_INPUT;
-		send_message(kcd_command->dest_id, kcd_command);
-	}	
 	else if(roys flag set){
 		// Code for displaying char to uart0
 		uart0_put_string(crt_string);
 	}
+	//else we know that we send a keyboard input
+	else{
+		// Code for sending a message to the KCD for a command registration
+		kcd_command->message_type = KEYBOARD_INPUT;
+		send_message(kcd_command->dest_id, kcd_command);
+	}	
 }
 
 void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len )

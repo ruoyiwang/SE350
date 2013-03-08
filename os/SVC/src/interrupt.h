@@ -2,6 +2,10 @@
 #include "debug_hotkeys.h"
 #include <stdint.h>	/* typedefs */
 
+#ifndef DEBUG_0
+#include <stdio.h>
+#endif
+
 #ifndef INTERRUPT_H
 #define INTERRUPT_H
 
