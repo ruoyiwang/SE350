@@ -95,11 +95,6 @@ uint32_t timer_init(uint8_t n_timer)
 	return 0;
 }
 
-// increment the timer
-void timer_iprocess(void){
-  g_timer_count++ ;
-}
-
 /**
  * @brief: use CMSIS ISR for TIMER0 IRQ Handler
  * NOTE: This example shows how to save/restore all registers rather than just
@@ -120,15 +115,16 @@ __asm void TIMER0_IRQHandler(void)
  */
 void k_TIMER0_IRQHandler(void)
 {
-	// Set status of current process to interrupted
+	__disable_irq();
+	// Set status of current Prescaleocess to interrupted
 	current_process->state = INTERRUPT;
 	saved_process = current_process;
 	/* ack inttrupt, see section  21.6.1 on pg 493 of LPC17XX_UM */
 	LPC_TIM0->IR = BIT(0);  
 
-	timer->state = WAITING_FOR_INTERRUPT;
-	timer_iprocess();
+	k_context_switch(timer->pcb);
 
+	__enable_irq();
 	//code to save context of interrupt handler (i_process)
 	current_process = saved_process;
 	k_context_switch (current_process);

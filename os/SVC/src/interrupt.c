@@ -4,10 +4,6 @@
 volatile uint8_t g_UART0_TX_empty=1;
 volatile uint8_t g_UART0_buffer[BUFSIZE];
 volatile uint32_t g_UART0_count = 0;
-/* Use this flag to figure out if the user is sending a command
-If they typed % then we are receiving a command. Once they press enter then
-we know to send the command to kcd as a command registration and not a hotkey */
-volatile boolean is_command = false; 
 
 pcb* saved_process;
 
@@ -146,6 +142,7 @@ __asm void UART0_IRQHandler(void)
 
 void k_UART0_IRQHandler(void)
 {
+	__disable_irq();
 	uint8_t IIR_IntId;      /* Interrupt ID from IIR */		
 	uint8_t LSR_Val;        /* LSR Value             */
 	uint8_t dummy = dummy;	/* to clear interrupt upon LSR error */
@@ -155,7 +152,6 @@ void k_UART0_IRQHandler(void)
 	current_process->state = INTERRUPT;
 	saved_process = current_process;
 
-	interrupt_process->state = WAITING_FOR_INTERRUPT;
 	/* Reading IIR automatically acknowledges the interrupt */
 	IIR_IntId = (pUart->IIR) >> 1 ; /* skip pending bit in IIR */
 
@@ -164,14 +160,29 @@ void k_UART0_IRQHandler(void)
 
 		// If user presses enter then we enter the i-process
 		if(pUart->RBR == ENTER){
-			k_context_switch(interrupt_process);	
+			k_context_switch(interrupt_process->pcb);	
 		}
+		else{
+			g_UART0_buffer[g_UART0_count++] = pUart->RBR;
+			if (g_UART0_count == BUFSIZE) {
+				g_UART0_count = 0; /* buffer overflow */
+			}
+		}
+#ifdef DEBUG_0
+		/* Check if the hotkeys have been pressed */
+		// User presses 1
+		if(pUart->RBR == 0x31){
+			print_ready_queue_priority();
+		}
+		else if(pUart->RBR == 0x32){
+			print_memory_blocked_queue_priority();
+		}
+		else if(pUart->RBR == 0x33){
+			print_message_blocked_queue_priority();
+		}
+#endif
 
-		g_UART0_buffer[g_UART0_count++] = pUart->RBR;
-		if (g_UART0_count == BUFSIZE) {
-			g_UART0_count = 0; /* buffer overflow */
-		}
-			
+
 	} else if (IIR_IntId & IIR_THRE) { 
 		/* THRE Interrupt, transmit holding register empty*/
 		
@@ -201,21 +212,23 @@ void k_UART0_IRQHandler(void)
 			/* read from the uart */
 	        // If user presses enter then we enter the i-process
 			if(pUart->RBR == ENTER){
-				k_context_switch(interrupt_process);	
+				k_context_switch(interrupt_process->pcb);	
 			}
-
-			g_UART0_buffer[g_UART0_count++] = pUart->RBR; 
-			if ( g_UART0_count == BUFSIZE ) {
-				g_UART0_count = 0;  /* buffer overflow */
-			}	
+			else{
+				g_UART0_buffer[g_UART0_count++] = pUart->RBR; 
+				if ( g_UART0_count == BUFSIZE ) {
+					g_UART0_count = 0;  /* buffer overflow */
+				}
+			}
 		}	    
 	} else { /* IIR_CTI and reserved combination are not implemented */
 		return;
 	}	
+	
+	__enable_irq();
 
 	// We now have to restore context of the current process
 	current_process = saved_process;
-	interrupt_process->state = RUN;
 	k_context_switch (current_process);
 }
 

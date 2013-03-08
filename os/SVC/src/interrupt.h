@@ -1,4 +1,5 @@
 #include "process.h"
+#include "debug_hotkeys.h"
 #include <stdint.h>	/* typedefs */
 
 #ifndef INTERRUPT_H
@@ -47,7 +48,6 @@
 #define ENTER 0xd // Ascii value for carriage return i.e enter key
 #define command 0x25 // ascii value for the % sign
 
-
 typedef unsigned int U32;
 
 typedef enum {RUN, WAITING_FOR_INTERRUPT} iprocess_state;   
@@ -63,10 +63,14 @@ int uart_init(int n_uart); /* initialize the n_uart, interrupt driven */
 /* write a string to the n_uart */
 void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len );
 
-#endif /* ! _UART_H_ */
+extern i_process* interrupt_process;
 
 extern void k_UART0_IRQHandler();
 #define UART0_IRQHandler() _UART0_IRQHandler((U32)k_UART0_IRQHandler)
 extern void __SVC_0 _UART0_IRQHandler(U32 p_func);
- 	
+ 
+extern void print_ready_queue_priority(void);
+extern void print_memory_blocked_queue_priority(void);
+extern void print_message_blocked_queue_priority(void);
+
 #endif

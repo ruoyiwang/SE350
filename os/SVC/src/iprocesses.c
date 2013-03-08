@@ -7,10 +7,10 @@
 #include "uart_polling.h"
 #include "interrupt.h"
 
-void i_process_routine(){
+void i_process_routine(void){
 	// Create an envelope for the kcd message send
 	envelope* kcd_command = k_request_memory_block();
-	kcd_command->message = command;
+	kcd_command->message = g_UART0_buffer[0];
 	kcd_command->src_id = interrupt_process->pcb->pid;
 	kcd_command->dest_id = kcd_process_id;
 	if(g_UART0_buffer[0] == command){
