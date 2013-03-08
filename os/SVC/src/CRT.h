@@ -1,5 +1,6 @@
 #include "process.h"
 #include "memory.h"
+#include "uart_irq.c";
 #include <LPC17xx.h>
 #include "uart_polling.h"
 
@@ -29,12 +30,14 @@ void crt_displpay_process(){
 			send_message(message_envelop->dest_id, message_envelop);
 
 			//TODO: need to raise a hardware interupt
+			UART0_IRQHandler();
 
+			//unset the message ready
+			display_message_ready = 0;
 		}
 
 		release_memory_block(message_envelop);
 		message_envelop = receive_message();
-		display_message_ready = 0;
 	}
 }
 
