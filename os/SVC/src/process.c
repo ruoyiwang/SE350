@@ -310,8 +310,7 @@ void process_init() {
 	*(--sp) = 0x0;
 	kcd_proc.sp = sp;
 	pqueue_enqueue(&ready_queue,&kcd_proc);
-	if (i!=0)
-		pcb_insert(&kcd_proc, pcb_lookup_list);
+	pcb_insert(&kcd_proc, pcb_lookup_list);
 }
 
 int k_set_process_priority(int pid, int priority) {
