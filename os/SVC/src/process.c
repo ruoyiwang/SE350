@@ -16,8 +16,8 @@ MMU mmu;
 pcb pcbs[NUM_PROCS];
 pcb kcd_proc;
 pcb crt_proc;
-i_process* interrupt_process;
-i_process* timer;
+i_process interrupt_process;
+i_process timer;
 
 void atomic (int onOff)
 {
@@ -240,10 +240,10 @@ void process_init() {
 	pcb_lookup_list = &pcbs[0];
 
 	// setup the interrupt process;
-	interrupt_process->pcb->pid = 7;
-	interrupt_process->pcb->pc = (uint32_t)i_process_routine;
-	interrupt_process->state = RUNNING;
-	interrupt_process->pcb->priority=0;
+	interrupt_process.pcb.pid = 7;
+	interrupt_process.pcb.pc = (uint32_t)i_process_routine;
+	interrupt_process.state = RUNNING;
+	interrupt_process.pcb.priority=0;
 	sp  = k_request_memory_block();
 	/* 8 bytes alignement adjustment to exception stack frame */
 	if (!(((uint32_t)sp) & 0x04)) {
@@ -251,14 +251,16 @@ void process_init() {
 	}
 
 	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
-	*(--sp)  = (uint32_t)interrupt_process;  /* PC contains the entry point of the process */
-	*(--sp) = 0x0;
-	interrupt_process->pcb->sp = sp;
+	*(--sp)  = (uint32_t)interrupt_process.pcb.pc;  /* PC contains the entry point of the process */
+	for (j = 0; j < 6; j++) { /* R0-R3, R12 are cleared with 0 */
+		*(--sp) = 0x0;
+	}
+	interrupt_process.pcb.sp = sp;
 
-	timer->pcb->pid = 8;
-	timer->pcb->pc = (uint32_t)timer_iprocess;
-	timer->state = RUNNING;
-	timer->pcb->priority=0;
+	timer.pcb.pid = 8;
+	timer.pcb.pc = (uint32_t)timer_iprocess;
+	timer.state = RUNNING;
+	timer.pcb.priority=0;
 	sp  = k_request_memory_block();
 	/* 8 bytes alignement adjustment to exception stack frame */
 	if (!(((uint32_t)sp) & 0x04)) {
@@ -266,9 +268,11 @@ void process_init() {
 	}
 
 	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
-	*(--sp)  = (uint32_t)timer;  /* PC contains the entry point of the process */
-	*(--sp) = 0x0;
-	timer->pcb->sp = sp;
+	*(--sp)  = (uint32_t)timer.pcb.pc;  /* PC contains the entry point of the process */
+	for (j = 0; j < 6; j++) { /* R0-R3, R12 are cleared with 0 */
+		*(--sp) = 0x0;
+	}
+	timer.pcb.sp = sp;
 
 	for (i=0; i<NUM_PROCS;i++)
 	{
@@ -309,7 +313,9 @@ void process_init() {
 
 	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
 	*(--sp)  = (uint32_t)kcd;  /* PC contains the entry point of the process */
-	*(--sp) = 0x0;
+	for (j = 0; j < 6; j++) { /* R0-R3, R12 are cleared with 0 */
+		*(--sp) = 0x0;
+	}
 	kcd_proc.sp = sp;
 	pqueue_enqueue(&ready_queue,&kcd_proc);
 	pcb_insert(&kcd_proc, pcb_lookup_list);
@@ -327,7 +333,9 @@ void process_init() {
 
 	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
 	*(--sp)  = (uint32_t)crt_displpay_process;  /* PC contains the entry point of the process */
-	*(--sp) = 0x0;
+	for (j = 0; j < 6; j++) { /* R0-R3, R12 are cleared with 0 */
+		*(--sp) = 0x0;
+	}
 	crt_proc.sp = sp;
 	pqueue_enqueue(&ready_queue,&crt_proc);
 	pcb_insert(&crt_proc, pcb_lookup_list);
@@ -361,11 +369,11 @@ int k_get_process_priority(int pid){
 }
 
 __asm void push_registers(void) {
-	PUSH{r4-r11, lr}
+	//PUSH{r4-r11, lr}
 }
 
 __asm void pop_registers(void) {
-	POP{r4-r11, pc}	
+	//POP{r4-r11, pc}	
 }
 
 

@@ -90,7 +90,7 @@ uint32_t timer_init(uint8_t n_timer)
 	pTimer->TCR = 1;
 
 	// Create the iprocess for the timer
-	timer->pcb->pc = (uint32_t)timer_iprocess;
+	timer.pcb.pc = (uint32_t)timer_iprocess;
 	return 0;
 }
 
@@ -121,7 +121,7 @@ void k_TIMER0_IRQHandler(void)
 	/* ack inttrupt, see section  21.6.1 on pg 493 of LPC17XX_UM */
 	LPC_TIM0->IR = BIT(0);  
 
-	k_context_switch(timer->pcb);
+	k_context_switch(&(timer.pcb));
 
 	__enable_irq();
 	//code to save context of interrupt handler (i_process)

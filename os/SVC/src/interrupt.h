@@ -58,7 +58,7 @@ typedef enum {RUNNING, WAITING_FOR_INTERRUPT} iprocess_state;
 
 typedef struct interrupt_t{
 	// The i-process contains a pcb for interprocess communication
-	pcb* pcb;
+	pcb pcb;
    iprocess_state state;
 } i_process;
      
@@ -67,7 +67,7 @@ int uart_init(int n_uart); /* initialize the n_uart, interrupt driven */
 /* write a string to the n_uart */
 void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len );
 
-extern i_process* interrupt_process;
+extern i_process interrupt_process;
 
 extern void k_UART0_IRQHandler(void);
  
