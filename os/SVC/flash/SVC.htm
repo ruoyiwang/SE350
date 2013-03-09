@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\flash\SVC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\flash\SVC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.02 [Build 28]: Last Updated: Fri Mar 08 23:38:57 2013
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.02 [Build 28]: Last Updated: Sat Mar 09 02:44:27 2013
 <BR><P>
 <H3>Maximum Stack Usage =         64 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -20,7 +20,7 @@ Mutually Recursive functions
  <LI><a href="#[8]">PendSV_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[8]">PendSV_Handler</a><BR>
  <LI><a href="#[9]">SysTick_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[9]">SysTick_Handler</a><BR>
  <LI><a href="#[20]">ADC_IRQHandler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[20]">ADC_IRQHandler</a><BR>
- <LI><a href="#[4c]">pcb_lookup_by_pid</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[4c]">pcb_lookup_by_pid</a><BR>
+ <LI><a href="#[4f]">pcb_lookup_by_pid</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[4f]">pcb_lookup_by_pid</a><BR>
 </UL>
 <P>
 <H3>
@@ -72,13 +72,14 @@ Function Pointers
  <LI><a href="#[5]">UsageFault_Handler</a> from startup_lpc17xx.o(.text) referenced from startup_lpc17xx.o(RESET)
  <LI><a href="#[a]">WDT_IRQHandler</a> from startup_lpc17xx.o(.text) referenced from startup_lpc17xx.o(RESET)
  <LI><a href="#[2e]">__main</a> from entry.o(.ARM.Collect$$$$00000000) referenced from startup_lpc17xx.o(.text)
+ <LI><a href="#[52]">crt_displpay_process</a> from process.o(.text) referenced 2 times from process.o(.text)
  <LI><a href="#[39]">i_process_routine</a> from iprocesses.o(.text) referenced from process.o(.text)
  <LI><a href="#[3c]">k_get_process_priority</a> from process.o(.text) referenced from processes.o(.text)
- <LI><a href="#[3f]">k_receive_message</a> from process.o(.text) referenced 3 times from processes.o(.text)
- <LI><a href="#[30]">k_release_memory_block</a> from memory.o(.text) referenced 4 times from main_svc.o(.text)
+ <LI><a href="#[3f]">k_receive_message</a> from process.o(.text) referenced 5 times from processes.o(.text)
+ <LI><a href="#[30]">k_release_memory_block</a> from memory.o(.text) referenced 5 times from main_svc.o(.text)
  <LI><a href="#[2f]">k_release_processor</a> from process.o(.text) referenced 3 times from main_svc.o(.text)
  <LI><a href="#[31]">k_request_memory_block</a> from memory.o(.text) referenced 4 times from main_svc.o(.text)
- <LI><a href="#[3e]">k_send_message</a> from process.o(.text) referenced 3 times from processes.o(.text)
+ <LI><a href="#[3e]">k_send_message</a> from process.o(.text) referenced 4 times from processes.o(.text)
  <LI><a href="#[3d]">k_set_process_priority</a> from process.o(.text) referenced from processes.o(.text)
  <LI><a href="#[3b]">kcd</a> from keyboard.o(.text) referenced from process.o(.text)
  <LI><a href="#[2d]">main</a> from main_svc.o(.text) referenced from entry8.o(.ARM.Collect$$$$00000009)
@@ -112,8 +113,8 @@ Global Symbols
 
 <P><STRONG><a name="[5c]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8.o(.ARM.Collect$$$$00000009))
 
-<P><STRONG><a name="[50]"></a>__rte</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, hal.o(.emb_text))
-<BR><BR>[Called By]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_context_switch
+<P><STRONG><a name="[4e]"></a>__rte</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, hal.o(.emb_text))
+<BR><BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_context_switch
 </UL>
 
 <P><STRONG><a name="[6]"></a>SVC_Handler</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, hal.o(.emb_text))
@@ -124,7 +125,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_UART0_IRQHandler
 </UL>
-<BR>[Called By]<UL><LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;crt_displpay_process
+<BR>[Called By]<UL><LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;crt_displpay_process
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_lpc17xx.o(RESET)
 </UL>
@@ -356,52 +357,42 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[4d]"></a>atomic</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, process.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_delay_send
+<P><STRONG><a name="[51]"></a>atomic</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, process.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_delay_send
+<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_send_message
 <LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_receive_message
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_send_message
 </UL>
 
-<P><STRONG><a name="[4c]"></a>pcb_lookup_by_pid</STRONG> (Thumb, 32 bytes, Stack size 12 bytes, process.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 12 + In Cycle
-<LI>Call Chain = pcb_lookup_by_pid &rArr;  pcb_lookup_by_pid (Cycle)
-</UL>
-<BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_lookup_by_pid
-</UL>
-<BR>[Called By]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_set_process_priority
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_send_message
-<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_lookup_by_pid
-<LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_release_processor
-</UL>
-
-<P><STRONG><a name="[3e]"></a>k_send_message</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, process.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = k_send_message &rArr; pcb_lookup_by_pid &rArr;  pcb_lookup_by_pid (Cycle)
-</UL>
-<BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_lookup_by_pid
-<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atomic
-</UL>
-<BR>[Address Reference Count : 3]<UL><LI> iprocesses.o(.text)
-<LI> keyboard.o(.text)
-<LI> processes.o(.text)
-</UL>
-<P><STRONG><a name="[4f]"></a>pqueue_enqueue</STRONG> (Thumb, 58 bytes, Stack size 0 bytes, process.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_pqueue_set_priority
-<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_context_switch
+<P><STRONG><a name="[4d]"></a>pqueue_enqueue</STRONG> (Thumb, 58 bytes, Stack size 0 bytes, process.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_pqueue_set_priority
+<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_context_switch
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;process_init
 </UL>
 
-<P><STRONG><a name="[4e]"></a>k_context_switch</STRONG> (Thumb, 116 bytes, Stack size 8 bytes, process.o(.text))
+<P><STRONG><a name="[4c]"></a>k_context_switch</STRONG> (Thumb, 116 bytes, Stack size 8 bytes, process.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = k_context_switch
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pqueue_enqueue
-<LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rte
+<BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pqueue_enqueue
+<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rte
 </UL>
 <BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_TIMER0_IRQHandler
 <LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_UART0_IRQHandler
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_release_processor
 </UL>
 
-<P><STRONG><a name="[51]"></a>pqueue_dequeue</STRONG> (Thumb, 252 bytes, Stack size 16 bytes, process.o(.text))
+<P><STRONG><a name="[4f]"></a>pcb_lookup_by_pid</STRONG> (Thumb, 32 bytes, Stack size 12 bytes, process.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 12 + In Cycle
+<LI>Call Chain = pcb_lookup_by_pid &rArr;  pcb_lookup_by_pid (Cycle)
+</UL>
+<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_lookup_by_pid
+</UL>
+<BR>[Called By]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_set_process_priority
+<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_send_message
+<LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_lookup_by_pid
+<LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_release_processor
+</UL>
+
+<P><STRONG><a name="[50]"></a>pqueue_dequeue</STRONG> (Thumb, 252 bytes, Stack size 16 bytes, process.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = pqueue_dequeue
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_release_processor
@@ -410,9 +401,9 @@ Global Symbols
 <P><STRONG><a name="[2f]"></a>k_release_processor</STRONG> (Thumb, 62 bytes, Stack size 8 bytes, process.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = k_release_processor &rArr; pqueue_dequeue
 </UL>
-<BR>[Calls]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pqueue_dequeue
-<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_context_switch
-<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_lookup_by_pid
+<BR>[Calls]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pqueue_dequeue
+<LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_lookup_by_pid
+<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_context_switch
 </UL>
 <BR>[Called By]<UL><LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_request_memory_block
 <LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_release_memory_block
@@ -424,33 +415,52 @@ Global Symbols
 <P><STRONG><a name="[3f]"></a>k_receive_message</STRONG> (Thumb, 80 bytes, Stack size 8 bytes, process.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = k_receive_message
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atomic
+<BR>[Calls]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atomic
 </UL>
-<BR>[Address Reference Count : 3]<UL><LI> iprocesses.o(.text)
+<BR>[Address Reference Count : 4]<UL><LI> process.o(.text)
+<LI> iprocesses.o(.text)
 <LI> keyboard.o(.text)
 <LI> processes.o(.text)
 </UL>
-<P><STRONG><a name="[52]"></a>k_delay_send</STRONG> (Thumb, 74 bytes, Stack size 4 bytes, process.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atomic
+<P><STRONG><a name="[3e]"></a>k_send_message</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, process.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = k_send_message &rArr; pcb_lookup_by_pid &rArr;  pcb_lookup_by_pid (Cycle)
+</UL>
+<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_lookup_by_pid
+<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atomic
+</UL>
+<BR>[Address Reference Count : 4]<UL><LI> process.o(.text)
+<LI> iprocesses.o(.text)
+<LI> keyboard.o(.text)
+<LI> processes.o(.text)
+</UL>
+<P><STRONG><a name="[52]"></a>crt_displpay_process</STRONG> (Thumb, 78 bytes, Stack size 8 bytes, process.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = crt_displpay_process &rArr; UART0_IRQHandler &rArr; k_UART0_IRQHandler &rArr; k_context_switch
+</UL>
+<BR>[Calls]<UL><LI><a href="#[f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART0_IRQHandler
+</UL>
+<BR>[Address Reference Count : 1]<UL><LI> process.o(.text)
+</UL>
+<P><STRONG><a name="[53]"></a>k_delay_send</STRONG> (Thumb, 74 bytes, Stack size 4 bytes, process.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atomic
 </UL>
 
-<P><STRONG><a name="[54]"></a>pcb_insert</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, process.o(.text))
+<P><STRONG><a name="[55]"></a>pcb_insert</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, process.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;process_init
 </UL>
 
-<P><STRONG><a name="[53]"></a>k_pqueue_set_priority</STRONG> (Thumb, 104 bytes, Stack size 24 bytes, process.o(.text))
+<P><STRONG><a name="[54]"></a>k_pqueue_set_priority</STRONG> (Thumb, 104 bytes, Stack size 24 bytes, process.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = k_pqueue_set_priority
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pqueue_enqueue
+<BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pqueue_enqueue
 </UL>
 <BR>[Called By]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_set_process_priority
 </UL>
 
-<P><STRONG><a name="[4a]"></a>process_init</STRONG> (Thumb, 534 bytes, Stack size 16 bytes, process.o(.text))
+<P><STRONG><a name="[4a]"></a>process_init</STRONG> (Thumb, 612 bytes, Stack size 16 bytes, process.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = process_init &rArr; k_request_memory_block &rArr; k_release_processor &rArr; pqueue_dequeue
 </UL>
-<BR>[Calls]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_insert
-<LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pqueue_enqueue
+<BR>[Calls]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_insert
+<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pqueue_enqueue
 <LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_request_memory_block
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -459,15 +469,15 @@ Global Symbols
 <P><STRONG><a name="[3d]"></a>k_set_process_priority</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, process.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = k_set_process_priority &rArr; k_pqueue_set_priority
 </UL>
-<BR>[Calls]<UL><LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_pqueue_set_priority
-<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_lookup_by_pid
+<BR>[Calls]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_pqueue_set_priority
+<LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_lookup_by_pid
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> processes.o(.text)
 </UL>
 <P><STRONG><a name="[3c]"></a>k_get_process_priority</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, process.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> processes.o(.text)
 </UL>
-<P><STRONG><a name="[55]"></a>block_current_process</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, process.o(.text))
+<P><STRONG><a name="[56]"></a>block_current_process</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, process.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_request_memory_block
 </UL>
 
@@ -528,7 +538,7 @@ Global Symbols
 <P><STRONG><a name="[31]"></a>k_request_memory_block</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, memory.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = k_request_memory_block &rArr; k_release_processor &rArr; pqueue_dequeue
 </UL>
-<BR>[Calls]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;block_current_process
+<BR>[Calls]<UL><LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;block_current_process
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_release_processor
 </UL>
 <BR>[Called By]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i_process_routine
@@ -544,21 +554,18 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_release_processor
 </UL>
-<BR>[Address Reference Count : 4]<UL><LI> iprocesses.o(.text)
+<BR>[Address Reference Count : 5]<UL><LI> process.o(.text)
+<LI> iprocesses.o(.text)
 <LI> keyboard.o(.text)
 <LI> main_svc.o(.text)
 <LI> processes.o(.text)
 </UL>
-<P><STRONG><a name="[42]"></a>k_UART0_IRQHandler</STRONG> (Thumb, 218 bytes, Stack size 24 bytes, interrupt.o(.text))
+<P><STRONG><a name="[42]"></a>k_UART0_IRQHandler</STRONG> (Thumb, 210 bytes, Stack size 24 bytes, interrupt.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = k_UART0_IRQHandler &rArr; k_context_switch
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_context_switch
+<BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_context_switch
 </UL>
 <BR>[Called By]<UL><LI><a href="#[f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART0_IRQHandler
-</UL>
-
-<P><STRONG><a name="[56]"></a>crt_displpay_process</STRONG> (Thumb, 74 bytes, Stack size 8 bytes, iprocesses.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART0_IRQHandler
 </UL>
 
 <P><STRONG><a name="[57]"></a>uart_send_string</STRONG> (Thumb, 46 bytes, Stack size 12 bytes, iprocesses.o(.text))
@@ -601,12 +608,12 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> process.o(.text)
 </UL>
-<P><STRONG><a name="[62]"></a>timer_init</STRONG> (Thumb, 74 bytes, Stack size 12 bytes, timer.o(.text), UNUSED)
+<P><STRONG><a name="[62]"></a>timer_init</STRONG> (Thumb, 70 bytes, Stack size 12 bytes, timer.o(.text), UNUSED)
 
-<P><STRONG><a name="[43]"></a>k_TIMER0_IRQHandler</STRONG> (Thumb, 58 bytes, Stack size 8 bytes, timer.o(.text))
+<P><STRONG><a name="[43]"></a>k_TIMER0_IRQHandler</STRONG> (Thumb, 54 bytes, Stack size 8 bytes, timer.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = k_TIMER0_IRQHandler &rArr; k_context_switch
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_context_switch
+<BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_context_switch
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIMER0_IRQHandler
 </UL>

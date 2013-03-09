@@ -312,7 +312,7 @@ void process_init() {
 	}
 
 	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
-	*(--sp)  = (uint32_t)kcd;  /* PC contains the entry point of the process */
+	*(--sp)  = (uint32_t)kcd_proc.pc;  /* PC contains the entry point of the process */
 	for (j = 0; j < 6; j++) { /* R0-R3, R12 are cleared with 0 */
 		*(--sp) = 0x0;
 	}

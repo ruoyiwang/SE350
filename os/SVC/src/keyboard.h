@@ -7,6 +7,5 @@ typedef struct kcd_node_t {
 	char _command[32];
 } kcd_node;
 
-void kcd(void);
 
 #endif

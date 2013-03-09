@@ -17,9 +17,11 @@ Section Cross References
     main_svc.o(.text) refers to process.o(.text) for process_init
     retarget.o(.text) refers to uart_polling.o(.text) for uart_put_char
     process.o(.text) refers to hal.o(.emb_text) for __rte
+    process.o(.text) refers to interrupt.o(.emb_text) for UART0_IRQHandler
     process.o(.text) refers to memory.o(.text) for k_request_memory_block
-    process.o(.text) refers to process.o(.data) for pcb_lookup_list
+    process.o(.text) refers to process.o(.data) for current_process
     process.o(.text) refers to process.o(.bss) for ready_queue
+    process.o(.text) refers to iprocesses.o(.data) for display_message_ready
     process.o(.text) refers to timer.o(.data) for g_timer_count
     process.o(.text) refers to processes.o(.text) for null_process
     process.o(.text) refers to iprocesses.o(.text) for i_process_routine
@@ -34,15 +36,16 @@ Section Cross References
     interrupt.o(.text) refers to process.o(.text) for k_context_switch
     interrupt.o(.text) refers to process.o(.data) for current_process
     interrupt.o(.text) refers to interrupt.o(.data) for saved_process
+    interrupt.o(.text) refers to process.o(.bss) for interrupt_process
     interrupt.o(.text) refers to interrupt.o(.bss) for g_UART0_buffer
-    iprocesses.o(.text) refers to interrupt.o(.emb_text) for UART0_IRQHandler
     iprocesses.o(.text) refers to memory.o(.text) for k_request_memory_block
-    iprocesses.o(.text) refers to process.o(.text) for k_receive_message
-    iprocesses.o(.text) refers to process.o(.data) for current_process
-    iprocesses.o(.text) refers to iprocesses.o(.data) for display_message_ready
     iprocesses.o(.text) refers to interrupt.o(.data) for g_UART0_TX_empty
+    iprocesses.o(.text) refers to process.o(.bss) for interrupt_process
     iprocesses.o(.text) refers to interrupt.o(.bss) for g_UART0_buffer
+    iprocesses.o(.text) refers to process.o(.text) for k_send_message
+    iprocesses.o(.text) refers to iprocesses.o(.data) for display_message_ready
     iprocesses.o(.text) refers to timer.o(.data) for g_timer_count
+    iprocesses.o(.text) refers to process.o(.data) for delay_message_list
     keyboard.o(.text) refers to keyboard.o(.data) for command_root
     keyboard.o(.text) refers to memory.o(.text) for k_request_memory_block
     keyboard.o(.text) refers to process.o(.text) for k_receive_message
@@ -50,7 +53,8 @@ Section Cross References
     timer.o(.text) refers to process.o(.text) for k_context_switch
     timer.o(.text) refers to timer.o(.data) for g_timer_count
     timer.o(.text) refers to iprocesses.o(.text) for timer_iprocess
-    timer.o(.text) refers to process.o(.data) for timer
+    timer.o(.text) refers to process.o(.bss) for timer
+    timer.o(.text) refers to process.o(.data) for current_process
     entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry7b.o(.ARM.Collect$$$$00000008) for _main_clock
     entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry8.o(.ARM.Collect$$$$00000009) for _main_init
     entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry5.o(.ARM.Collect$$$$00000004) for _main_scatterload
@@ -79,6 +83,7 @@ Removing Unused input sections from the image.
     Removing retarget.o(.data), (8 bytes).
     Removing process.o(.rev16_text), (4 bytes).
     Removing process.o(.revsh_text), (4 bytes).
+    Removing process.o(.emb_text), (0 bytes).
     Removing interrupt.o(.rev16_text), (4 bytes).
     Removing interrupt.o(.revsh_text), (4 bytes).
     Removing iprocesses.o(.rev16_text), (4 bytes).
@@ -86,7 +91,7 @@ Removing Unused input sections from the image.
     Removing timer.o(.rev16_text), (4 bytes).
     Removing timer.o(.revsh_text), (4 bytes).
 
-17 unused section(s) (total 150 bytes) removed from the image.
+18 unused section(s) (total 150 bytes) removed from the image.
 
 ==============================================================================
 
@@ -148,23 +153,23 @@ Image Symbol Table
     .ARM.__at_0x02FC                         0x000002fc   Section        4  startup_lpc17xx.o(.ARM.__at_0x02FC)
     .text                                    0x00000300   Section        0  system_lpc17xx.o(.text)
     .text                                    0x0000051c   Section        0  process.o(.text)
-    .text                                    0x00000b24   Section        0  processes.o(.text)
-    .text                                    0x00000fbc   Section        0  memory.o(.text)
-    .text                                    0x00001094   Section        0  interrupt.o(.text)
-    .text                                    0x0000118c   Section        0  iprocesses.o(.text)
-    .text                                    0x000013b8   Section        0  keyboard.o(.text)
-    .text                                    0x000014c0   Section        0  timer.o(.text)
-    i.__scatterload_zeroinit                 0x00001558   Section       14  handlers.o(i.__scatterload_zeroinit)
+    .text                                    0x00000bcc   Section        0  processes.o(.text)
+    .text                                    0x00001064   Section        0  memory.o(.text)
+    .text                                    0x0000113c   Section        0  interrupt.o(.text)
+    .text                                    0x0000122c   Section        0  iprocesses.o(.text)
+    .text                                    0x0000140c   Section        0  keyboard.o(.text)
+    .text                                    0x00001514   Section        0  timer.o(.text)
+    i.__scatterload_zeroinit                 0x000015a4   Section       14  handlers.o(i.__scatterload_zeroinit)
     .data                                    0x10000000   Section        4  system_lpc17xx.o(.data)
-    .data                                    0x10000004   Section       20  process.o(.data)
-    .data                                    0x10000018   Section       16  processes.o(.data)
-    .data                                    0x10000028   Section       12  interrupt.o(.data)
-    .data                                    0x10000034   Section        4  iprocesses.o(.data)
-    .data                                    0x10000038   Section        4  keyboard.o(.data)
-    .data                                    0x1000003c   Section        8  timer.o(.data)
-    .bss                                     0x10000044   Section      600  process.o(.bss)
-    .bss                                     0x1000029c   Section       64  interrupt.o(.bss)
-    STACK                                    0x100002e0   Section      512  startup_lpc17xx.o(STACK)
+    .data                                    0x10000004   Section       12  process.o(.data)
+    .data                                    0x10000010   Section       16  processes.o(.data)
+    .data                                    0x10000020   Section       12  interrupt.o(.data)
+    .data                                    0x1000002c   Section        4  iprocesses.o(.data)
+    .data                                    0x10000030   Section        4  keyboard.o(.data)
+    .data                                    0x10000034   Section        8  timer.o(.data)
+    .bss                                     0x1000003c   Section      716  process.o(.bss)
+    .bss                                     0x10000308   Section       64  interrupt.o(.bss)
+    STACK                                    0x10000348   Section      512  startup_lpc17xx.o(STACK)
 
     Global Symbols
 
@@ -247,68 +252,69 @@ Image Symbol Table
     __scatterload_null                       0x000002fb   Thumb Code     2  handlers.o(i.__scatterload_null)
     SystemInit                               0x00000301   Thumb Code   476  system_lpc17xx.o(.text)
     atomic                                   0x0000051d   Thumb Code    10  process.o(.text)
-    pcb_lookup_by_pid                        0x00000527   Thumb Code    32  process.o(.text)
-    k_send_message                           0x00000547   Thumb Code    84  process.o(.text)
-    pqueue_enqueue                           0x0000059b   Thumb Code    58  process.o(.text)
-    k_context_switch                         0x000005d5   Thumb Code   116  process.o(.text)
-    pqueue_dequeue                           0x00000649   Thumb Code   252  process.o(.text)
-    k_release_processor                      0x00000745   Thumb Code    62  process.o(.text)
-    k_receive_message                        0x00000783   Thumb Code    80  process.o(.text)
-    k_delay_send                             0x000007d3   Thumb Code    74  process.o(.text)
-    pcb_insert                               0x0000081d   Thumb Code    30  process.o(.text)
-    k_pqueue_set_priority                    0x0000083b   Thumb Code   104  process.o(.text)
-    process_init                             0x000008a3   Thumb Code   534  process.o(.text)
-    k_set_process_priority                   0x00000ab9   Thumb Code    40  process.o(.text)
-    k_get_process_priority                   0x00000ae1   Thumb Code    30  process.o(.text)
-    block_current_process                    0x00000aff   Thumb Code    10  process.o(.text)
-    null_process                             0x00000b25   Thumb Code    10  processes.o(.text)
-    test_process_1                           0x00000b2f   Thumb Code    60  processes.o(.text)
-    test_process_2                           0x00000b6b   Thumb Code    60  processes.o(.text)
-    test_process_3                           0x00000ba7   Thumb Code    70  processes.o(.text)
-    test_process_4                           0x00000bed   Thumb Code    78  processes.o(.text)
-    test_process_5                           0x00000c3b   Thumb Code    54  processes.o(.text)
-    test_process_6                           0x00000c71   Thumb Code    64  processes.o(.text)
-    wall_clock                               0x00000cb1   Thumb Code   520  processes.o(.text)
-    mmu_init                                 0x00000fbd   Thumb Code    70  memory.o(.text)
-    k_request_memory_block                   0x00001003   Thumb Code    64  memory.o(.text)
-    k_release_memory_block                   0x00001043   Thumb Code    68  memory.o(.text)
-    k_UART0_IRQHandler                       0x00001095   Thumb Code   218  interrupt.o(.text)
-    crt_displpay_process                     0x0000118d   Thumb Code    74  iprocesses.o(.text)
-    uart_send_string                         0x000011d7   Thumb Code    46  iprocesses.o(.text)
-    i_process_routine                        0x00001205   Thumb Code   234  iprocesses.o(.text)
-    timer_iprocess                           0x000012ef   Thumb Code   150  iprocesses.o(.text)
-    kcd_register                             0x000013b9   Thumb Code    72  keyboard.o(.text)
-    kcd_lookup                               0x00001401   Thumb Code    78  keyboard.o(.text)
-    kcd                                      0x0000144f   Thumb Code    92  keyboard.o(.text)
-    timer_init                               0x000014c1   Thumb Code    74  timer.o(.text)
-    k_TIMER0_IRQHandler                      0x0000150b   Thumb Code    58  timer.o(.text)
-    __scatterload_zeroinit                   0x00001559   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
-    Region$$Table$$Base                      0x00001568   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00001588   Number         0  anon$$obj.o(Region$$Table)
+    pqueue_enqueue                           0x00000527   Thumb Code    58  process.o(.text)
+    k_context_switch                         0x00000561   Thumb Code   116  process.o(.text)
+    pcb_lookup_by_pid                        0x000005d5   Thumb Code    32  process.o(.text)
+    pqueue_dequeue                           0x000005f5   Thumb Code   252  process.o(.text)
+    k_release_processor                      0x000006f1   Thumb Code    62  process.o(.text)
+    k_receive_message                        0x0000072f   Thumb Code    80  process.o(.text)
+    k_send_message                           0x0000077f   Thumb Code    84  process.o(.text)
+    crt_displpay_process                     0x000007d3   Thumb Code    78  process.o(.text)
+    k_delay_send                             0x00000821   Thumb Code    74  process.o(.text)
+    pcb_insert                               0x0000086b   Thumb Code    30  process.o(.text)
+    k_pqueue_set_priority                    0x00000889   Thumb Code   104  process.o(.text)
+    process_init                             0x000008f1   Thumb Code   612  process.o(.text)
+    k_set_process_priority                   0x00000b55   Thumb Code    40  process.o(.text)
+    k_get_process_priority                   0x00000b7d   Thumb Code    30  process.o(.text)
+    block_current_process                    0x00000b9b   Thumb Code    10  process.o(.text)
+    null_process                             0x00000bcd   Thumb Code    10  processes.o(.text)
+    test_process_1                           0x00000bd7   Thumb Code    60  processes.o(.text)
+    test_process_2                           0x00000c13   Thumb Code    60  processes.o(.text)
+    test_process_3                           0x00000c4f   Thumb Code    70  processes.o(.text)
+    test_process_4                           0x00000c95   Thumb Code    78  processes.o(.text)
+    test_process_5                           0x00000ce3   Thumb Code    54  processes.o(.text)
+    test_process_6                           0x00000d19   Thumb Code    64  processes.o(.text)
+    wall_clock                               0x00000d59   Thumb Code   520  processes.o(.text)
+    mmu_init                                 0x00001065   Thumb Code    70  memory.o(.text)
+    k_request_memory_block                   0x000010ab   Thumb Code    64  memory.o(.text)
+    k_release_memory_block                   0x000010eb   Thumb Code    68  memory.o(.text)
+    k_UART0_IRQHandler                       0x0000113d   Thumb Code   210  interrupt.o(.text)
+    uart_send_string                         0x0000122d   Thumb Code    46  iprocesses.o(.text)
+    i_process_routine                        0x0000125b   Thumb Code   234  iprocesses.o(.text)
+    timer_iprocess                           0x00001345   Thumb Code   150  iprocesses.o(.text)
+    kcd_register                             0x0000140d   Thumb Code    72  keyboard.o(.text)
+    kcd_lookup                               0x00001455   Thumb Code    78  keyboard.o(.text)
+    kcd                                      0x000014a3   Thumb Code    92  keyboard.o(.text)
+    timer_init                               0x00001515   Thumb Code    70  timer.o(.text)
+    k_TIMER0_IRQHandler                      0x0000155b   Thumb Code    54  timer.o(.text)
+    __scatterload_zeroinit                   0x000015a5   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
+    Region$$Table$$Base                      0x000015b4   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x000015d4   Number         0  anon$$obj.o(Region$$Table)
     SystemFrequency                          0x10000000   Data           4  system_lpc17xx.o(.data)
     current_process                          0x10000004   Data           4  process.o(.data)
     pcb_lookup_list                          0x10000008   Data           4  process.o(.data)
     delay_message_list                       0x1000000c   Data           4  process.o(.data)
-    interrupt_process                        0x10000010   Data           4  process.o(.data)
-    timer                                    0x10000014   Data           4  process.o(.data)
-    KCD_PID                                  0x10000018   Data           4  processes.o(.data)
-    WALLCLOCK_PID                            0x1000001c   Data           4  processes.o(.data)
-    num_passes                               0x10000020   Data           4  processes.o(.data)
-    num_fails                                0x10000024   Data           4  processes.o(.data)
-    g_UART0_TX_empty                         0x10000028   Data           1  interrupt.o(.data)
-    g_UART0_count                            0x1000002c   Data           4  interrupt.o(.data)
-    saved_process                            0x10000030   Data           4  interrupt.o(.data)
-    display_message_ready                    0x10000034   Data           4  iprocesses.o(.data)
-    command_root                             0x10000038   Data           4  keyboard.o(.data)
-    g_timer_count                            0x1000003c   Data           4  timer.o(.data)
-    timer_saved_process                      0x10000040   Data           4  timer.o(.data)
-    ready_queue                              0x10000044   Data          36  process.o(.bss)
-    mmu                                      0x10000068   Data         276  process.o(.bss)
-    pcbs                                     0x1000017c   Data         252  process.o(.bss)
-    kcd_proc                                 0x10000278   Data          36  process.o(.bss)
-    g_UART0_buffer                           0x1000029c   Data          64  interrupt.o(.bss)
-    Image$$RW_IRAM1$$ZI$$Limit               0x100004e0   Number         0  startup_lpc17xx.o(STACK)
-    __initial_sp                             0x100004e0   Data           0  startup_lpc17xx.o(STACK)
+    KCD_PID                                  0x10000010   Data           4  processes.o(.data)
+    WALLCLOCK_PID                            0x10000014   Data           4  processes.o(.data)
+    num_passes                               0x10000018   Data           4  processes.o(.data)
+    num_fails                                0x1000001c   Data           4  processes.o(.data)
+    g_UART0_TX_empty                         0x10000020   Data           1  interrupt.o(.data)
+    g_UART0_count                            0x10000024   Data           4  interrupt.o(.data)
+    saved_process                            0x10000028   Data           4  interrupt.o(.data)
+    display_message_ready                    0x1000002c   Data           4  iprocesses.o(.data)
+    command_root                             0x10000030   Data           4  keyboard.o(.data)
+    g_timer_count                            0x10000034   Data           4  timer.o(.data)
+    timer_saved_process                      0x10000038   Data           4  timer.o(.data)
+    ready_queue                              0x1000003c   Data          36  process.o(.bss)
+    mmu                                      0x10000060   Data         276  process.o(.bss)
+    pcbs                                     0x10000174   Data         252  process.o(.bss)
+    kcd_proc                                 0x10000270   Data          36  process.o(.bss)
+    crt_proc                                 0x10000294   Data          36  process.o(.bss)
+    interrupt_process                        0x100002b8   Data          40  process.o(.bss)
+    timer                                    0x100002e0   Data          40  process.o(.bss)
+    g_UART0_buffer                           0x10000308   Data          64  interrupt.o(.bss)
+    Image$$RW_IRAM1$$ZI$$Limit               0x10000548   Number         0  startup_lpc17xx.o(STACK)
+    __initial_sp                             0x10000548   Data           0  startup_lpc17xx.o(STACK)
 
 
 
@@ -318,58 +324,57 @@ Memory Map of the image
 
   Image Entry point : 0x000000cd
 
-  Load Region LR_IROM1 (Base: 0x00000000, Size: 0x000015cc, Max: 0x00080000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x00000000, Size: 0x00001610, Max: 0x00080000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Base: 0x00000000, Size: 0x00001588, Max: 0x00080000, ABSOLUTE)
+    Execution Region ER_IROM1 (Base: 0x00000000, Size: 0x000015d4, Max: 0x00080000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x00000000   0x000000cc   Data   RO            3    RESET               startup_lpc17xx.o
-    0x000000cc   0x00000000   Code   RO          354  * .ARM.Collect$$$$00000000  mc_w.l(entry.o)
-    0x000000cc   0x00000004   Code   RO          357    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
-    0x000000d0   0x00000004   Code   RO          360    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
-    0x000000d4   0x00000000   Code   RO          362    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
-    0x000000d4   0x00000008   Code   RO          363    .ARM.Collect$$$$00000009  mc_w.l(entry8.o)
-    0x000000dc   0x00000004   Code   RO          358    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
+    0x000000cc   0x00000000   Code   RO          356  * .ARM.Collect$$$$00000000  mc_w.l(entry.o)
+    0x000000cc   0x00000004   Code   RO          359    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
+    0x000000d0   0x00000004   Code   RO          362    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
+    0x000000d4   0x00000000   Code   RO          364    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
+    0x000000d4   0x00000008   Code   RO          365    .ARM.Collect$$$$00000009  mc_w.l(entry8.o)
+    0x000000dc   0x00000004   Code   RO          360    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
     0x000000e0   0x0000002a   Code   RO          148    .emb_text           hal.o
     0x0000010a   0x00000002   PAD
-    0x0000010c   0x0000000c   Code   RO          244    .emb_text           interrupt.o
-    0x00000118   0x0000000c   Code   RO          325    .emb_text           timer.o
+    0x0000010c   0x0000000c   Code   RO          249    .emb_text           interrupt.o
+    0x00000118   0x0000000c   Code   RO          327    .emb_text           timer.o
     0x00000124   0x0000001c   Code   RO            5    .text               startup_lpc17xx.o
     0x00000140   0x00000130   Code   RO           59    .text               uart_polling.o
     0x00000270   0x00000058   Code   RO           86    .text               main_svc.o
-    0x000002c8   0x00000024   Code   RO          364    .text               mc_w.l(init.o)
-    0x000002ec   0x0000000e   Code   RO          368    i.__scatterload_copy  mc_w.l(handlers.o)
-    0x000002fa   0x00000002   Code   RO          369    i.__scatterload_null  mc_w.l(handlers.o)
+    0x000002c8   0x00000024   Code   RO          366    .text               mc_w.l(init.o)
+    0x000002ec   0x0000000e   Code   RO          370    i.__scatterload_copy  mc_w.l(handlers.o)
+    0x000002fa   0x00000002   Code   RO          371    i.__scatterload_null  mc_w.l(handlers.o)
     0x000002fc   0x00000004   Code   RO            4    .ARM.__at_0x02FC    startup_lpc17xx.o
     0x00000300   0x0000021c   Code   RO           15    .text               system_lpc17xx.o
-    0x0000051c   0x00000608   Code   RO          157    .text               process.o
-    0x00000b24   0x00000498   Code   RO          207    .text               processes.o
-    0x00000fbc   0x000000d8   Code   RO          222    .text               memory.o
-    0x00001094   0x000000f8   Code   RO          245    .text               interrupt.o
-    0x0000118c   0x0000022c   Code   RO          276    .text               iprocesses.o
-    0x000013b8   0x00000108   Code   RO          308    .text               keyboard.o
-    0x000014c0   0x00000098   Code   RO          326    .text               timer.o
-    0x00001558   0x0000000e   Code   RO          370    i.__scatterload_zeroinit  mc_w.l(handlers.o)
-    0x00001566   0x00000002   PAD
-    0x00001568   0x00000020   Data   RO          366    Region$$Table       anon$$obj.o
+    0x0000051c   0x000006b0   Code   RO          158    .text               process.o
+    0x00000bcc   0x00000498   Code   RO          212    .text               processes.o
+    0x00001064   0x000000d8   Code   RO          227    .text               memory.o
+    0x0000113c   0x000000f0   Code   RO          250    .text               interrupt.o
+    0x0000122c   0x000001e0   Code   RO          281    .text               iprocesses.o
+    0x0000140c   0x00000108   Code   RO          310    .text               keyboard.o
+    0x00001514   0x00000090   Code   RO          328    .text               timer.o
+    0x000015a4   0x0000000e   Code   RO          372    i.__scatterload_zeroinit  mc_w.l(handlers.o)
+    0x000015b2   0x00000002   PAD
+    0x000015b4   0x00000020   Data   RO          368    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Base: 0x10000000, Size: 0x000004e0, Max: 0x00008000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Base: 0x10000000, Size: 0x00000548, Max: 0x00008000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x10000000   0x00000004   Data   RW           16    .data               system_lpc17xx.o
-    0x10000004   0x00000014   Data   RW          159    .data               process.o
-    0x10000018   0x00000010   Data   RW          208    .data               processes.o
-    0x10000028   0x0000000c   Data   RW          247    .data               interrupt.o
-    0x10000034   0x00000004   Data   RW          277    .data               iprocesses.o
-    0x10000038   0x00000004   Data   RW          309    .data               keyboard.o
-    0x1000003c   0x00000008   Data   RW          327    .data               timer.o
-    0x10000044   0x00000258   Zero   RW          158    .bss                process.o
-    0x1000029c   0x00000040   Zero   RW          246    .bss                interrupt.o
-    0x100002dc   0x00000004   PAD
-    0x100002e0   0x00000200   Zero   RW            1    STACK               startup_lpc17xx.o
+    0x10000004   0x0000000c   Data   RW          160    .data               process.o
+    0x10000010   0x00000010   Data   RW          213    .data               processes.o
+    0x10000020   0x0000000c   Data   RW          252    .data               interrupt.o
+    0x1000002c   0x00000004   Data   RW          282    .data               iprocesses.o
+    0x10000030   0x00000004   Data   RW          311    .data               keyboard.o
+    0x10000034   0x00000008   Data   RW          329    .data               timer.o
+    0x1000003c   0x000002cc   Zero   RW          159    .bss                process.o
+    0x10000308   0x00000040   Zero   RW          251    .bss                interrupt.o
+    0x10000348   0x00000200   Zero   RW            1    STACK               startup_lpc17xx.o
 
 
 ==============================================================================
@@ -380,23 +385,23 @@ Image component sizes
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
         42          0          0          0          0        308   hal.o
-       260         30          0         12         64       1595   interrupt.o
-       556         52          0          4          0       2157   iprocesses.o
+       252         30          0         12         64       1595   interrupt.o
+       480         50          0          4          0       1992   iprocesses.o
        264         22          0          4          0       1645   keyboard.o
         88         14          0          0          0       1907   main_svc.o
        216         14          0          0          0       2722   memory.o
-      1544        100          0         20        600      10590   process.o
+      1712        112          0         12        716      10924   process.o
       1176        260          0         16          0       2593   processes.o
          0          0          0          0          0       1689   rtx.o
         32          8        204          0        512        900   startup_lpc17xx.o
        540         64          0          4          0      21631   system_lpc17xx.o
-       164         20          0          8          0       1605   timer.o
+       156         20          0          8          0       1605   timer.o
        304         12          0          0          0      25840   uart_polling.o
 
     ----------------------------------------------------------------------
-      5188        596        236         68       1180      75182   Object Totals
+      5264        606        236         60       1292      75351   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-         2          0          0          0          4          0   (incl. Padding)
+         2          0          0          0          0          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -430,15 +435,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      5276        612        236         68       1180      74470   Grand Totals
-      5276        612        236         68       1180      74470   ELF Image Totals
-      5276        612        236         68          0          0   ROM Totals
+      5352        622        236         60       1292      74639   Grand Totals
+      5352        622        236         60       1292      74639   ELF Image Totals
+      5352        622        236         60          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 5512 (   5.38kB)
-    Total RW  Size (RW Data + ZI Data)              1248 (   1.22kB)
-    Total ROM Size (Code + RO Data + RW Data)       5580 (   5.45kB)
+    Total RO  Size (Code + RO Data)                 5588 (   5.46kB)
+    Total RW  Size (RW Data + ZI Data)              1352 (   1.32kB)
+    Total ROM Size (Code + RO Data + RW Data)       5648 (   5.52kB)
 
 ==============================================================================
 
