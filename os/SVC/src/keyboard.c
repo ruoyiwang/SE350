@@ -38,6 +38,7 @@ void kcd_register(char* command, int pid) {
 		tmpc++;
 		i++;
 	}
+	tmp->command[i] = '\0';
 	tmp->pid = pid;
 }
 
@@ -72,7 +73,7 @@ void kcd() {
 	command_root = NULL;
 
 	while (1) {
-		m = (envelope *)receive_message();
+		m = (envelope *)receive_message(NULL);
 		input = (char*)m->message;
 		mt = m->type;
 		src_id = m->src_id;
@@ -90,6 +91,7 @@ void kcd() {
 				if (*(input + 1)) {
 					src_id = kcd_lookup(input + 1);
 					if (src_id != -1) {
+						m->dest_id = src_id;
 						send_message(src_id, m);
 					}
 				}

@@ -4,10 +4,32 @@
 
 #include "process.h"
 #include "memory.h"
+#include "keyboard.h"
 #include "uart_polling.h"
 
 int num_passes;         // Holds number of test cases that passed
 int num_fails;          // Hold number of test cases that failed
+int KCD_PID = 9;
+int WALLCLOCK_PID = 10;
+
+/*int atoi(void* input) {
+  char c;
+  int n = -1;
+  int i = 0;
+  
+  c = (char)(*(input + i));
+  while (c) {
+    if (c < '0' || c > '9') {
+      return n;
+    }
+    n = n*10;
+    n = n + (c - '0');
+    i++;
+    c = = (char)*(input + i);
+  }
+
+  return n;
+}*/
 
 void null_process() {
 	while(1) {
@@ -123,4 +145,86 @@ void test_process_6() {
         num_fails++;
     }
     release_processor();
+}
+
+void wall_clock() {
+  envelope e[3];
+  envelope* re;
+  char* input;
+  char wr_message[] = "WR";
+  char ws_message[] = "WS";
+  char wt_message[] = "WT";
+  char time_string[8];
+  int hour = 0, minute = 0, second = 0;
+  int second_overflow = 0, minute_overflow = 0;
+  int on = 0;
+
+  e[0].message = (void*)&wr_message;
+  e[1].message = (void*)&ws_message;
+  e[2].message = (void*)&wt_message;
+
+  // Register for commands WR, WS, WT
+  for (int i = 0; i < 3; i++) {
+    e[i].src_id = WALLCLOCK_PID;
+    e[i].dest_id = KCD_PID;
+    e[i].type = COMMAND_REGISTRATION;
+    e[i].message_length = 2;
+    e[i].next = NULL;
+    send_message(KCD_PID, &e[i]);
+  }
+
+  while (1) {
+    re = (envelope*)receive_message(NULL);
+    input = (char *)re->message;
+    if (on && re->type == TIMER_UPDATE) {
+      if (second + 1 >= 60) {
+        second_overflow = 1;
+      }
+      second = (second + 1)%60;
+
+      if (minute + second_overflow >= 60) {
+        minute_overflow = 1;
+      }
+      minute = (minute + second_overflow)%60;
+      hour = (hour + minute_overflow)%60;
+
+      second_overflow = minute_overflow = 0;
+    }
+    else if (*input == '%' && *(input+1) == 'W') {
+      if (*(input+2) == 'R') {
+        // Reset clock to 00:00:00
+        hour = 0;
+        minute = 0;
+        second = 0;
+        on = 1;
+      }
+      else if (*(input+2) == 'S') {
+        // Set clock to HH:MM:SS
+        if (*(input+4) >= '0' && *(input+4) <= '2' && *(input+5) >= '0' && *(input+5) <= '9' &&
+            *(input+7) >= '0' && *(input+7) <= '6' && *(input+8) >= '0' && *(input+8) <= '9' &&
+            *(input+10) >= '0' && *(input+10) <= '6' && *(input+11) >= '0' && *(input+11) <= '9') {
+          hour = 10*(*(input+5) - '0');
+          hour = hour + (*(input+4) - '0');
+          minute = 10*(*(input+8) - '0');
+          minute = minute + (*(input+7) - '0');
+          second = 10*(*(input+11) - '0');
+          second = second + (*(input+10) - '0');
+          on = 1;
+        }
+      }
+      else if (*(input+2) == 'T') {
+        // Terminate wallclock
+        on = 0;
+      }
+    }
+    if (on) {
+      time_string[0] = hour/10;
+      time_string[1] = hour%10;
+      time_string[2] = time_string[5] = ':';
+      time_string[3] = minute/10;
+      time_string[4] = minute%10;
+      time_string[6] = second/10;
+      time_string[7] = second%10;
+    }
+  }
 }
