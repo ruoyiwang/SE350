@@ -24,7 +24,8 @@ void i_process_routine(void){
 	// Create an envelope for the kcd message send
 	envelope* kcd_command = k_request_memory_block();
 	kcd_command->src_id = interrupt_process->pcb->pid;
-	kcd_command->dest_id = kcd_process_id;
+	// Set the message destination id to the id of the kcd process
+	kcd_command->dest_id = 9;
 
 	// Make sure that interrupts don't add to the char buffer
 	// Disable the RBR in the IER
