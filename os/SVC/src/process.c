@@ -373,7 +373,7 @@ int k_context_switch(pcb* pcb) {
 	if (current_process != NULL) {
 	    current_process->state = READY;
 	    current_process->sp = (uint32_t *) __get_MSP();
-	    push_registers();
+	    //push_registers();
 	    pqueue_enqueue( &ready_queue, current_process );
 	}
 
@@ -382,13 +382,13 @@ int k_context_switch(pcb* pcb) {
 	if (current_process->state == NEW) {
 	    current_process->state = RUN;
 	    __set_MSP((uint32_t ) current_process->sp);
-	    pop_registers();
+	    //pop_registers();
 		__rte();
 	}
 	else if (current_process->state == READY) {
 	    current_process->state = RUN;
 	    __set_MSP((uint32_t ) current_process->sp);
-	    pop_registers();
+	    //pop_registers();
 	}
 	else {
 		return 1;
