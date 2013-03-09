@@ -4,7 +4,7 @@
 typedef struct kcd_node_t {
 	int pid;
 	struct kcd_node_t* next;
-	char command[32];
+	char _command[32];
 } kcd_node;
 
 void kcd(void);

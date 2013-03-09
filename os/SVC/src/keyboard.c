@@ -34,11 +34,11 @@ void kcd_register(char* command, int pid) {
 
 	tmp = (kcd_node*)request_memory_block();
 	while (*tmpc && *tmpc != ' ') {
-		tmp->command[i] = *tmpc;
+		tmp->_command[i] = *tmpc;
 		tmpc++;
 		i++;
 	}
-	tmp->command[i] = '\0';
+	tmp->_command[i] = '\0';
 	tmp->pid = pid;
 }
 
@@ -51,13 +51,13 @@ int kcd_lookup(char* command) {
 		i = -1;
 		do {
 			i++;
-			if (tmp->command[i] != *(tmpc+i)) {
+			if (tmp->_command[i] != *(tmpc+i)) {
 				break;
 			}
-			if (tmp->command[i] == '\0' && *(tmpc+i) == '\0') {
+			if (tmp->_command[i] == '\0' && *(tmpc+i) == '\0') {
 				return tmp->pid;
 			}
-		} while (tmp->command[i] != '\0' && *(tmpc+i) != '\0');
+		} while (tmp->_command[i] != '\0' && *(tmpc+i) != '\0');
 		tmp = tmp->next;
 	}
 
@@ -73,7 +73,7 @@ void kcd() {
 	command_root = NULL;
 
 	while (1) {
-		m = (envelope *)receive_message(NULL);
+		m = (envelope *)receive_message();
 		input = (char*)m->message;
 		mt = m->type;
 		src_id = m->src_id;

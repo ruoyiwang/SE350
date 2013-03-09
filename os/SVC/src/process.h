@@ -10,7 +10,7 @@ typedef unsigned int U32;
 
 #include <stdint.h>
 typedef enum {NEW, READY, MEMORY_BLOCK, MESSAGE_BLOCK, RUN, INTERRUPT} process_state;
-typedef enum {DISPLAY_REQUEST, COMMAND_REGISTRATION, KEYBOARD_INPUT, TIMER_UPDATE} message_type;
+typedef enum {DISPLAY_REQUEST, COMMAND_REGISTRATION, TIMER_UPDATE} message_type;
 
 typedef struct envelope_t{
 	void* message;
@@ -76,9 +76,17 @@ void k_send_message(int dest_id, envelope* env);
 #define send_message(dest_id, env) _send_message((U32)k_send_message, dest_id, env)
 void __SVC_0 _send_message(U32 p_func, int dest_id, envelope* env);
 
+void k_delay_send(int dest_id, envelope* env, int delay);
+#define delay_send(dest_id, env, delay) _delay_send((U32)k_delay_send, dest_id, env, delay)
+void __SVC_0 _delay_send(U32 p_func, int dest_id, envelope* env, int delay);
+
 envelope* k_receive_message(void);
 #define receive_message() _receive_message((U32)k_receive_message)
 envelope* __SVC_0 _receive_message(U32 p_func);
+
+int k_set_process_priority(int pid, int priority);
+#define set_process_priority(pid,priority) _set_process_priority((U32)k_set_process_priority, pid, priority)
+int __SVC_0 _set_process_priority(U32 p_func, int pid, int priority);
 
 int k_get_process_priority(int pid);
 #define get_process_priority(pid) _get_process_priority((U32)k_get_process_priority, pid)
