@@ -85,3 +85,47 @@ C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(295): error:  #20: ide
 C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(296): error:  #171: invalid type conversion
 C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(306): error:  #171: invalid type conversion
 Target not created
+Build target 'SVC SIM'
+compiling main_svc.c...
+src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+compiling rtx.c...
+src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+compiling process.c...
+src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+src\process.c(296): error:  #171: invalid type conversion
+src\process.c(306): error:  #171: invalid type conversion
+compiling processes.c...
+src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
+src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
+src\processes.c(167): error:  #29: expected an expression
+src\processes.c(167): error:  #20: identifier "i" is undefined
+src\processes.c(177): error:  #55-D: too many arguments in invocation of macro "receive_message"
+src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+compiling memory.c...
+src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+compiling interrupt.c...
+src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+compiling iprocesses.c...
+src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+src\CRT.h(35): warning:  #223-D: function "UART0_IRQHandler" declared implicitly
+compiling keyboard.c...
+src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+src\keyboard.c(76): error:  #55-D: too many arguments in invocation of macro "receive_message"
+compiling timer.c...
+src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+Target not created
+Build target 'SVC SIM'
+compiling process.c...
+src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+src\process.c(296): error:  #20: identifier "kcd" is undefined
+compiling processes.c...
+src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
+src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
+src\processes.c(178): error:  #55-D: too many arguments in invocation of macro "receive_message"
+src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+compiling keyboard.c...
+src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+src\keyboard.c(76): error:  #55-D: too many arguments in invocation of macro "receive_message"
+Target not created

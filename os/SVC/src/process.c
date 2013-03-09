@@ -10,7 +10,7 @@ pcb* current_process;
 pqueue ready_queue;
 MMU mmu;
 pcb pcbs[NUM_PROCS];
-pcb kcd;
+pcb kcd_proc;
 i_process* interrupt_process;
 i_process* timer;
 
@@ -292,10 +292,10 @@ void process_init() {
 			pcb_insert(&pcbs[i], pcb_lookup_list);
 	}
 
-	kcd.pid = 9;
-	kcd.pc = (uint32_t)kcd;
-	kcd.state = NEW;
-	kcd.priority=2;
+	kcd_proc.pid = 9;
+	kcd_proc.pc = (uint32_t)kcd;
+	kcd_proc.state = NEW;
+	kcd_proc.priority=2;
 	sp  = k_request_memory_block();
 	/* 8 bytes alignement adjustment to exception stack frame */
 	if (!(((uint32_t)sp) & 0x04)) {
@@ -305,10 +305,10 @@ void process_init() {
 	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
 	*(--sp)  = (uint32_t)kcd;  /* PC contains the entry point of the process */
 	*(--sp) = 0x0;
-	kcd.sp = sp;
-	pqueue_enqueue(&ready_queue,&kcd);
+	kcd_proc.sp = sp;
+	pqueue_enqueue(&ready_queue,&kcd_proc);
 	if (i!=0)
-		pcb_insert(&kcd, pcb_lookup_list);
+		pcb_insert(&kcd_proc, pcb_lookup_list);
 }
 
 int k_set_process_priority(int pid, int priority) {
