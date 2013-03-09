@@ -3,55 +3,85 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-N:\SE350\os\SVC\SVC.uvproj
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\SVC.uvproj
 Project File Date:  03/08/2013
 
 <h2>Output:</h2>
-Build target 'SVC SIM'
+Build Project 'SVC' - Target 'SVC SIM'
+assembling startup_LPC17xx.s...
+compiling system_LPC17xx.c...
+compiling uart_polling.c...
 compiling main_svc.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
 compiling rtx.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+compiling Retarget.c...
 compiling process.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(296): error:  #171: invalid type conversion
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(306): error:  #171: invalid type conversion
 compiling processes.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
-src\processes.c(80): warning:  #223-D: function "set_process_priority" declared implicitly
-src\processes.c(116): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(167): error:  #29: expected an expression
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(167): error:  #20: identifier "i" is undefined
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(177): error:  #55-D: too many arguments in invocation of macro "receive_message"
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
 compiling memory.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
 compiling interrupt.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
 compiling iprocesses.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
-src\CRT.h(35): warning:  #223-D: function "UART0_IRQHandler" declared implicitly
-src\iprocesses.c(26): error:  #20: identifier "kcd_process_id" is undefined
-src\iprocesses.c(34): error:  #29: expected an expression
-src\iprocesses.c(34): error:  #20: identifier "i" is undefined
-src\iprocesses.c(35): error:  #18: expected a ")"
-src\iprocesses.c(35): error:  #29: expected an expression
-src\iprocesses.c(69): error:  #29: expected an expression
-src\iprocesses.c(69): error:  #20: identifier "i" is undefined
-src\iprocesses.c(70): error:  #18: expected a ")"
-src\iprocesses.c(70): error:  #29: expected an expression
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\CRT.h(35): warning:  #223-D: function "UART0_IRQHandler" declared implicitly
 compiling keyboard.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\keyboard.c(76): error:  #55-D: too many arguments in invocation of macro "receive_message"
 compiling timer.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
 Target not created
-Build target 'SVC SIM'
-compiling iprocesses.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
-src\CRT.h(35): warning:  #223-D: function "UART0_IRQHandler" declared implicitly
-src\iprocesses.c(27): error:  #20: identifier "kcd_process_id" is undefined
-src\iprocesses.c(36): error:  #18: expected a ")"
-src\iprocesses.c(36): error:  #29: expected an expression
-src\iprocesses.c(71): error:  #18: expected a ")"
-src\iprocesses.c(71): error:  #29: expected an expression
+Build Project 'SVC' - Target 'SVC SIM'
+compiling process.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(296): error:  #171: invalid type conversion
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(306): error:  #171: invalid type conversion
+compiling processes.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(178): error:  #55-D: too many arguments in invocation of macro "receive_message"
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+compiling keyboard.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\keyboard.c(76): error:  #55-D: too many arguments in invocation of macro "receive_message"
 Target not created
-Build target 'SVC SIM'
-compiling iprocesses.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
-src\CRT.h(35): warning:  #223-D: function "UART0_IRQHandler" declared implicitly
-src\iprocesses.c(27): error:  #20: identifier "kcd_process_id" is undefined
+Build Project 'SVC' - Target 'SVC SIM'
+compiling process.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(296): error:  #171: invalid type conversion
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(306): error:  #171: invalid type conversion
+compiling processes.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+compiling keyboard.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\keyboard.c(76): error:  #55-D: too many arguments in invocation of macro "receive_message"
+Target not created
+Build Project 'SVC' - Target 'SVC SIM'
+compiling process.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(296): error:  #171: invalid type conversion
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(306): error:  #171: invalid type conversion
+compiling keyboard.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+Target not created
+Build Project 'SVC' - Target 'SVC SIM'
+compiling process.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(295): error:  #20: identifier "kcd_proc" is undefined
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(296): error:  #171: invalid type conversion
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(306): error:  #171: invalid type conversion
 Target not created
