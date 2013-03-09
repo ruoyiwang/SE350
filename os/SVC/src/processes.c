@@ -226,5 +226,7 @@ void wall_clock() {
       time_string[6] = second/10;
       time_string[7] = second%10;
     }
+
+    release_memory_block((void*)re);
   }
 }
