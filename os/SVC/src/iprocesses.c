@@ -104,5 +104,29 @@ void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len )
 }
 // increment the timer
 void timer_iprocess(void){
-   g_timer_count++ ;
+	envelope* finished_env;
+	envelope *temp;
+	g_timer_count++;
+	if (delay_message_list->front->expire_time > g_timer_count)
+	{
+		finished_env = delay_message_list->front;
+		delay_message_list->front = delay_message_list->front->next;
+		finished_env->next = NULL;
+		send_message(finished_env->dest_id, finished_env);
+	}
+	temp = delay_message_list->front;
+	while ( temp->next != NULL)
+	{
+		if (temp->next->expire_time > g_timer_count)
+		{
+			if (temp->next == delay_message_list->end)
+			{
+				delay_message_list->end = temp;
+			}
+			finished_env = temp->next;
+			temp->next = temp->next->next;
+			finished_env->next = NULL;
+			send_message(finished_env->dest_id, finished_env);
+		}			
+	}
 }

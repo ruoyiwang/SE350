@@ -15,6 +15,7 @@ typedef enum {DISPLAY_REQUEST, COMMAND_REGISTRATION, KEYBOARD_INPUT} message_typ
 typedef struct envelope_t{
 	void* message;
 	message_type type;
+	uint32_t expire_time;
 	int src_id;
 	int dest_id;
 	int message_length;
@@ -48,6 +49,7 @@ extern pcb* current_process;
 
 extern pcb *pcb_lookup_list;
 
+extern mailbox* delay_message_list;
 /*************************************************************************
  *          PCB LINKED LIST DEFINITIONS
  *************************************************************************/

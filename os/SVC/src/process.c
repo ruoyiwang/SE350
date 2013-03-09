@@ -1,5 +1,6 @@
 #include "process.h"
 #include "interrupt.h"
+#include "timer.h"
 #include "memory.h"
 #include <LPC17xx.h>
 #include "uart_polling.h"
@@ -28,6 +29,9 @@ void k_send_message(int dest_id, envelope* env)
 	pcb* dest_pcb;
 	atomic(1);
 	dest_pcb = pcb_lookup_by_pid(dest_id, pcb_lookup_list);
+	env->expire_time = 0;
+	env->dest_id = dest_id;
+	env->src_id = current_process->pid;
 	if (dest_pcb->mb->end->next == NULL)
 	{
 		dest_pcb->mb->front = env;
@@ -61,6 +65,25 @@ envelope* k_receive_message()
 	ret->next = NULL;
 	atomic(0);
 	return ret;
+}
+
+void k_delay_send( int dest_id, envelope *env, int delay)
+{
+	atomic(1);
+	env->expire_time = g_timer_count + delay;
+	env->dest_id = dest_id;
+	env->src_id = current_process->pid;
+	if (delay_message_list->end->next == NULL)
+	{
+		delay_message_list->front = env;
+		delay_message_list->end = env;
+	}
+	else
+	{
+		delay_message_list->end->next = env;
+		delay_message_list->end = env;
+	}
+	atomic(0);
 }
 
 pcb* pqueue_dequeue(pqueue *queue)
