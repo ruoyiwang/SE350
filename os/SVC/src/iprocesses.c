@@ -19,6 +19,7 @@ void i_process_routine(void){
 	envelope* crt_message = NULL;
 	LPC_UART_TypeDef *pUart = (LPC_UART_TypeDef *)LPC_UART0;
 	int message_length = 0;
+	int i = 0;
 	void * message_pointer;
 	// Create an envelope for the kcd message send
 	envelope* kcd_command = k_request_memory_block();
@@ -31,8 +32,8 @@ void i_process_routine(void){
 
 	// If the first char in the buffer is 0x25 i.e '%', then we send a command registration
 	if(g_UART0_buffer[0] == 0x25){
-		for(int i = 0 ; i < g_UART0_count; i++){
-			*(char+i) = g_UART0_buffer[i];
+		for(i = 0 ; i < g_UART0_count; i++){
+			*(char_buffer_string+i) = g_UART0_buffer[i];
 			g_UART0_buffer[i] = 0;
 		}
 		g_UART0_count = 0;
@@ -66,8 +67,8 @@ void i_process_routine(void){
 	}
 	//else we know that we send a keyboard input
 	else{
-		for(int i = 0 ; i < g_UART0_count; i++){
-			*(char+i) = g_UART0_buffer[i];
+		for(i = 0 ; i < g_UART0_count; i++){
+			*(char_buffer_string+i) = g_UART0_buffer[i];
 			g_UART0_buffer[i] = 0;
 		}
 		g_UART0_count = 0;
