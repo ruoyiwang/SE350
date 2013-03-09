@@ -5,6 +5,7 @@
 #include "keyboard.h"
 #include <LPC17xx.h>
 #include "uart_polling.h"
+#include "CRT.h"
 #define NUM_PROCS 7
 
 pcb* current_process;
@@ -14,6 +15,7 @@ pqueue ready_queue;
 MMU mmu;
 pcb pcbs[NUM_PROCS];
 pcb kcd_proc;
+pcb crt_proc;
 i_process* interrupt_process;
 i_process* timer;
 
@@ -311,6 +313,24 @@ void process_init() {
 	kcd_proc.sp = sp;
 	pqueue_enqueue(&ready_queue,&kcd_proc);
 	pcb_insert(&kcd_proc, pcb_lookup_list);
+
+	//this is the crt process
+	crt_proc.pid = 10;
+	crt_proc.pc = (uint32_t)crt_displpay_process;
+	crt_proc.state = NEW;
+	crt_proc.priority=2;
+	sp  = k_request_memory_block();
+	/* 8 bytes alignement adjustment to exception stack frame */
+	if (!(((uint32_t)sp) & 0x04)) {
+			--sp;
+	}
+
+	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
+	*(--sp)  = (uint32_t)crt_displpay_process;  /* PC contains the entry point of the process */
+	*(--sp) = 0x0;
+	crt_proc.sp = sp;
+	pqueue_enqueue(&ready_queue,&crt_proc);
+	pcb_insert(&crt_proc, pcb_lookup_list);
 }
 
 int k_set_process_priority(int pid, int priority) {
