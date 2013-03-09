@@ -43,7 +43,7 @@ void k_UART0_IRQHandler(void)
 
 		// If user presses enter then we enter the i-process
 		if(pUart->RBR == ENTER){
-			k_context_switch(interrupt_process->pcb);	
+			k_context_switch(&(interrupt_process.pcb));	
 		}
 		else{
 			g_UART0_buffer[g_UART0_count++] = pUart->RBR;
@@ -95,7 +95,7 @@ void k_UART0_IRQHandler(void)
 			/* read from the uart */
 	        // If user presses enter then we enter the i-process
 			if(pUart->RBR == ENTER){
-				k_context_switch(interrupt_process->pcb);	
+				k_context_switch(&(interrupt_process.pcb));	
 			}
 			else{
 				g_UART0_buffer[g_UART0_count++] = pUart->RBR; 
