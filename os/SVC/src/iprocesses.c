@@ -109,6 +109,7 @@ void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len )
 // increment the timer
 void timer_iprocess(void){
 	envelope* finished_env;
+	envelope* env;
 	envelope *temp;
 	g_timer_count++;
 	if (delay_message_list->front->expire_time > g_timer_count)
@@ -133,4 +134,7 @@ void timer_iprocess(void){
 			send_message(finished_env->dest_id, finished_env);
 		}			
 	}
+	env = (envelope *) request_memory_block();
+	env->type = TIMER_UPDATE;
+	send_message(10, env);
 }

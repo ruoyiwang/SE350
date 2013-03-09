@@ -158,13 +158,14 @@ void wall_clock() {
   int hour = 0, minute = 0, second = 0;
   int second_overflow = 0, minute_overflow = 0;
   int on = 0;
+	int i;
 
   e[0].message = (void*)&wr_message;
   e[1].message = (void*)&ws_message;
   e[2].message = (void*)&wt_message;
 
   // Register for commands WR, WS, WT
-  for (int i = 0; i < 3; i++) {
+  for (i = 0; i < 3; i++) {
     e[i].src_id = WALLCLOCK_PID;
     e[i].dest_id = KCD_PID;
     e[i].type = COMMAND_REGISTRATION;
@@ -174,7 +175,7 @@ void wall_clock() {
   }
 
   while (1) {
-    re = (envelope*)receive_message(NULL);
+    re = (envelope*)receive_message();
     input = (char *)re->message;
     if (on && re->type == TIMER_UPDATE) {
       if (second + 1 >= 60) {
@@ -226,5 +227,7 @@ void wall_clock() {
       time_string[6] = second/10;
       time_string[7] = second%10;
     }
+
+    release_memory_block((void*)re);
   }
 }
