@@ -24,8 +24,6 @@ void i_process_routine(void){
 	// Create an envelope for the kcd message send
 	envelope* kcd_command = k_request_memory_block();
 	kcd_command->src_id = interrupt_process->pcb->pid;
-	// Set the message destination id to the id of the kcd process
-	kcd_command->dest_id = 9;
 
 	// Make sure that interrupts don't add to the char buffer
 	// Disable the RBR in the IER
@@ -39,6 +37,8 @@ void i_process_routine(void){
 		}
 		g_UART0_count = 0;
 		// Code for sending a message to the KCD for a command registration
+		// Set the message destination id to the id of the kcd process
+		kcd_command->dest_id = 9;
 		kcd_command->type = COMMAND_REGISTRATION;
 		kcd_command->message = char_buffer_string;
 		send_message(kcd_command->dest_id, kcd_command);
@@ -74,7 +74,9 @@ void i_process_routine(void){
 		}
 		g_UART0_count = 0;
 		// Code for sending a message to the KCD for a command registration
-		kcd_command->type = KEYBOARD_INPUT;
+		// Set the message destination id to the id of the crt process
+		kcd_command->dest_id = 10;
+		kcd_command->type = DISPLAY_REQUEST;
 		kcd_command->message = char_buffer_string;
 		send_message(kcd_command->dest_id, kcd_command);
 	}	
