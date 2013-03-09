@@ -7,7 +7,8 @@
 #include "uart_polling.h"
 #include "interrupt.h"
 #include "timer.h"
-#include "CRT.h"
+#include <LPC17xx.h>
+//#include "CRT.h"
 
 int display_message_ready;
 

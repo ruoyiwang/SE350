@@ -1,11 +1,11 @@
-#include "process.h"
+#ifndef __CRT_DISPLAY_PROCESS__
+#define __CRT_DISPLAY_PROCESS__
+
+//#include "process.h"
 #include "memory.h"
 //#include "uart_irq.h";
 #include <LPC17xx.h>
 #include "interrupt.h"
-
-#ifndef __CRT_DISPLAY_PROCESS__
-#define __CRT_DISPLAY_PROCESS__
 
 extern int display_message_ready;
 
