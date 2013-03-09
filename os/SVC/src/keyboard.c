@@ -98,5 +98,6 @@ void kcd() {
 			}
 			// Send to CRT
 		}
+		release_memory_block((void*)m);
 	}
 }
