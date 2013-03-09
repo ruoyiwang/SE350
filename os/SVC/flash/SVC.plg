@@ -85,47 +85,144 @@ C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(295): error:  #20: ide
 C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(296): error:  #171: invalid type conversion
 C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(306): error:  #171: invalid type conversion
 Target not created
-Build target 'SVC SIM'
+Build Project 'SVC' - Target 'SVC SIM'
+compiling process.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.c(296): error:  #20: identifier "kcd" is undefined
+compiling processes.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+Target not created
+Build Project 'SVC' - Target 'SVC SIM'
+compiling process.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\keyboard.h(7): error:  #40: expected an identifier
+Target not created
+Build Project 'SVC' - Target 'SVC SIM'
+compiling process.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\keyboard.h(6): error:  #40: expected an identifier
+compiling processes.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+compiling keyboard.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+Target not created
+Build Project 'SVC' - Target 'SVC SIM'
+compiling process.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\keyboard.h(7): error:  #40: expected an identifier
+compiling processes.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+compiling keyboard.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+Target not created
+Build Project 'SVC' - Target 'SVC SIM'
+compiling process.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\keyboard.h(7): error:  #40: expected an identifier
+compiling processes.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+compiling keyboard.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+Target not created
+Build Project 'SVC' - Target 'SVC SIM'
+compiling process.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+compiling processes.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+compiling keyboard.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\keyboard.c(37): error:  #136: struct "kcd_node_t" has no field "command"
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\keyboard.c(41): error:  #136: struct "kcd_node_t" has no field "command"
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\keyboard.c(54): error:  #136: struct "kcd_node_t" has no field "command"
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\keyboard.c(57): error:  #136: struct "kcd_node_t" has no field "command"
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\keyboard.c(60): error:  #136: struct "kcd_node_t" has no field "command"
+Target not created
+Build Project 'SVC' - Target 'SVC SIM'
+compiling process.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+compiling processes.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+compiling keyboard.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+linking...
+.\flash\SVC.axf: Error: L6218E: Undefined symbol delay_message_list (referred from process.o).
+.\flash\SVC.axf: Error: L6218E: Undefined symbol pcb_lookup_list (referred from process.o).
+.\flash\SVC.axf: Error: L6218E: Undefined symbol set_process_priority (referred from processes.o).
+Target not created
+Build Project 'SVC' - Target 'SVC SIM'
 compiling main_svc.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
 compiling rtx.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
 compiling process.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
-src\process.c(296): error:  #171: invalid type conversion
-src\process.c(306): error:  #171: invalid type conversion
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
 compiling processes.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
-src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
-src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
-src\processes.c(167): error:  #29: expected an expression
-src\processes.c(167): error:  #20: identifier "i" is undefined
-src\processes.c(177): error:  #55-D: too many arguments in invocation of macro "receive_message"
-src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
 compiling memory.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
 compiling interrupt.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
 compiling iprocesses.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
-src\CRT.h(35): warning:  #223-D: function "UART0_IRQHandler" declared implicitly
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\CRT.h(35): warning:  #223-D: function "UART0_IRQHandler" declared implicitly
 compiling keyboard.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
-src\keyboard.c(76): error:  #55-D: too many arguments in invocation of macro "receive_message"
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
 compiling timer.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
+linking...
+.\flash\SVC.axf: Error: L6218E: Undefined symbol delay_message_list (referred from process.o).
+.\flash\SVC.axf: Error: L6218E: Undefined symbol pcb_lookup_list (referred from process.o).
+.\flash\SVC.axf: Error: L6218E: Undefined symbol set_process_priority (referred from processes.o).
 Target not created
-Build target 'SVC SIM'
+Build Project 'SVC' - Target 'SVC SIM'
+compiling main_svc.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
+compiling rtx.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
 compiling process.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
-src\process.c(296): error:  #20: identifier "kcd" is undefined
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
 compiling processes.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
-src\processes.c(102): warning:  #223-D: function "set_process_priority" declared implicitly
-src\processes.c(138): warning:  #223-D: function "set_process_priority" declared implicitly
-src\processes.c(178): error:  #55-D: too many arguments in invocation of macro "receive_message"
-src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\processes.c(157): warning:  #550-D: variable "time_string" was set but never used
+compiling memory.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
+compiling interrupt.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
+compiling iprocesses.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\CRT.h(35): warning:  #223-D: function "UART0_IRQHandler" declared implicitly
 compiling keyboard.c...
-src\process.h(81): warning:  #815-D: type qualifier on return type is meaningless
-src\keyboard.c(76): error:  #55-D: too many arguments in invocation of macro "receive_message"
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
+compiling timer.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
+linking...
+.\flash\SVC.axf: Error: L6218E: Undefined symbol delay_message_list (referred from process.o).
+.\flash\SVC.axf: Error: L6218E: Undefined symbol pcb_lookup_list (referred from process.o).
 Target not created
+Build Project 'SVC' - Target 'SVC SIM'
+compiling process.c...
+C:\Users\Bill\SCHOOL\3A\SE 350\SE350\os\SVC\src\process.h(85): warning:  #815-D: type qualifier on return type is meaningless
+linking...
+Program Size: Code=5276 RO-data=236 RW-data=68 ZI-data=1180  
+".\flash\SVC.axf" - 0 Error(s), 1 Warning(s).

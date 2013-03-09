@@ -2,11 +2,14 @@
 #include "interrupt.h"
 #include "timer.h"
 #include "memory.h"
+#include "keyboard.h"
 #include <LPC17xx.h>
 #include "uart_polling.h"
 #define NUM_PROCS 7
 
 pcb* current_process;
+pcb *pcb_lookup_list;
+mailbox* delay_message_list;
 pqueue ready_queue;
 MMU mmu;
 pcb pcbs[NUM_PROCS];
