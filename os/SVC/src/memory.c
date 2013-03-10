@@ -26,7 +26,10 @@ void* k_request_memory_block(){
 				//set the flag to in use
 				mmu.lookup_table[i] = 1;
 				//give out the mem address according to map
-				return (void *)(mmu.max_mem - USR_SZ_STACK * i);
+				return (void *)((mmu.max_mem - USR_SZ_STACK * i) - USR_SZ_STACK + 1);
+					//the - USR_SZ_STACK + 1 part would give the bottom of the stack instead of the top
+					//usage of this pointer would be ++ instead of --
+					//not shortening the formula because it's not clear other wise
 			}
 		}
 		//above loop loops through entire map for an empty spot
