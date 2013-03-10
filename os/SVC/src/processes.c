@@ -9,8 +9,8 @@
 
 int num_passes;         // Holds number of test cases that passed
 int num_fails;          // Hold number of test cases that failed
-int KCD_PID = 9;
-int WALLCLOCK_PID = 10;
+int KCD_PID = 7;
+int WALLCLOCK_PID = 9;
 
 /*int atoi(void* input) {
   char c;
@@ -79,7 +79,7 @@ void test_process_3() {
 	int priority;
   //set_process_priority(3, 0);
 	while(1) {
-		for(i =0; i<7;i++)
+		for(i =0; i<9;i++)
 		{
         priority = get_process_priority(i);
 				uart0_put_string("\n\rPROCESS ");
@@ -133,18 +133,12 @@ void test_process_5() {
 }
 
 void test_process_6() {
-	int priority = 3;
-	int i = 0;
-	set_process_priority(6, priority);
-    if (i == 0) {
-        uart0_put_string("\n\rG029_test: test 6 OK");
-        num_passes++;
-    }
-    else {
-        uart0_put_string("\n\rG029_test: test 6 FAIL");
-        num_fails++;
-    }
-    release_processor();
+	while(1) {
+		#ifdef DEBUG_0
+		printf("NULL PROCESS");
+		#endif
+		release_processor();
+	}
 }
 
 void wall_clock() {

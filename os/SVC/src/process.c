@@ -6,7 +6,7 @@
 #include <LPC17xx.h>
 #include "uart_polling.h"
 #include "CRT.h"
-#define NUM_PROCS 9
+#define NUM_PROCS 10
 
 pcb* current_process;
 pcb *pcb_lookup_list;
@@ -57,9 +57,9 @@ envelope* k_receive_message()
 {
 	envelope* ret;
 	atomic(1);
-	if (current_process->mb.front == NULL)
+	while (current_process->mb.front == NULL)
 	{
-		current_process->state == MESSAGE_BLOCK;
+		current_process->state = MESSAGE_BLOCK;
 		atomic(0);
 		k_release_processor();
 		atomic(1);
@@ -239,6 +239,7 @@ void process_init() {
 	pcbs[6]->pc = (uint32_t)test_process_6;
 	pcbs[7]->pc = (uint32_t)kcd;
 	pcbs[8]->pc = (uint32_t)crt_displpay_process;
+	pcbs[9]->pc = (uint32_t)wall_clock;
 
 	pcbs[0]->priority = 3;
 	pcb_lookup_list = pcbs[0];
@@ -248,16 +249,19 @@ void process_init() {
 	interrupt_process.pcb.pc = (uint32_t)i_process_routine;
 	interrupt_process.state = RUNNING;
 	interrupt_process.pcb.priority=0;
+	interrupt_process.pcb.next = NULL;
+	interrupt_process.pcb.lu_next = NULL;
+	interrupt_process.pcb.prev = NULL;
 	sp = k_request_memory_block();
 	sp = sp + USR_SZ_STACK - 4;
-	/* 8 bytes alignement adjustment to exception stack frame */
+	// 8 bytes alignement adjustment to exception stack frame 
 	if (!(((uint32_t)sp) & 0x04)) {
 			--sp;
 	}
 
-	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
-	*(--sp)  = (uint32_t)interrupt_process.pcb.pc;  /* PC contains the entry point of the process */
-	for (j = 0; j < 6; j++) { /* R0-R3, R12 are cleared with 0 */
+	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR 
+	*(--sp)  = (uint32_t)interrupt_process.pcb.pc;  // PC contains the entry point of the process 
+	for (j = 0; j < 6; j++) { // R0-R3, R12 are cleared with 0 
 		*(--sp) = 0x0;
 	}
 	interrupt_process.pcb.sp = sp;
@@ -266,16 +270,19 @@ void process_init() {
 	timer.pcb.pc = (uint32_t)timer_iprocess;
 	timer.state = RUNNING;
 	timer.pcb.priority=0;
+	timer.pcb.next = NULL;
+	timer.pcb.lu_next = NULL;
+	timer.pcb.prev = NULL;
 	sp = k_request_memory_block();
 	sp = sp + USR_SZ_STACK - 4;
-	/* 8 bytes alignement adjustment to exception stack frame */
+	// 8 bytes alignement adjustment to exception stack frame 
 	if (!(((uint32_t)sp) & 0x04)) {
 			--sp;
 	}
 
-	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */
-	*(--sp)  = (uint32_t)timer.pcb.pc;  /* PC contains the entry point of the process */
-	for (j = 0; j < 6; j++) { /* R0-R3, R12 are cleared with 0 */
+	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR 
+	*(--sp)  = (uint32_t)timer.pcb.pc;  // PC contains the entry point of the process 
+	for (j = 0; j < 6; j++) { // R0-R3, R12 are cleared with 0 
 		*(--sp) = 0x0;
 	}
 	timer.pcb.sp = sp;
@@ -285,6 +292,9 @@ void process_init() {
 		/* initialize the first process	exception stack frame */
 		pcbs[i]->pid = i;
 		pcbs[i]->state = NEW;
+		pcbs[i]->next = NULL;
+		pcbs[i]->lu_next = NULL;
+		pcbs[i]->prev = NULL;
 		if (i!=0)
 			pcbs[i]->priority = 2;
 
@@ -337,8 +347,9 @@ int k_get_process_priority(int pid){
 }
 
 int k_context_switch(pcb* pcb) {
-	if (current_process != NULL) {
-	    current_process->state = READY;
+	if (current_process != NULL ) {
+			if (current_process->state != MESSAGE_BLOCK && current_process->state != MEMORY_BLOCK)
+				current_process->state = READY;
 	    current_process->sp = (uint32_t *) __get_MSP();
 	    pqueue_enqueue( &ready_queue, current_process );
 	}

@@ -29,22 +29,7 @@ void i_process_routine(void){
 	// Make sure that interrupts don't add to the char buffer
 	// Disable the RBR in the IER
 	pUart->IER = pUart->IER & 0xfffffff8;
-
-	// If the first char in the buffer is 0x25 i.e '%', then we send a command registration
-	if(g_UART0_buffer[0] == 0x25){
-		for(i = 0 ; i < g_UART0_count; i++){
-			*(char_buffer_string+i) = g_UART0_buffer[i];
-			g_UART0_buffer[i] = 0;
-		}
-		g_UART0_count = 0;
-		// Code for sending a message to the KCD for a command registration
-		// Set the message destination id to the id of the kcd process
-		kcd_command->dest_id = 9;
-		kcd_command->type = COMMAND_REGISTRATION;
-		kcd_command->message = char_buffer_string;
-		send_message(kcd_command->dest_id, kcd_command);
-	}	
-	else if(display_message_ready == 1){		//if there's a message ready for me to print to CRT
+	if(display_message_ready == 1){		//if there's a message ready for me to print to CRT
 			//above var is the old "roys flag set"
 		//receive the message from mail box
 		crt_message = receive_message();
@@ -76,8 +61,8 @@ void i_process_routine(void){
 		g_UART0_count = 0;
 		// Code for sending a message to the KCD for a command registration
 		// Set the message destination id to the id of the crt process
-		kcd_command->dest_id = 10;
-		kcd_command->type = DISPLAY_REQUEST;
+		kcd_command->dest_id = 9;
+		kcd_command->type = KEYBOARD_INPUT;
 		kcd_command->message = char_buffer_string;
 		send_message(kcd_command->dest_id, kcd_command);
 	}	
