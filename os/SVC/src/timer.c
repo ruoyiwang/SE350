@@ -107,7 +107,7 @@ __asm void TIMER0_IRQHandler(void)
 	IMPORT k_TIMER0_IRQHandler
 	PUSH{r4-r11, lr}
 	BL k_TIMER0_IRQHandler
-	POP{r4-r11, pc}
+	POP{r4-r11, pc}	
 } 
 /**
  * @brief: c TIMER0 IRQ Handler
@@ -115,18 +115,14 @@ __asm void TIMER0_IRQHandler(void)
 void k_TIMER0_IRQHandler(void)
 {
 	__disable_irq();
-	// Set status of current Prescaleocess to interrupted
-	current_process->state = INTERRUPT;
-	timer_saved_process = current_process;
 	/* ack inttrupt, see section  21.6.1 on pg 493 of LPC17XX_UM */
 	LPC_TIM0->IR = BIT(0);  
-
+	timer_saved_process = current_process;
 	k_context_switch(&(timer.pcb));
-
+	timer_iprocess();
+	
 	__enable_irq();
-	//code to save context of interrupt handler (i_process)
-	current_process = timer_saved_process;
-	k_context_switch (current_process);
+	k_context_switch (timer_saved_process);
 	//perform a return from exception sequence
 	//this restarts the original process before i_handler
 }

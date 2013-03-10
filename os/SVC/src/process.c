@@ -31,8 +31,16 @@ void atomic (int onOff)
 void k_send_message(int dest_id, envelope* env)
 {
 	pcb* dest_pcb;
+	int i;
 	atomic(1);
-	dest_pcb = pcb_lookup_by_pid(dest_id, pcb_lookup_list);
+	for ( i= 0; i<NUM_PROCS; i++)
+	{
+		if (pcbs[i]->pid == dest_id)
+		{
+			dest_pcb = pcbs[i];
+			break;
+		}
+	}
 	env->expire_time = 0;
 	env->dest_id = dest_id;
 	env->src_id = current_process->pid;
@@ -249,10 +257,11 @@ void process_init() {
 	pcb_lookup_list = pcbs[0];
 
 	// setup the interrupt process;
-	interrupt_process.pcb.pid = 9;
+	interrupt_process.pcb.pid = 10;
 	interrupt_process.pcb.pc = (uint32_t)i_process_routine;
 	interrupt_process.state = RUNNING;
 	interrupt_process.pcb.priority=0;
+	interrupt_process.pcb.state=INTERRUPT;
 	interrupt_process.pcb.next = NULL;
 	interrupt_process.pcb.lu_next = NULL;
 	interrupt_process.pcb.prev = NULL;
@@ -270,10 +279,11 @@ void process_init() {
 	}
 	interrupt_process.pcb.sp = sp;
 
-	timer.pcb.pid = 10;
+	timer.pcb.pid = 11;
 	timer.pcb.pc = (uint32_t)timer_iprocess;
 	timer.state = RUNNING;
 	timer.pcb.priority=0;
+	timer.pcb.state=INTERRUPT;
 	timer.pcb.next = NULL;
 	timer.pcb.lu_next = NULL;
 	timer.pcb.prev = NULL;
@@ -351,11 +361,18 @@ int k_get_process_priority(int pid){
 }
 
 int k_context_switch(pcb* pcb) {
-	if (current_process != NULL ) {
-			if (current_process->state != MESSAGE_BLOCK && current_process->state != MEMORY_BLOCK)
+	if (current_process != NULL && current_process->state != INTERRUPT) {
+			if (current_process->state != MESSAGE_BLOCK && pcb->state != INTERRUPT) {
 				current_process->state = READY;
+			}
+			else if (pcb->state == INTERRUPT) {
+				current_process->state = INTERRUPTED;
+			}
 	    current_process->sp = (uint32_t *) __get_MSP();
-	    pqueue_enqueue( &ready_queue, current_process );
+	    //push_registers();
+			if (pcb->state != INTERRUPT) {
+				pqueue_enqueue( &ready_queue, current_process );
+			}
 	}
 
 	current_process = pcb;
@@ -365,7 +382,7 @@ int k_context_switch(pcb* pcb) {
 	    __set_MSP((uint32_t ) current_process->sp);
 		__rte();
 	}
-	else if (current_process->state == READY) {
+	else if (current_process->state == READY || current_process->state == INTERRUPTED) {
 	    current_process->state = RUN;
 	    __set_MSP((uint32_t ) current_process->sp);
 	}

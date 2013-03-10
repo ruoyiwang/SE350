@@ -9,7 +9,7 @@ typedef unsigned int U32;
 #define __SVC_0  __svc_indirect(0)
 
 #include <stdint.h>
-typedef enum {NEW, READY, MEMORY_BLOCK, MESSAGE_BLOCK, RUN, INTERRUPT} process_state;
+typedef enum {NEW, READY, MEMORY_BLOCK, MESSAGE_BLOCK, RUN, INTERRUPT, INTERRUPTED} process_state;
 typedef enum {DISPLAY_REQUEST, COMMAND_REGISTRATION, KEYBOARD_INPUT, TIMER_UPDATE} message_type;
 
 typedef struct envelope_t{

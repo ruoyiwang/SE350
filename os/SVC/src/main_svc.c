@@ -16,6 +16,7 @@
 #include "uart_polling.h"
 #include "process.h"
 #include "memory.h"
+#include "timer.h"
 
 int main()
 {
@@ -25,6 +26,7 @@ int main()
   SystemInit();  /* initialize the system */
   __disable_irq();
   uart0_init();
+	timer_init(0);
 	mmu_init();
   process_init();
   __enable_irq();
