@@ -248,7 +248,8 @@ void process_init() {
 	interrupt_process.pcb.pc = (uint32_t)i_process_routine;
 	interrupt_process.state = RUNNING;
 	interrupt_process.pcb.priority=0;
-	sp  = k_request_memory_block();
+	sp = k_request_memory_block();
+	sp = sp + USR_SZ_STACK - 4;
 	/* 8 bytes alignement adjustment to exception stack frame */
 	if (!(((uint32_t)sp) & 0x04)) {
 			--sp;
@@ -265,7 +266,8 @@ void process_init() {
 	timer.pcb.pc = (uint32_t)timer_iprocess;
 	timer.state = RUNNING;
 	timer.pcb.priority=0;
-	sp  = k_request_memory_block();
+	sp = k_request_memory_block();
+	sp = sp + USR_SZ_STACK - 4;
 	/* 8 bytes alignement adjustment to exception stack frame */
 	if (!(((uint32_t)sp) & 0x04)) {
 			--sp;
@@ -286,7 +288,8 @@ void process_init() {
 		if (i!=0)
 			pcbs[i]->priority = 2;
 
-		sp  = k_request_memory_block();
+		sp = k_request_memory_block();
+		sp = sp + USR_SZ_STACK - 4;
 		/* 8 bytes alignement adjustment to exception stack frame */
 		if (!(((uint32_t)sp) & 0x04)) {
 				--sp;
