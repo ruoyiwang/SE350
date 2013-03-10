@@ -114,5 +114,6 @@ extern void test_process_6(void);
 extern void i_process_routine(void);
 extern void timer_iprocess(void);
 extern void kcd(void);
+extern void wall_clock(void);
 
 #endif
