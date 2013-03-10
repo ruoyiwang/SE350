@@ -171,7 +171,7 @@ void i_process_routine(void){
 					kcd_command->dest_id = 9;
 					kcd_command->type = KEYBOARD_INPUT;
 					kcd_command->message = char_buffer_string;
-					send_message(kcd_command->dest_id, kcd_command);
+					k_send_message(kcd_command->dest_id, kcd_command);
 				}	
 			}
 			else{
@@ -219,7 +219,7 @@ void timer_iprocess(void){
 		finished_env = delay_message_list->front;
 		delay_message_list->front = delay_message_list->front->next;
 		finished_env->next = NULL;
-		send_message(finished_env->dest_id, finished_env);
+		k_send_message(finished_env->dest_id, finished_env);
 	}
 	temp = delay_message_list->front;
 	while ( temp->next != NULL)
@@ -233,10 +233,10 @@ void timer_iprocess(void){
 			finished_env = temp->next;
 			temp->next = temp->next->next;
 			finished_env->next = NULL;
-			send_message(finished_env->dest_id, finished_env);
+			k_send_message(finished_env->dest_id, finished_env);
 		}			
 	}
-	env = (envelope *) request_memory_block();
+	env = (envelope *) k_request_memory_block();
 	env->type = TIMER_UPDATE;
-	send_message(10, env);
+	k_send_message(9, env);
 }
