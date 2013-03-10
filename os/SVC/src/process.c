@@ -229,7 +229,7 @@ pcb* pcb_lookup_by_pid(int pid, pcb *node){
         return pcb_lookup_by_pid(pid, node->lu_next);
     }*/
 	if (pid > NUM_PROCS || pid < 0) {
-			return -1;
+			return NULL;
 		}
 	return pcbs[pid];
 }
