@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\flash\SVC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\flash\SVC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.02 [Build 28]: Last Updated: Sat Mar 09 02:44:27 2013
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.02 [Build 28]: Last Updated: Sat Mar 09 19:34:55 2013
 <BR><P>
 <H3>Maximum Stack Usage =         64 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -72,16 +72,16 @@ Function Pointers
  <LI><a href="#[5]">UsageFault_Handler</a> from startup_lpc17xx.o(.text) referenced from startup_lpc17xx.o(RESET)
  <LI><a href="#[a]">WDT_IRQHandler</a> from startup_lpc17xx.o(.text) referenced from startup_lpc17xx.o(RESET)
  <LI><a href="#[2e]">__main</a> from entry.o(.ARM.Collect$$$$00000000) referenced from startup_lpc17xx.o(.text)
- <LI><a href="#[52]">crt_displpay_process</a> from process.o(.text) referenced 2 times from process.o(.text)
- <LI><a href="#[39]">i_process_routine</a> from iprocesses.o(.text) referenced from process.o(.text)
+ <LI><a href="#[52]">crt_displpay_process</a> from process.o(.text) referenced from process.o(.text)
+ <LI><a href="#[3a]">i_process_routine</a> from iprocesses.o(.text) referenced from process.o(.text)
  <LI><a href="#[3c]">k_get_process_priority</a> from process.o(.text) referenced from processes.o(.text)
  <LI><a href="#[3f]">k_receive_message</a> from process.o(.text) referenced 5 times from processes.o(.text)
  <LI><a href="#[30]">k_release_memory_block</a> from memory.o(.text) referenced 5 times from main_svc.o(.text)
- <LI><a href="#[2f]">k_release_processor</a> from process.o(.text) referenced 3 times from main_svc.o(.text)
+ <LI><a href="#[2f]">k_release_processor</a> from process.o(.text) referenced 2 times from main_svc.o(.text)
  <LI><a href="#[31]">k_request_memory_block</a> from memory.o(.text) referenced 4 times from main_svc.o(.text)
  <LI><a href="#[3e]">k_send_message</a> from process.o(.text) referenced 4 times from processes.o(.text)
  <LI><a href="#[3d]">k_set_process_priority</a> from process.o(.text) referenced from processes.o(.text)
- <LI><a href="#[3b]">kcd</a> from keyboard.o(.text) referenced from process.o(.text)
+ <LI><a href="#[39]">kcd</a> from keyboard.o(.text) referenced from process.o(.text)
  <LI><a href="#[2d]">main</a> from main_svc.o(.text) referenced from entry8.o(.ARM.Collect$$$$00000009)
  <LI><a href="#[32]">null_process</a> from processes.o(.text) referenced from process.o(.text)
  <LI><a href="#[33]">test_process_1</a> from processes.o(.text) referenced from process.o(.text)
@@ -90,7 +90,7 @@ Function Pointers
  <LI><a href="#[36]">test_process_4</a> from processes.o(.text) referenced from process.o(.text)
  <LI><a href="#[37]">test_process_5</a> from processes.o(.text) referenced from process.o(.text)
  <LI><a href="#[38]">test_process_6</a> from processes.o(.text) referenced from process.o(.text)
- <LI><a href="#[3a]">timer_iprocess</a> from iprocesses.o(.text) referenced 2 times from process.o(.text)
+ <LI><a href="#[3b]">timer_iprocess</a> from iprocesses.o(.text) referenced 2 times from process.o(.text)
 </UL>
 <P>
 <H3>
@@ -405,24 +405,25 @@ Global Symbols
 <LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_lookup_by_pid
 <LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_context_switch
 </UL>
-<BR>[Called By]<UL><LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_request_memory_block
+<BR>[Called By]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_receive_message
+<LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_request_memory_block
 <LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_release_memory_block
 </UL>
-<BR>[Address Reference Count : 3]<UL><LI> process.o(.text)
-<LI> main_svc.o(.text)
+<BR>[Address Reference Count : 2]<UL><LI> main_svc.o(.text)
 <LI> processes.o(.text)
 </UL>
-<P><STRONG><a name="[3f]"></a>k_receive_message</STRONG> (Thumb, 80 bytes, Stack size 8 bytes, process.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = k_receive_message
+<P><STRONG><a name="[3f]"></a>k_receive_message</STRONG> (Thumb, 70 bytes, Stack size 8 bytes, process.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = k_receive_message &rArr; k_release_processor &rArr; pqueue_dequeue
 </UL>
 <BR>[Calls]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atomic
+<LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_release_processor
 </UL>
 <BR>[Address Reference Count : 4]<UL><LI> process.o(.text)
 <LI> iprocesses.o(.text)
 <LI> keyboard.o(.text)
 <LI> processes.o(.text)
 </UL>
-<P><STRONG><a name="[3e]"></a>k_send_message</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, process.o(.text))
+<P><STRONG><a name="[3e]"></a>k_send_message</STRONG> (Thumb, 74 bytes, Stack size 16 bytes, process.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = k_send_message &rArr; pcb_lookup_by_pid &rArr;  pcb_lookup_by_pid (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_lookup_by_pid
@@ -456,7 +457,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_set_process_priority
 </UL>
 
-<P><STRONG><a name="[4a]"></a>process_init</STRONG> (Thumb, 612 bytes, Stack size 16 bytes, process.o(.text))
+<P><STRONG><a name="[4a]"></a>process_init</STRONG> (Thumb, 472 bytes, Stack size 16 bytes, process.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = process_init &rArr; k_request_memory_block &rArr; k_release_processor &rArr; pqueue_dequeue
 </UL>
 <BR>[Calls]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcb_insert
@@ -474,7 +475,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> processes.o(.text)
 </UL>
-<P><STRONG><a name="[3c]"></a>k_get_process_priority</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, process.o(.text))
+<P><STRONG><a name="[3c]"></a>k_get_process_priority</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, process.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> processes.o(.text)
 </UL>
 <P><STRONG><a name="[56]"></a>block_current_process</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, process.o(.text))
@@ -529,7 +530,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> process.o(.text)
 </UL>
-<P><STRONG><a name="[61]"></a>wall_clock</STRONG> (Thumb, 520 bytes, Stack size 104 bytes, processes.o(.text), UNUSED)
+<P><STRONG><a name="[61]"></a>wall_clock</STRONG> (Thumb, 522 bytes, Stack size 104 bytes, processes.o(.text), UNUSED)
 
 <P><STRONG><a name="[49]"></a>mmu_init</STRONG> (Thumb, 70 bytes, Stack size 0 bytes, memory.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -541,7 +542,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;block_current_process
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;k_release_processor
 </UL>
-<BR>[Called By]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i_process_routine
+<BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i_process_routine
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;process_init
 </UL>
 <BR>[Address Reference Count : 4]<UL><LI> iprocesses.o(.text)
@@ -571,10 +572,10 @@ Global Symbols
 <P><STRONG><a name="[57]"></a>uart_send_string</STRONG> (Thumb, 46 bytes, Stack size 12 bytes, iprocesses.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = uart_send_string
 </UL>
-<BR>[Called By]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i_process_routine
+<BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i_process_routine
 </UL>
 
-<P><STRONG><a name="[39]"></a>i_process_routine</STRONG> (Thumb, 234 bytes, Stack size 32 bytes, iprocesses.o(.text))
+<P><STRONG><a name="[3a]"></a>i_process_routine</STRONG> (Thumb, 238 bytes, Stack size 32 bytes, iprocesses.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = i_process_routine &rArr; k_request_memory_block &rArr; k_release_processor &rArr; pqueue_dequeue
 </UL>
 <BR>[Calls]<UL><LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_send_string
@@ -582,7 +583,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> process.o(.text)
 </UL>
-<P><STRONG><a name="[3a]"></a>timer_iprocess</STRONG> (Thumb, 150 bytes, Stack size 16 bytes, iprocesses.o(.text))
+<P><STRONG><a name="[3b]"></a>timer_iprocess</STRONG> (Thumb, 150 bytes, Stack size 16 bytes, iprocesses.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = timer_iprocess
 </UL>
 <BR>[Address Reference Count : 2]<UL><LI> process.o(.text)
@@ -591,16 +592,16 @@ Global Symbols
 <P><STRONG><a name="[58]"></a>kcd_register</STRONG> (Thumb, 72 bytes, Stack size 24 bytes, keyboard.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = kcd_register
 </UL>
-<BR>[Called By]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kcd
+<BR>[Called By]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kcd
 </UL>
 
 <P><STRONG><a name="[59]"></a>kcd_lookup</STRONG> (Thumb, 78 bytes, Stack size 12 bytes, keyboard.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = kcd_lookup
 </UL>
-<BR>[Called By]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kcd
+<BR>[Called By]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kcd
 </UL>
 
-<P><STRONG><a name="[3b]"></a>kcd</STRONG> (Thumb, 92 bytes, Stack size 0 bytes, keyboard.o(.text))
+<P><STRONG><a name="[39]"></a>kcd</STRONG> (Thumb, 94 bytes, Stack size 0 bytes, keyboard.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = kcd &rArr; kcd_register
 </UL>
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kcd_lookup
