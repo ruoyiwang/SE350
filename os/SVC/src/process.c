@@ -211,7 +211,7 @@ void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
 }
 
 pcb* pcb_lookup_by_pid(int pid, pcb *node){
-    if(node == NULL){
+    /*if(node == NULL){
         return NULL;
     }
     else if (pid == node->pid){
@@ -219,7 +219,11 @@ pcb* pcb_lookup_by_pid(int pid, pcb *node){
     }
     else{
         return pcb_lookup_by_pid(pid, node->lu_next);
-    }
+    }*/
+	if (pid > NUM_PROCS || pid < 0) {
+			return -1;
+		}
+	return pcbs[pid];
 }
 
 void process_init() {
