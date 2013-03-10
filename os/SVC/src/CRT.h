@@ -31,8 +31,7 @@ void crt_displpay_process(){
 			//send message to i-process that contains the message and shit
 			send_message(message_envelop->dest_id, message_envelop);
 
-			//TODO: need to raise a hardware interupt
-			UART0_IRQHandler();
+			//TODO: skip the hardware interrupt and talk to iprocess directly
 
 			//unset the message ready
 			display_message_ready = 0;
