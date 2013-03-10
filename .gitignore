@@ -28,3 +28,6 @@
 #personal files
 *.Bill
 *.Roy
+
+#axf file
+*.axf
