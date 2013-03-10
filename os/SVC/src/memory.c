@@ -51,7 +51,12 @@ int k_release_memory_block(void *MemoryBlock){
 	}
 
 	//calculates the index of the lookup table for that address and then set the flag to be freed
-	index = (mmu.max_mem - mem_block_address) / USR_SZ_STACK;
+	for (index = 0; index < mmu.actual_size; index ++){
+		if ((mmu.max_mem - USR_SZ_STACK * index >= mem_block_address) && ((mmu.max_mem - USR_SZ_STACK * index) - USR_SZ_STACK + 4) <= mem_block_address){
+			//if the memory given too me is within this range, then the index is correct
+			break;
+		}
+	}
 	mmu.lookup_table[index] = 0;
 	if (mmu.memory_available == 0){
 		mmu.memory_available = 1;		//when we release mem, there's mem avaialble again
