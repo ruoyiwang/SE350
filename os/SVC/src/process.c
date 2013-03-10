@@ -356,15 +356,6 @@ int k_get_process_priority(int pid){
 		return pcbs[pid]->priority;
 }
 
-__asm void push_registers(void) {
-	//PUSH{r4-r11, lr}
-}
-
-__asm void pop_registers(void) {
-	//POP{r4-r11, pc}	
-}
-
-
 int k_context_switch(pcb* pcb) {
 	if (current_process != NULL && current_process->state != INTERRUPT) {
 			if (current_process->state != MESSAGE_BLOCK && pcb->state != INTERRUPT) {
@@ -385,13 +376,11 @@ int k_context_switch(pcb* pcb) {
 	if (current_process->state == NEW) {
 	    current_process->state = RUN;
 	    __set_MSP((uint32_t ) current_process->sp);
-	    //pop_registers();
 		__rte();
 	}
 	else if (current_process->state == READY || current_process->state == INTERRUPTED) {
 	    current_process->state = RUN;
 	    __set_MSP((uint32_t ) current_process->sp);
-	    //pop_registers();
 	}
 	else {
 		return 1;
