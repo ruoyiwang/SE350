@@ -6,6 +6,7 @@
 //#include "uart_irq.h";
 #include <LPC17xx.h>
 #include "interrupt.h"
+//#include "iprocesses.c"
 
 extern int display_message_ready;
 
@@ -32,6 +33,7 @@ void crt_displpay_process(){
 			send_message(message_envelop->dest_id, message_envelop);
 
 			//TODO: skip the hardware interrupt and talk to iprocess directly
+			i_process_routine();
 
 			//unset the message ready
 			display_message_ready = 0;

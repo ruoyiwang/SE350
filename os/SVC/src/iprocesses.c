@@ -2,6 +2,9 @@
 #include <stdio.h>
 #endif
 
+#ifndef __iprocesses__
+#define __iprocesses__
+
 #include "process.h"
 #include "memory.h"
 #include "uart_polling.h"
@@ -30,18 +33,7 @@ void i_process_routine(void){
 	/* Reading IIR automatically acknowledges the interrupt */
 	IIR_IntId = (pUart->IIR) >> 1 ; /* skip pending bit in IIR */
 
-	if (IIR_IntId & IIR_RDA) { /* Receive Data Avaialbe */
-		/* read UART. Read RBR will clear the interrupt */
 
-		// If user presses enter then we enter the i-process
-		if(pUart->RBR == ENTER){
-			// Create an envelope for the kcd message send
-			envelope* kcd_command = k_request_memory_block();
-			kcd_command->src_id = interrupt_process.pcb.pid;
-
-			// Make sure that interrupts don't add to the char buffer
-			// Disable the RBR in the IER
-			pUart->IER = pUart->IER & 0xfffffff8;
 			if(display_message_ready == 1){		//if there's a message ready for me to print to CRT
 					//above var is the old "roys flag set"
 				//receive the message from mail box
@@ -57,7 +49,9 @@ void i_process_routine(void){
 				// TODO: get the message length
 				message_length = 0;
 				message_pointer = crt_message->message;
-				while (message_pointer != '\0'){
+				//I'm trying to find EOS here but hacing trouble
+				//TODO: debug this shit
+				while ((char*)message_pointer != '\0'){
 					message_length++;
 				}
 				uart_send_string(0, (uint8_t *) crt_message->message, message_length);
@@ -65,8 +59,23 @@ void i_process_routine(void){
 				// Code for displaying char to uart0
 				//uart0_put_string(crt_message->message);
 			}
-			//else we know that we send a keyboard input
-			else{
+
+
+
+	if (IIR_IntId & IIR_RDA) { /* Receive Data Avaialbe */
+		/* read UART. Read RBR will clear the interrupt */
+
+		// If user presses enter then we enter the i-process
+		if(pUart->RBR == ENTER){
+			// Create an envelope for the kcd message send
+			envelope* kcd_command = k_request_memory_block();
+			kcd_command->src_id = interrupt_process.pcb.pid;
+
+			// Make sure that interrupts don't add to the char buffer
+			// Disable the RBR in the IER
+			pUart->IER = pUart->IER & 0xfffffff8;
+
+			//else we know that we send a keyboard because CRT is not seperated from this
 				for(i = 0 ; i < g_UART0_count; i++){
 					*(char_buffer_string+i) = g_UART0_buffer[i];
 					g_UART0_buffer[i] = 0;
@@ -78,7 +87,6 @@ void i_process_routine(void){
 				kcd_command->type = KEYBOARD_INPUT;
 				kcd_command->message = char_buffer_string;
 				send_message(kcd_command->dest_id, kcd_command);
-			}	
 		}
 		else{
 			g_UART0_buffer[g_UART0_count++] = pUart->RBR;
@@ -240,3 +248,5 @@ void timer_iprocess(void){
 	env->type = TIMER_UPDATE;
 	k_send_message(9, env);
 }
+
+#endif
