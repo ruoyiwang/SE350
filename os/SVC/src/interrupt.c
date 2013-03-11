@@ -26,19 +26,16 @@ __asm void UART0_IRQHandler(void)
 void k_UART0_IRQHandler(void)
 {
 	__disable_irq();
-	// Set status of current process to interrupted
-	current_process->state = INTERRUPT;
+	// Save the current process
 	saved_process = current_process;
 
 	k_context_switch(&(interrupt_process.pcb));	
-
-	
+	i_process_routine();
 	
 	__enable_irq();
 
 	// We now have to restore context of the current process
-	current_process = saved_process;
-	k_context_switch (current_process);
+	k_context_switch (saved_process);
 }
 
 
