@@ -68,7 +68,7 @@ void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len );
 
 extern i_process interrupt_process;
 
-extern void k_UART0_IRQHandler(void);
+extern void k_UART0_IRQHandler(uint32_t msp);
  
 extern void print_ready_queue_priority(void);
 extern void print_memory_blocked_queue_priority(void);

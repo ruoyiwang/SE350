@@ -361,12 +361,9 @@ int k_get_process_priority(int pid){
 }
 
 int k_context_switch(pcb* pcb) {
-	if (current_process != NULL && current_process->state != INTERRUPT) {
-			if (current_process->state != MESSAGE_BLOCK && pcb->state != INTERRUPT) {
+	if (current_process != NULL) {
+			if (current_process->state != MESSAGE_BLOCK) {
 				current_process->state = READY;
-			}
-			else if (pcb->state == INTERRUPT) {
-				current_process->state = INTERRUPTED;
 			}
 	    current_process->sp = (uint32_t *) __get_MSP();
 	    //push_registers();

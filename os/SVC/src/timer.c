@@ -106,24 +106,23 @@ __asm void TIMER0_IRQHandler(void)
 	PRESERVE8
 	IMPORT k_TIMER0_IRQHandler
 	PUSH{r4-r11, lr}
+	MRS r0, MSP
 	BL k_TIMER0_IRQHandler
 	POP{r4-r11, pc}	
 } 
 /**
  * @brief: c TIMER0 IRQ Handler
  */
-void k_TIMER0_IRQHandler(void)
+void k_TIMER0_IRQHandler(uint32_t msp)
 {
 	__disable_irq();
+	current_process->sp = msp;
+	__set_MSP((uint32_t ) interrupt_process.pcb.sp);
 	/* ack inttrupt, see section  21.6.1 on pg 493 of LPC17XX_UM */
 	LPC_TIM0->IR = BIT(0);  
-	timer_saved_process = current_process;
-	k_context_switch(&(timer.pcb));
 	timer_iprocess();
 	
+	__set_MSP((uint32_t ) current_process->sp);
 	__enable_irq();
-	k_context_switch (timer_saved_process);
-	//perform a return from exception sequence
-	//this restarts the original process before i_handler
 }
 
