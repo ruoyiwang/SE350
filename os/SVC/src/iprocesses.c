@@ -24,20 +24,16 @@ void i_process_routine(void){
 	envelope* kcd_command;
 	char* char_buffer_string;
 	// make an empty envelope to for the crt msgs
-	envelope* crt_message = NULL;
 	LPC_UART_TypeDef *pUart = (LPC_UART_TypeDef *)LPC_UART0;
-	int message_length = 0;
 	int i = 0;
-	void * message_pointer;
-	uint8_t rbr_val;
 	/* Reading IIR automatically acknowledges the interrupt */
 	IIR_IntId = (pUart->IIR) >> 1 ; /* skip pending bit in IIR */
 
 	if (IIR_IntId & IIR_RDA) { /* Receive Data Avaialbe */
-		/* read UART. Read RBR will clear the interrupt */
-		rbr_val = pUart->RBR;
-		// If user presses enter then we enter the i-process
-		if(rbr_val == ENTER){
+		g_UART0_buffer[g_UART0_count] = pUart->RBR;
+		++g_UART0_count;
+		// Check if the user clicked enter
+		/*if(g_UART0_buffer[g_UART0_count-1] == ENTER){
 			// Create an envelope for the kcd message send
 			envelope* kcd_command = k_request_memory_block();
 			kcd_command->src_id = interrupt_process.pcb.pid;
@@ -57,28 +53,25 @@ void i_process_routine(void){
 			kcd_command->type = KEYBOARD_INPUT;
 			kcd_command->message = char_buffer_string;
 			k_send_message(kcd_command->dest_id, kcd_command);
-		}
-		else{
-			g_UART0_buffer[g_UART0_count] = rbr_val;
-			++g_UART0_count;
-			if (g_UART0_count == BUFSIZE) {
-				g_UART0_count = 0; /* buffer overflow */
-			}
-		}
+		}*/
+		
 #ifdef DEBUG_0
-		/* Check if the hotkeys have been pressed */
+		/* Check if the hotkeys have been pressed 
 		// User presses 1
-		if(rbr_val == 0x31){
+		if(g_UART0_buffer[g_UART0_count-1] == 0x31){
 			print_ready_queue_priority();
 		}
-		else if(rbr_val == 0x32){
+		else if(g_UART0_buffer[g_UART0_count-1] == 0x32){
 			print_memory_blocked_queue_priority();
 		}
-		else if(rbr_val == 0x33){
+		else if(g_UART0_buffer[g_UART0_count-1] == 0x33){
 			print_message_blocked_queue_priority();
+		}*/
+#endif		
+		
+		if (g_UART0_count == BUFSIZE) {
+			g_UART0_count = 0; /* buffer overflow */
 		}
-#endif
-
 	} else if (IIR_IntId & IIR_THRE) { 
 		/* THRE Interrupt, transmit holding register empty*/
 		
@@ -98,7 +91,7 @@ void i_process_routine(void){
 		           Read LSR will clear the interrupt 
 			   Dummy read on RX to clear interrupt, then bail out
 			*/
-			dummy = rbr_val; 
+			dummy = pUart->RBR; 
 			return; /* error occurs, return */
 		}
 		/* If no error on RLS, normal ready, save into the data buffer.
@@ -106,58 +99,32 @@ void i_process_routine(void){
 		*/
 		if (LSR_Val & LSR_RDR) { /* Receive Data Ready */
 			/* read from the uart */
-	        // If user presses enter then we enter the i-process
-			if(rbr_val == ENTER){
+			// If user presses enter then we enter the i-process
+			g_UART0_buffer[g_UART0_count++] = pUart->RBR; 
+
+			if(g_UART0_buffer[g_UART0_count-1] == ENTER){
 				// Create an envelope for the kcd message send
 				kcd_command = k_request_memory_block();
 				kcd_command->src_id = interrupt_process.pcb.pid;
 
 				// Make sure that interrupts don't add to the char buffer
 				// Disable the RBR in the IER
-				pUart->IER = pUart->IER & 0xfffffff8;
-				if(display_message_ready == 1){		//if there's a message ready for me to print to CRT
-						//above var is the old "roys flag set"
-					//receive the message from mail box
-					crt_message = k_receive_message();
-
-					//check of message type
-					while (crt_message->type != DISPLAY_REQUEST){
-						//if it's not a display request, silently kill it
-						release_memory_block(crt_message);
-						crt_message = k_receive_message();
-					}
-
-					// TODO: get the message length
-					message_length = 0;
-					message_pointer = crt_message->message;
-					while (message_pointer != '\0'){
-						message_length++;
-					}
-					uart_send_string(0, (uint8_t *) crt_message->message, message_length);
-
-					// Code for displaying char to uart0
-					//uart0_put_string(crt_message->message);
+				//pUart->IER = pUart->IER & 0xfffffff8;
+				
+				for(i = 0 ; i < g_UART0_count; i++){
+					*(char_buffer_string+i) = g_UART0_buffer[i];
+					g_UART0_buffer[i] = 0;
 				}
-				//else we know that we send a keyboard input
-				else{
-					for(i = 0 ; i < g_UART0_count; i++){
-						*(char_buffer_string+i) = g_UART0_buffer[i];
-						g_UART0_buffer[i] = 0;
-					}
-					g_UART0_count = 0;
-					// Code for sending a message to the KCD for a command registration
-					// Set the message destination id to the id of the crt process
-					kcd_command->dest_id = 9;
-					kcd_command->type = KEYBOARD_INPUT;
-					kcd_command->message = char_buffer_string;
-					k_send_message(kcd_command->dest_id, kcd_command);
-				}	
+				g_UART0_count = 0;
+				// Code for sending a message to the KCD for a command registration
+				// Set the message destination id to the id of the crt process
+				kcd_command->dest_id = 9;
+				kcd_command->type = KEYBOARD_INPUT;
+				kcd_command->message = char_buffer_string;
+				k_send_message(kcd_command->dest_id, kcd_command);
 			}
-			else{
-				g_UART0_buffer[g_UART0_count++] = rbr_val; 
-				if ( g_UART0_count == BUFSIZE ) {
-					g_UART0_count = 0;  /* buffer overflow */
-				}
+			if ( g_UART0_count == BUFSIZE ) {
+				g_UART0_count = 0;  /* buffer overflow */
 			}
 		}	    
 	}
