@@ -237,5 +237,6 @@ void wall_clock() {
 			crt->message = time_string;
 			send_message(8, crt);
     }
+		release_memory_block(re);
   }
 }
