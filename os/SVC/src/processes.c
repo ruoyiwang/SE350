@@ -133,11 +133,18 @@ void test_process_5() {
 }
 
 void test_process_6() {
-	while(1) {
-		#ifdef DEBUG_0
-		printf("NULL PROCESS");
-		#endif
-		release_processor();
+  char* message ="QWERTYUIOP\nPOIUYTREWQ\n";
+  envelope* crt_message = NULL;
+  while(1) {
+		message  ="QWERTYUIOP\nPOIUYTREWQ\n";
+    crt_message = request_memory_block();
+    crt_message->src_id = 6;
+    crt_message->dest_id = 8;
+    crt_message->type = DISPLAY_REQUEST;
+    crt_message->message = message;
+    send_message(8, crt_message);
+
+    release_processor();
 	}
 }
 
