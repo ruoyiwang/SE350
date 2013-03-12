@@ -44,7 +44,7 @@ void k_send_message(int dest_id, envelope* env)
 	env->expire_time = 0;
 	env->dest_id = dest_id;
 	env->src_id = current_process->pid;
-	if (dest_pcb->mb.end->next == NULL)
+	if (dest_pcb->mb.front->next == NULL)
 	{
 		dest_pcb->mb.front = env;
 		dest_pcb->mb.end = env;
@@ -72,8 +72,17 @@ envelope* k_receive_message()
 		k_release_processor();
 		atomic(1);
 	}
-	ret = current_process->mb.front;
-	current_process->mb.front = current_process->mb.front->next;
+	if (current_process->mb.front == current_process->mb.end)
+	{
+		ret = current_process->mb.front;
+		current_process->mb.front = NULL;
+		current_process->mb.end = NULL;
+	}
+	else
+	{
+		ret = current_process->mb.front;
+		current_process->mb.front = current_process->mb.front->next;
+	}
 	ret->next = NULL;
 	atomic(0);
 	return ret;
@@ -262,6 +271,8 @@ void process_init() {
 	interrupt_process.state = RUNNING;
 	interrupt_process.pcb.priority=0;
 	interrupt_process.pcb.state=INTERRUPT;
+	interrupt_process.pcb.mb.front = NULL;
+	interrupt_process.pcb.mb.end = NULL;
 	interrupt_process.pcb.next = NULL;
 	interrupt_process.pcb.lu_next = NULL;
 	interrupt_process.pcb.prev = NULL;
@@ -284,6 +295,8 @@ void process_init() {
 	timer.state = RUNNING;
 	timer.pcb.priority=0;
 	timer.pcb.state=INTERRUPT;
+	timer.pcb.mb.front = NULL;
+	timer.pcb.mb.end = NULL;
 	timer.pcb.next = NULL;
 	timer.pcb.lu_next = NULL;
 	timer.pcb.prev = NULL;
@@ -308,6 +321,8 @@ void process_init() {
 		pcbs[i]->state = NEW;
 		pcbs[i]->next = NULL;
 		pcbs[i]->lu_next = NULL;
+		pcbs[i]->mb.front = NULL;
+		pcbs[i]->mb.end = NULL;
 		pcbs[i]->prev = NULL;
 		if (i!=0)
 			pcbs[i]->priority = 2;
@@ -331,6 +346,7 @@ void process_init() {
 		if (i!=0)
 			pcb_insert(pcbs[i], pcb_lookup_list);
 	}
+	pcbs[8]->priority = pcbs[9]->priority = 1;
 }
 
 int k_set_process_priority(int pid, int priority) {

@@ -182,7 +182,10 @@ void timer_iprocess(void){
 			k_send_message(finished_env->dest_id, finished_env);
 		}			
 	}
-	//env = (envelope *) k_request_memory_block();
-	//env->type = TIMER_UPDATE;
-	//k_send_message(9, env);
+	if (g_timer_count%1000 == 0)
+	{
+		env = (envelope *) k_request_memory_block();
+		env->type = TIMER_UPDATE;
+		k_send_message(9, env);
+	}
 }

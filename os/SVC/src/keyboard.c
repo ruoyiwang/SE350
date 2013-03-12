@@ -24,13 +24,10 @@ kcd_node* command_root;
 }*/
 
 void kcd_register(char* command, int pid) {
-	kcd_node* tmp = command_root;
+	kcd_node* tmp;
 	int i = 0;
 	char* tmpc = command;
 
-	while (tmp) {
-		tmp = tmp->next;
-	}
 
 	tmp = (kcd_node*)request_memory_block();
 	while (*tmpc && *tmpc != ' ') {
@@ -40,6 +37,8 @@ void kcd_register(char* command, int pid) {
 	}
 	tmp->_command[i] = '\0';
 	tmp->pid = pid;
+	tmp->next = command_root;
+	command_root = tmp;
 }
 
 int kcd_lookup(char* command) {
@@ -79,10 +78,8 @@ void kcd() {
 		src_id = m->src_id;
 
 		if (mt == COMMAND_REGISTRATION) {
-			if ((*input)== '%') {
-				if (*(input + 1)) {
-					kcd_register(input + 1, src_id);
-				}
+			if (*input) {
+					kcd_register(input, src_id);
 			}
 		}
 		else if (mt == KEYBOARD_INPUT) {

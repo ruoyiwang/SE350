@@ -14,17 +14,17 @@ __asm void UART0_IRQHandler(void)
 {
 	PRESERVE8
 	IMPORT k_UART0_IRQHandler
-	PUSH{r4-r11, lr}
 	MRS r0, MSP
+	PUSH{r4-r11, lr}
 	BL k_UART0_IRQHandler
 	POP{r4-r11, pc}
 } 
 
 void k_UART0_IRQHandler(uint32_t msp)
 {
+	current_process->sp = (uint32_t *) msp;
 	__disable_irq();
 	// Save the current process
-	current_process->sp = (uint32_t *) msp;
 	//saved_process = current_process;
 	i_process_routine();
 	
