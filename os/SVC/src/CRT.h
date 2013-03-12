@@ -14,8 +14,8 @@ void crt_displpay_process(){
 	int message_length = 0;
 	char * message_pointer;
 	envelope * message_envelop = NULL;
-	message_envelop = receive_message();
-	while(message_envelop != NULL){
+	while(1){
+		message_envelop = receive_message();
 		//pretty much as long as I get messages, I do this shit
 		//will only care if the message is a display request, or else I just delete the message wihtout handling it
 		if (message_envelop->type == DISPLAY_REQUEST){
@@ -49,11 +49,10 @@ void crt_displpay_process(){
 				uart_send_string(0, (uint8_t *) message_envelop->message, message_length);
 
 			//unset the message ready
-			display_message_ready = 0;
+			//display_message_ready = 0;
 		}
 
 		release_memory_block(message_envelop);
-		message_envelop = receive_message();
 	}
 }
 
