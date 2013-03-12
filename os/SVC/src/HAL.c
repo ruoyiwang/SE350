@@ -30,13 +30,13 @@ __asm void SVC_Handler (void)
 
   LDM  R0, {R0-R3, R12}; Read R0-R3, R12 from stack. 
                        ; NOTE R0 contains the sp before this instruction
-
+	PUSH{r4-r11}
   BLX  R12             ; Call SVC Function, 
                        ; R12 contains the corresponding 
                        ; C kernel functions entry point
                        ; R0-R3 contains the kernel function input params 
 		       ; according to AAPCS
-             
+  POP{R4-R11}  
   MRS  R12, MSP        ; Read MSP
   STR  R0, [R12]       ; store C kernel function return value in R0
                        ; to R0 on the exception stack frame  

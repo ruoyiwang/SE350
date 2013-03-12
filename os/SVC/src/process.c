@@ -376,13 +376,20 @@ int k_get_process_priority(int pid){
 		return pcbs[pid]->priority;
 }
 
+__asm void pushreg(void) {
+	PUSH{r4-r11}
+}
+
+__asm void popreg(void) {
+	POP{r4-r11}
+}
+
 int k_context_switch(pcb* pcb) {
 	if (current_process != NULL) {
 			if (current_process->state != MESSAGE_BLOCK) {
 				current_process->state = READY;
 			}
-	    current_process->sp = (uint32_t *) __get_MSP();
-	    //push_registers();
+			current_process->sp = (uint32_t *) __get_MSP();
 			if (pcb->state != INTERRUPT) {
 				pqueue_enqueue( &ready_queue, current_process );
 			}
@@ -407,7 +414,8 @@ int k_context_switch(pcb* pcb) {
 
 // Return 0 if success; 1 if fail
 int k_release_processor() {
-    pcb* new_process = pqueue_dequeue(&ready_queue);
+		pcb* new_process = NULL;
+    new_process = pqueue_dequeue(&ready_queue);
 
     // If process queue is empty or the state is not READY execute the null process
     if (new_process == NULL || (new_process->state != READY && new_process->state != NEW && new_process->state != MEMORY_BLOCK && new_process->state != MESSAGE_BLOCK)) {
@@ -417,7 +425,7 @@ int k_release_processor() {
     if (k_context_switch(new_process)) {
         return 1;
     }
-
+		
     return 0;
 }
 

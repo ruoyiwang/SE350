@@ -49,10 +49,10 @@ void test_process_1() {
 #ifdef DEBUG_0
       printf("\n\rproc1: ret_val=%d. ", ret_val);
 #else
-      uart0_put_string("\n\rTEST 1: ");
+      //uart0_put_string("\n\rTEST 1: ");
 #endif /* DEBUG_0 */
     }
-    uart0_put_char('A' + i%26);
+    //uart0_put_char('A' + i%26);
     i++;
   }
 }
@@ -66,10 +66,10 @@ void test_process_2() {
 #ifdef DEBUG_0
       printf("\n\rproc2: ret_val=%d. ", ret_val);
 #else
-      uart0_put_string("\n\rTEST 2: ");
+      //uart0_put_string("\n\rTEST 2: ");
 #endif  /* DEBUG_0 */
     }
-    uart0_put_char('a' + i%26);
+    //uart0_put_char('a' + i%26);
     i++;
   }
 }
@@ -82,10 +82,10 @@ void test_process_3() {
 		for(i =0; i<9;i++)
 		{
         priority = get_process_priority(i);
-				uart0_put_string("\n\rPROCESS ");
-			  uart0_put_char('0'+i);
-				uart0_put_string(" PRIORITY: ");
-			  uart0_put_char('0'+priority);
+				//uart0_put_string("\n\rPROCESS ");
+			  //uart0_put_char('0'+i);
+				//uart0_put_string(" PRIORITY: ");
+			 // uart0_put_char('0'+priority);
 		}
 
 		release_processor();
@@ -103,12 +103,12 @@ void test_process_4() {
     priority = get_process_priority(4);
 
     if(priority != prioritySet){
-        uart0_put_string("\n\rG029_test: test 4 FAIL");
+        //uart0_put_string("\n\rG029_test: test 4 FAIL");
         num_fails++;
         release_processor();
     }
 
-    uart0_put_string("\n\rG029_test: test 4 OK");
+    //uart0_put_string("\n\rG029_test: test 4 OK");
     num_passes++;
     release_processor();
 	}
@@ -122,11 +122,11 @@ void test_process_5() {
 		memory = (void*)request_memory_block();
 		release_success = release_memory_block(memory);
 		if (release_success != 0){
-			uart0_put_string("\n\rG029_test: test 5 FAIL");
+			//uart0_put_string("\n\rG029_test: test 5 FAIL");
 			release_processor();
 		}
 		else{
-			uart0_put_string("\n\rG029_test: test 5 OK");
+			//uart0_put_string("\n\rG029_test: test 5 OK");
 			release_processor();
 		}
 	}
@@ -134,15 +134,15 @@ void test_process_5() {
 
 void test_process_6() {
   char* message ="QWERTYUIOP\nPOIUYTREWQ\n";
-  envelope* crt_message = NULL;
+  //envelope* crt_message = NULL;
   while(1) {
 		message  ="QWERTYUIOP\nPOIUYTREWQ\n";
-    crt_message = request_memory_block();
+    /*crt_message = request_memory_block();
     crt_message->src_id = 6;
     crt_message->dest_id = 8;
     crt_message->type = DISPLAY_REQUEST;
     crt_message->message = message;
-    send_message(8, crt_message);
+    send_message(8, crt_message);*/
 
     release_processor();
 	}
@@ -150,15 +150,16 @@ void test_process_6() {
 
 void wall_clock() {
   envelope e[3];
+	envelope* crt;
   envelope* re;
   char* input;
   char wr_message[] = "WR";
   char ws_message[] = "WS";
   char wt_message[] = "WT";
-  char time_string[8];
+  char time_string[10];
   int hour = 0, minute = 0, second = 0;
   int second_overflow = 0, minute_overflow = 0;
-  int on = 0;
+  int on = 1;
 	int i;
 
   e[0].message = (void*)&wr_message;
@@ -192,7 +193,7 @@ void wall_clock() {
 
       second_overflow = minute_overflow = 0;
     }
-    else if (*input == '%' && *(input+1) == 'W') {
+    else if (re->type != TIMER_UPDATE && *input == '%' && *(input+1) == 'W') {
       if (*(input+2) == 'R') {
         // Reset clock to 00:00:00
         hour = 0;
@@ -220,15 +221,21 @@ void wall_clock() {
       }
     }
     if (on) {
-      time_string[0] = hour/10;
-      time_string[1] = hour%10;
-      time_string[2] = time_string[5] = ':';
-      time_string[3] = minute/10;
-      time_string[4] = minute%10;
-      time_string[6] = second/10;
-      time_string[7] = second%10;
+			time_string[0] = '\n';
+      time_string[1] = hour/10 + '0';
+      time_string[2] = hour%10 + '0';
+      time_string[3] = time_string[6] = ':';
+      time_string[4] = minute/10 + '0';
+      time_string[5] = minute%10 + '0';
+      time_string[7] = second/10 + '0';
+      time_string[8] = second%10 + '0';
+			time_string[9] = '\0';
+			crt = (envelope*)request_memory_block();
+			crt->src_id = 9;
+			crt->dest_id = 8;
+			crt->type = DISPLAY_REQUEST;
+			crt->message = time_string;
+			send_message(8, crt);
     }
-
-    release_memory_block((void*)re);
   }
 }
