@@ -44,7 +44,7 @@ void k_send_message(int dest_id, envelope* env)
 	env->expire_time = 0;
 	env->dest_id = dest_id;
 	env->src_id = current_process->pid;
-	if (dest_pcb->mb.front->next == NULL)
+	if (dest_pcb->mb.front == NULL)
 	{
 		dest_pcb->mb.front = env;
 		dest_pcb->mb.end = env;
