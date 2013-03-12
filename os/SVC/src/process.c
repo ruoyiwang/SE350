@@ -94,7 +94,7 @@ void k_delay_send( int dest_id, envelope *env, int delay)
 	env->expire_time = g_timer_count + delay;
 	env->dest_id = dest_id;
 	env->src_id = current_process->pid;
-	if (delay_message_list->end->next == NULL)
+	if (delay_message_list->front == NULL)
 	{
 		delay_message_list->front = env;
 		delay_message_list->end = env;
