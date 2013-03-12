@@ -179,7 +179,7 @@ void timer_iprocess(void){
 			k_send_message(finished_env->dest_id, finished_env);
 		}			
 	}
-	if (g_timer_count%100 == 0)
+	if (g_timer_count%10 == 0)
 	{
 		env = (envelope *) k_request_memory_block();
 		env->type = TIMER_UPDATE;

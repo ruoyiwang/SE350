@@ -325,8 +325,8 @@ void process_init() {
 		pcbs[i]->mb.end = NULL;
 		pcbs[i]->prev = NULL;
 		
-		if (i == 7 || i == 8 || i == 9)
-			pcbs[i]->priority = 1;			
+		if (i == 7 || i ==8 || i == 9)
+			pcbs[i]->priority = 1;
 		else if (i!=0)
 			pcbs[i]->priority = 2;
 
