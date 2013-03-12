@@ -134,18 +134,23 @@ void test_process_5() {
 }
 
 void test_process_6() {
-  char* message ="QWERTYUIOP\nPOIUYTREWQ\n";
+  char* message ="%WR";
+	envelope * re;
+	envelope * env;
   //envelope* crt_message = NULL;
   while(1) {
-		message  ="QWERTYUIOP\nPOIUYTREWQ\n";
-    /*crt_message = request_memory_block();
-    crt_message->src_id = 6;
-    crt_message->dest_id = 8;
-    crt_message->type = DISPLAY_REQUEST;
-    crt_message->message = message;
-    send_message(8, crt_message);*/
-
-    release_processor();
+		re = (envelope *) request_memory_block();
+		re->src_id = 6;
+		re->dest_id = 6;
+		delay_send(6, re, 10000);
+    re = (envelope*)receive_message();
+		
+		env = (envelope *) k_request_memory_block();
+		env->type = KEYBOARD_INPUT;
+		env->message = message;
+		k_send_message(9, env);
+		
+		release_memory_block(re);
 	}
 }
 
@@ -190,7 +195,7 @@ void wall_clock() {
         minute_overflow = 1;
       }
       minute = (minute + second_overflow)%60;
-      hour = (hour + minute_overflow)%60;
+      hour = (hour + minute_overflow)%24;
 
       second_overflow = minute_overflow = 0;
     }
@@ -207,12 +212,12 @@ void wall_clock() {
         if (*(input+4) >= '0' && *(input+4) <= '2' && *(input+5) >= '0' && *(input+5) <= '9' &&
             *(input+7) >= '0' && *(input+7) <= '6' && *(input+8) >= '0' && *(input+8) <= '9' &&
             *(input+10) >= '0' && *(input+10) <= '6' && *(input+11) >= '0' && *(input+11) <= '9') {
-          hour = 10*(*(input+5) - '0');
-          hour = hour + (*(input+4) - '0');
-          minute = 10*(*(input+8) - '0');
-          minute = minute + (*(input+7) - '0');
-          second = 10*(*(input+11) - '0');
-          second = second + (*(input+10) - '0');
+          hour = 10*(*(input+4) - '0');
+          hour = hour + (*(input+5) - '0');
+          minute = 10*(*(input+7) - '0');
+          minute = minute + (*(input+8) - '0');
+          second = 10*(*(input+10) - '0');
+          second = second + (*(input+11) - '0');
           on = 1;
         }
       }
@@ -222,14 +227,14 @@ void wall_clock() {
       }
     }
     if (on) {
-			time_string[0] = '\n';
-      time_string[1] = hour/10 + '0';
-      time_string[2] = hour%10 + '0';
-      time_string[3] = time_string[6] = ':';
-      time_string[4] = minute/10 + '0';
-      time_string[5] = minute%10 + '0';
-      time_string[7] = second/10 + '0';
-      time_string[8] = second%10 + '0';
+      time_string[0] = hour/10 + '0';
+      time_string[1] = hour%10 + '0';
+      time_string[2] = time_string[5] = ':';
+      time_string[3] = minute/10 + '0';
+      time_string[4] = minute%10 + '0';
+      time_string[6] = second/10 + '0';
+      time_string[7] = second%10 + '0';
+			time_string[8] = '\n';
 			time_string[9] = '\0';
 			crt = (envelope*)request_memory_block();
 			crt->src_id = 9;

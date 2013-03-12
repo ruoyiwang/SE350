@@ -50,13 +50,13 @@ int kcd_lookup(char* command) {
 		i = -1;
 		do {
 			i++;
+			if (i > 0 && tmp->_command[i] == '\0' && (*(tmpc+i) == '\0' || *(tmpc+i) == ' ')) {
+				return tmp->pid;
+			}
 			if (tmp->_command[i] != *(tmpc+i)) {
 				break;
 			}
-			if (tmp->_command[i] == '\0' && *(tmpc+i) == '\0') {
-				return tmp->pid;
-			}
-		} while (tmp->_command[i] != '\0' && *(tmpc+i) != '\0');
+		} while (tmp->_command[i] != '\0' && (*(tmpc+i) != '\0' || *(tmpc+i) == ' '));
 		tmp = tmp->next;
 	}
 

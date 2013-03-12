@@ -54,6 +54,20 @@ void k_send_message(int dest_id, envelope* env)
 		dest_pcb->mb.end->next = env;
 		dest_pcb->mb.end = env;
 	}
+	//manage the delay message list
+	if (env == delay_message_list->front)
+	{
+		if (delay_message_list->front == delay_message_list->end)
+		{
+			delay_message_list->front = NULL;
+			delay_message_list->end = NULL;
+		}
+		else
+		{
+			delay_message_list->front = delay_message_list->front->next;
+		}
+	}
+	
 	if (dest_pcb->state == MESSAGE_BLOCK)
 	{
 		dest_pcb->state = READY;
@@ -247,6 +261,9 @@ void process_init() {
 
 	volatile int i, j;
 	uint32_t * sp;
+	delay_message_list = (mailbox*) k_request_memory_block();
+	delay_message_list->front =NULL;
+	delay_message_list->end =NULL;
 	
 	for (i=0; i < NUM_PROCS; i++) {
 		pcbs[i] = (pcb*)k_request_memory_block();
