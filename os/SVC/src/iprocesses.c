@@ -43,6 +43,8 @@ void i_process_routine(void){
 				char_buffer_string[i] = g_UART0_buffer[i];
 				g_UART0_buffer[i] = 0;
 			}
+			// Since kcd is expecting the end of the command string to have \0, we replace the enter with a null char
+			char_buffer_string[--i] = '\0';
 			g_UART0_count = 0;
 			// Code for sending a message to the KCD for a command registration
 			// Set the message destination id to the id of the crt process
@@ -112,6 +114,8 @@ void i_process_routine(void){
 					char_buffer_string[i] = g_UART0_buffer[i];
 					g_UART0_buffer[i] = 0;
 				}
+				// Since kcd is expecting the end of the command string to have \0, we replace the enter with a null char
+				char_buffer_string[--i] = '\0';
 				g_UART0_count = 0;
 				// Code for sending a message to the KCD for a command registration
 				// Set the message destination id to the id of the crt process

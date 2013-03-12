@@ -87,13 +87,15 @@ void kcd() {
 				// Send message to PID registered to the command
 				if (*(input + 1)) {
 					src_id = kcd_lookup(input + 1);
+					
 					if (src_id != -1) {
 						m->dest_id = src_id;
 						send_message(src_id, m);
 					}
 				}
 			}
-			// Send to CRT
+			m->type = DISPLAY_REQUEST;
+			send_message(8, m);
 		}
 	}
 }

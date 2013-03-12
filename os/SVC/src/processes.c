@@ -11,6 +11,7 @@ int num_passes;         // Holds number of test cases that passed
 int num_fails;          // Hold number of test cases that failed
 int KCD_PID = 7;
 int WALLCLOCK_PID = 9;
+int CRT_PID = 8;
 
 /*int atoi(void* input) {
   char c;
