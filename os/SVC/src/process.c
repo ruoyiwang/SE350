@@ -378,14 +378,6 @@ int k_get_process_priority(int pid){
 		return pcbs[pid]->priority;
 }
 
-__asm void pushreg(void) {
-	PUSH{r4-r11}
-}
-
-__asm void popreg(void) {
-	POP{r4-r11}
-}
-
 int k_context_switch(pcb* pcb) {
 	if (current_process != NULL) {
 			if (current_process->state != MESSAGE_BLOCK) {
