@@ -43,6 +43,7 @@ void* k_request_memory_block(){
 
 int k_release_memory_block(void *MemoryBlock){
 	int index;
+	int temp;
 	int mem_block_address = (int) MemoryBlock;
 	//if the requested releasig address is outside of my range
 	//return 1 (error)
@@ -57,6 +58,8 @@ int k_release_memory_block(void *MemoryBlock){
 			break;
 		}
 	}
+	temp = mmu.lookup_table[index];		//the soul purpose of this line is so we can debug 
+																		//by looking at if they are releasing a used block
 	mmu.lookup_table[index] = 0;
 	if (mmu.memory_available == 0){
 		mmu.memory_available = 1;		//when we release mem, there's mem avaialble again
