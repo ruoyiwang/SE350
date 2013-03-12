@@ -11,6 +11,9 @@
 //#include "CRT.h"
 
 int display_message_ready;
+volatile uint8_t g_UART0_TX_empty=1;
+volatile uint8_t g_UART0_buffer[BUFSIZE];
+volatile uint32_t g_UART0_count = 0;
 
 void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len );
 
@@ -77,11 +80,12 @@ void i_process_routine(void){
 				kcd_command->dest_id = 9;
 				kcd_command->type = KEYBOARD_INPUT;
 				kcd_command->message = char_buffer_string;
-				send_message(kcd_command->dest_id, kcd_command);
+				k_send_message(kcd_command->dest_id, kcd_command);
 			}	
 		}
 		else{
-			g_UART0_buffer[g_UART0_count++] = pUart->RBR;
+			g_UART0_buffer[g_UART0_count] = pUart->RBR;
+			++g_UART0_count;
 			if (g_UART0_count == BUFSIZE) {
 				g_UART0_count = 0; /* buffer overflow */
 			}
@@ -139,13 +143,13 @@ void i_process_routine(void){
 				if(display_message_ready == 1){		//if there's a message ready for me to print to CRT
 						//above var is the old "roys flag set"
 					//receive the message from mail box
-					crt_message = receive_message();
+					crt_message = k_receive_message();
 
 					//check of message type
 					while (crt_message->type != DISPLAY_REQUEST){
 						//if it's not a display request, silently kill it
 						release_memory_block(crt_message);
-						crt_message = receive_message();
+						crt_message = k_receive_message();
 					}
 
 					// TODO: get the message length
