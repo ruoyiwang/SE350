@@ -1,10 +1,6 @@
 #include "interrupt.h"
 #include <LPC17xx.h>
 
-volatile uint8_t g_UART0_TX_empty=1;
-volatile uint8_t g_UART0_buffer[BUFSIZE];
-volatile uint32_t g_UART0_count = 0;
-
 pcb* saved_process;
 
 /**
@@ -19,26 +15,22 @@ __asm void UART0_IRQHandler(void)
 	PRESERVE8
 	IMPORT k_UART0_IRQHandler
 	PUSH{r4-r11, lr}
+	MRS r0, MSP
 	BL k_UART0_IRQHandler
 	POP{r4-r11, pc}
 } 
 
-void k_UART0_IRQHandler(void)
+void k_UART0_IRQHandler(uint32_t msp)
 {
 	__disable_irq();
-	// Set status of current process to interrupted
-	current_process->state = INTERRUPT;
-	saved_process = current_process;
-
-	k_context_switch(&(interrupt_process.pcb));	
-
+	// Save the current process
+	current_process->sp = (uint32_t *) msp;
+	//saved_process = current_process;
+	i_process_routine();
 	
-	
-	__enable_irq();
-
 	// We now have to restore context of the current process
-	current_process = saved_process;
-	k_context_switch (current_process);
+	//__set_MSP((uint32_t ) current_process->sp);
+	__enable_irq();
 }
 
 

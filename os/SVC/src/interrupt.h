@@ -47,7 +47,6 @@
    See table 279, pg306 LPC17xx_UM
 */
 #define UART_8N1  0x83 /* 8 bits, no Parity, 1 Stop bit */			
-#define uart0_init() uart_init(0)
 #define BIT(X)    ( 1<<X )
 #define ENTER 0xd // Ascii value for carriage return i.e enter key
 #define command 0x25 // ascii value for the % sign
@@ -69,7 +68,7 @@ void uart_send_string( uint32_t n_uart, uint8_t *p_buffer, uint32_t len );
 
 extern i_process interrupt_process;
 
-extern void k_UART0_IRQHandler(void);
+extern void k_UART0_IRQHandler(uint32_t msp);
  
 extern void print_ready_queue_priority(void);
 extern void print_memory_blocked_queue_priority(void);
