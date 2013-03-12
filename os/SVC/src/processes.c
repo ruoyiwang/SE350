@@ -133,9 +133,10 @@ void test_process_5() {
 }
 
 void test_process_6() {
-  char* message  ="lalalalalalalalala";
+  char* message ="QWERTYUIOP\nPOIUYTREWQ\n";
   envelope* crt_message = NULL;
   while(1) {
+		message  ="QWERTYUIOP\nPOIUYTREWQ\n";
     crt_message = request_memory_block();
     crt_message->src_id = 6;
     crt_message->dest_id = 8;
