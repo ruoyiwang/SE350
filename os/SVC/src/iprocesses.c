@@ -22,7 +22,7 @@ void i_process_routine(void){
 	uint8_t LSR_Val;        /* LSR Value             */
 	uint8_t dummy = dummy;	/* to clear interrupt upon LSR error */
 	envelope* kcd_command;
-	char* char_buffer_string;
+	char char_buffer_string[BUFSIZE];
 	// make an empty envelope to for the crt msgs
 	LPC_UART_TypeDef *pUart = (LPC_UART_TypeDef *)LPC_UART0;
 	int i = 0;
@@ -35,15 +35,12 @@ void i_process_routine(void){
 		// Check if the user clicked enter
 		if(g_UART0_buffer[g_UART0_count-1] == ENTER){
 			// Create an envelope for the kcd message send
-			envelope* kcd_command = k_request_memory_block();
+			kcd_command = k_request_memory_block();
 			kcd_command->src_id = interrupt_process.pcb.pid;
-
-			// Make sure that interrupts don't add to the char buffer
-			// Disable the RBR in the IER
-			//pUart->IER = pUart->IER & 0xfffffff8;
 			
+			// Copy the char buffer into a char array to pass into the message
 			for(i = 0 ; i < g_UART0_count; i++){
-				*(char_buffer_string+i) = g_UART0_buffer[i];
+				char_buffer_string[i] = g_UART0_buffer[i];
 				g_UART0_buffer[i] = 0;
 			}
 			g_UART0_count = 0;
@@ -58,7 +55,7 @@ void i_process_routine(void){
 
 		// Check if the hotkeys have been pressed 
 		// User presses 1
-		if(g_UART0_buffer[g_UART0_count-1] == 0x31){
+		else if(g_UART0_buffer[g_UART0_count-1] == 0x31){
 			print_ready_queue_priority();
 		}
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x32){
@@ -112,7 +109,7 @@ void i_process_routine(void){
 				//pUart->IER = pUart->IER & 0xfffffff8;
 				
 				for(i = 0 ; i < g_UART0_count; i++){
-					*(char_buffer_string+i) = g_UART0_buffer[i];
+					char_buffer_string[i] = g_UART0_buffer[i];
 					g_UART0_buffer[i] = 0;
 				}
 				g_UART0_count = 0;
