@@ -56,14 +56,16 @@ void i_process_routine(void){
 		
 
 		// Check if the hotkeys have been pressed 
-		// User presses 1
-		else if(g_UART0_buffer[g_UART0_count-1] == 0x31){
+		// User types exclamation mark
+		else if(g_UART0_buffer[g_UART0_count-1] == 0x21){
 			print_ready_queue_priority();
 		}
-		else if(g_UART0_buffer[g_UART0_count-1] == 0x32){
+		// User types @
+		else if(g_UART0_buffer[g_UART0_count-1] == 0x40){
 			print_memory_blocked_queue_priority();
 		}
-		else if(g_UART0_buffer[g_UART0_count-1] == 0x33){
+		// User types #
+		else if(g_UART0_buffer[g_UART0_count-1] == 0x23){
 			print_message_blocked_queue_priority();
 		}
 		
