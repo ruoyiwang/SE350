@@ -33,7 +33,7 @@ void i_process_routine(void){
 		g_UART0_buffer[g_UART0_count] = pUart->RBR;
 		++g_UART0_count;
 		// Check if the user clicked enter
-		/*if(g_UART0_buffer[g_UART0_count-1] == ENTER){
+		if(g_UART0_buffer[g_UART0_count-1] == ENTER){
 			// Create an envelope for the kcd message send
 			envelope* kcd_command = k_request_memory_block();
 			kcd_command->src_id = interrupt_process.pcb.pid;
@@ -49,14 +49,14 @@ void i_process_routine(void){
 			g_UART0_count = 0;
 			// Code for sending a message to the KCD for a command registration
 			// Set the message destination id to the id of the crt process
-			kcd_command->dest_id = 9;
+			kcd_command->dest_id = 7;
 			kcd_command->type = KEYBOARD_INPUT;
 			kcd_command->message = char_buffer_string;
 			k_send_message(kcd_command->dest_id, kcd_command);
-		}*/
+		}
 		
 #ifdef DEBUG_0
-		/* Check if the hotkeys have been pressed 
+		// Check if the hotkeys have been pressed 
 		// User presses 1
 		if(g_UART0_buffer[g_UART0_count-1] == 0x31){
 			print_ready_queue_priority();
@@ -66,7 +66,7 @@ void i_process_routine(void){
 		}
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x33){
 			print_message_blocked_queue_priority();
-		}*/
+		}
 #endif		
 		
 		if (g_UART0_count == BUFSIZE) {
@@ -118,7 +118,7 @@ void i_process_routine(void){
 				g_UART0_count = 0;
 				// Code for sending a message to the KCD for a command registration
 				// Set the message destination id to the id of the crt process
-				kcd_command->dest_id = 9;
+				kcd_command->dest_id = 7;
 				kcd_command->type = KEYBOARD_INPUT;
 				kcd_command->message = char_buffer_string;
 				k_send_message(kcd_command->dest_id, kcd_command);
