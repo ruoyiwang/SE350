@@ -29,15 +29,15 @@ void i_process_routine(void){
 	int message_length = 0;
 	int i = 0;
 	void * message_pointer;
-	
+	uint8_t rbr_val;
 	/* Reading IIR automatically acknowledges the interrupt */
 	IIR_IntId = (pUart->IIR) >> 1 ; /* skip pending bit in IIR */
 
 	if (IIR_IntId & IIR_RDA) { /* Receive Data Avaialbe */
 		/* read UART. Read RBR will clear the interrupt */
-
+		rbr_val = pUart->RBR;
 		// If user presses enter then we enter the i-process
-		if(pUart->RBR == ENTER){
+		if(rbr_val == ENTER){
 			// Create an envelope for the kcd message send
 			envelope* kcd_command = k_request_memory_block();
 			kcd_command->src_id = interrupt_process.pcb.pid;
@@ -84,7 +84,7 @@ void i_process_routine(void){
 			}	
 		}
 		else{
-			g_UART0_buffer[g_UART0_count] = pUart->RBR;
+			g_UART0_buffer[g_UART0_count] = rbr_val;
 			++g_UART0_count;
 			if (g_UART0_count == BUFSIZE) {
 				g_UART0_count = 0; /* buffer overflow */
@@ -93,13 +93,13 @@ void i_process_routine(void){
 #ifdef DEBUG_0
 		/* Check if the hotkeys have been pressed */
 		// User presses 1
-		if(pUart->RBR == 0x31){
+		if(rbr_val == 0x31){
 			print_ready_queue_priority();
 		}
-		else if(pUart->RBR == 0x32){
+		else if(rbr_val == 0x32){
 			print_memory_blocked_queue_priority();
 		}
-		else if(pUart->RBR == 0x33){
+		else if(rbr_val == 0x33){
 			print_message_blocked_queue_priority();
 		}
 #endif
@@ -123,7 +123,7 @@ void i_process_routine(void){
 		           Read LSR will clear the interrupt 
 			   Dummy read on RX to clear interrupt, then bail out
 			*/
-			dummy = pUart->RBR; 
+			dummy = rbr_val; 
 			return; /* error occurs, return */
 		}
 		/* If no error on RLS, normal ready, save into the data buffer.
@@ -132,7 +132,7 @@ void i_process_routine(void){
 		if (LSR_Val & LSR_RDR) { /* Receive Data Ready */
 			/* read from the uart */
 	        // If user presses enter then we enter the i-process
-			if(pUart->RBR == ENTER){
+			if(rbr_val == ENTER){
 				// Create an envelope for the kcd message send
 				kcd_command = k_request_memory_block();
 				kcd_command->src_id = interrupt_process.pcb.pid;
@@ -179,7 +179,7 @@ void i_process_routine(void){
 				}	
 			}
 			else{
-				g_UART0_buffer[g_UART0_count++] = pUart->RBR; 
+				g_UART0_buffer[g_UART0_count++] = rbr_val; 
 				if ( g_UART0_count == BUFSIZE ) {
 					g_UART0_count = 0;  /* buffer overflow */
 				}
