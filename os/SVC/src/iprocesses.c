@@ -44,44 +44,19 @@ void i_process_routine(void){
 
 			// Make sure that interrupts don't add to the char buffer
 			// Disable the RBR in the IER
-			pUart->IER = pUart->IER & 0xfffffff8;
-			if(display_message_ready == 1){		//if there's a message ready for me to print to CRT
-					//above var is the old "roys flag set"
-				//receive the message from mail box
-				crt_message = receive_message();
-
-				//check of message type
-				while (crt_message->type != DISPLAY_REQUEST){
-					//if it's not a display request, silently kill it
-					release_memory_block(crt_message);
-					crt_message = receive_message();
-				}
-
-				// TODO: get the message length
-				message_length = 0;
-				message_pointer = crt_message->message;
-				while (message_pointer != '\0'){
-					message_length++;
-				}
-				uart_send_string(0, (uint8_t *) crt_message->message, message_length);
-
-				// Code for displaying char to uart0
-				//uart0_put_string(crt_message->message);
+			//pUart->IER = pUart->IER & 0xfffffff8;
+			
+			for(i = 0 ; i < g_UART0_count; i++){
+				*(char_buffer_string+i) = g_UART0_buffer[i];
+				g_UART0_buffer[i] = 0;
 			}
-			//else we know that we send a keyboard input
-			else{
-				for(i = 0 ; i < g_UART0_count; i++){
-					*(char_buffer_string+i) = g_UART0_buffer[i];
-					g_UART0_buffer[i] = 0;
-				}
-				g_UART0_count = 0;
-				// Code for sending a message to the KCD for a command registration
-				// Set the message destination id to the id of the crt process
-				kcd_command->dest_id = 9;
-				kcd_command->type = KEYBOARD_INPUT;
-				kcd_command->message = char_buffer_string;
-				k_send_message(kcd_command->dest_id, kcd_command);
-			}	
+			g_UART0_count = 0;
+			// Code for sending a message to the KCD for a command registration
+			// Set the message destination id to the id of the crt process
+			kcd_command->dest_id = 9;
+			kcd_command->type = KEYBOARD_INPUT;
+			kcd_command->message = char_buffer_string;
+			k_send_message(kcd_command->dest_id, kcd_command);
 		}
 		else{
 			g_UART0_buffer[g_UART0_count] = rbr_val;
@@ -188,7 +163,7 @@ void i_process_routine(void){
 	}
 
 	// Since we are done with the interrupt we can reenable RBR
-	pUart->IER = pUart->IER | 0x7; 
+	//pUart->IER = pUart->IER | 0x7; 
 
 }
 
