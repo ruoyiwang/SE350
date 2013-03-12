@@ -324,7 +324,10 @@ void process_init() {
 		pcbs[i]->mb.front = NULL;
 		pcbs[i]->mb.end = NULL;
 		pcbs[i]->prev = NULL;
-		if (i!=0)
+		
+		if (i == 7 || i == 8 || i == 9)
+			pcbs[i]->priority = 1;			
+		else if (i!=0)
 			pcbs[i]->priority = 2;
 
 		sp = k_request_memory_block();
@@ -346,7 +349,6 @@ void process_init() {
 		if (i!=0)
 			pcb_insert(pcbs[i], pcb_lookup_list);
 	}
-	pcbs[8]->priority = pcbs[9]->priority = 1;
 }
 
 int k_set_process_priority(int pid, int priority) {
