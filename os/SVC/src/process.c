@@ -44,6 +44,7 @@ void k_send_message(int dest_id, envelope* env)
 	env->expire_time = 0;
 	env->dest_id = dest_id;
 	env->src_id = current_process->pid;
+	env->next = NULL;
 	if (dest_pcb->mb.front == NULL)
 	{
 		dest_pcb->mb.front = env;
@@ -108,6 +109,7 @@ void k_delay_send( int dest_id, envelope *env, int delay)
 	env->expire_time = g_timer_count + delay;
 	env->dest_id = dest_id;
 	env->src_id = current_process->pid;
+	env->next = NULL;
 	if (delay_message_list->front == NULL)
 	{
 		delay_message_list->front = env;
@@ -453,6 +455,7 @@ void print_ready_queue_priority(void){
 		pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 		if(pcb->state == READY){
 			uart0_put_char('\n');
+			uart0_put_char('\r');
 			uart0_put_char('0' + pcb->pid);
 			uart0_put_char(' ');
 			uart0_put_char('0' + pcb->priority);
@@ -468,6 +471,7 @@ void print_memory_blocked_queue_priority(void){
 		pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 		if(pcb->state == MEMORY_BLOCK){
 			uart0_put_char('\n');
+			uart0_put_char('\r');
 			uart0_put_char('0' + pcb->pid);
 			uart0_put_char(' ');
 			uart0_put_char('0' + pcb->priority);
@@ -483,6 +487,7 @@ void print_message_blocked_queue_priority(void){
 		pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 		if(pcb->state == MESSAGE_BLOCK){
 			uart0_put_char('\n');
+			uart0_put_char('\r');
 			uart0_put_char('0' + pcb->pid);
 			uart0_put_char(' ');
 			uart0_put_char('0' + pcb->priority);

@@ -134,9 +134,9 @@ void test_process_5() {
 }
 
 void test_process_6() {
-  char* message ="%WR";
+  char* message ="10 seconds have passed!\n\r";
 	envelope * re;
-	envelope * env;
+	envelope * crt;
   //envelope* crt_message = NULL;
   while(1) {
 		re = (envelope *) request_memory_block();
@@ -145,10 +145,14 @@ void test_process_6() {
 		delay_send(6, re, 10000);
     re = (envelope*)receive_message();
 		
-		env = (envelope *) k_request_memory_block();
-		env->type = KEYBOARD_INPUT;
-		env->message = message;
-		k_send_message(9, env);
+	//	env = (envelope *) k_request_memory_block();
+	//	env->type = KEYBOARD_INPUT;
+	//	env->message = message;
+	//	k_send_message(9, env);
+		crt = (envelope*)request_memory_block();
+		crt->type = DISPLAY_REQUEST;
+		crt->message = message;
+		send_message(8, crt);
 		
 		release_memory_block(re);
 	}
@@ -162,7 +166,7 @@ void wall_clock() {
   char wr_message[] = "WR";
   char ws_message[] = "WS";
   char wt_message[] = "WT";
-  char time_string[10];
+  char time_string[11];
   int hour = 0, minute = 0, second = 0;
   int second_overflow = 0, minute_overflow = 0;
   int on = 1;
@@ -235,7 +239,8 @@ void wall_clock() {
       time_string[6] = second/10 + '0';
       time_string[7] = second%10 + '0';
 			time_string[8] = '\n';
-			time_string[9] = '\0';
+			time_string[9] = '\r';
+			time_string[10] = '\0';
 			crt = (envelope*)request_memory_block();
 			crt->src_id = 9;
 			crt->dest_id = 8;

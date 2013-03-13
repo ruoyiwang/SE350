@@ -70,7 +70,7 @@ void i_process_routine(void){
 		}
 		
 		
-		if (g_UART0_count == BUFSIZE) {
+		if (g_UART0_count == BUFSIZE-1) {
 			g_UART0_count = 0; /* buffer overflow */
 		}
 	} else if (IIR_IntId & IIR_THRE) { 
@@ -126,7 +126,7 @@ void i_process_routine(void){
 				kcd_command->message = char_buffer_string;
 				k_send_message(kcd_command->dest_id, kcd_command);
 			}
-			if ( g_UART0_count == BUFSIZE ) {
+			if ( g_UART0_count == BUFSIZE-1 ) {
 				g_UART0_count = 0;  /* buffer overflow */
 			}
 		}	    
@@ -177,19 +177,22 @@ void timer_iprocess(void){
 		return;
 	}
 	temp = delay_message_list->front;
-	while ( temp->next != NULL)
+	if (temp!=NULL)
 	{
-		if (temp->next->expire_time > g_timer_count)
+		while ( temp->next != NULL)
 		{
-			if (temp->next == delay_message_list->end)
+			if (temp->next->expire_time > g_timer_count)
 			{
-				delay_message_list->end = temp;
-			}
-			finished_env = temp->next;
-			temp->next = temp->next->next;
-			finished_env->next = NULL;
-			k_send_message(finished_env->dest_id, finished_env);
-		}			
+				if (temp->next == delay_message_list->end)
+				{
+					delay_message_list->end = temp;
+				}
+				finished_env = temp->next;
+				temp->next = temp->next->next;
+				finished_env->next = NULL;
+				k_send_message(finished_env->dest_id, finished_env);
+			}			
+		}
 	}
 	if (g_timer_count%1000 == 0)
 	{

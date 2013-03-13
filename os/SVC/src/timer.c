@@ -115,6 +115,8 @@ __asm void TIMER0_IRQHandler(void)
  */
 void k_TIMER0_IRQHandler(uint32_t msp)
 {
+	if(current_process == NULL)
+		return;
 	__disable_irq();
 	current_process->sp = (uint32_t *) msp;
 	/* ack inttrupt, see section  21.6.1 on pg 493 of LPC17XX_UM */

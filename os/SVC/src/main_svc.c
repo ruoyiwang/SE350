@@ -29,10 +29,10 @@ int main()
 	timer_init(0);
 	mmu_init();
   process_init();
-  __enable_irq();
 
+  __enable_irq(); 
   // transit to unprivileged level, default MSP is used
-  __set_CONTROL(__get_CONTROL() | BIT(0));  
+  __set_CONTROL(__get_CONTROL() | BIT(0)); 
 
   ret_val = release_processor();
   ret_val = release_memory_block(NULL);
