@@ -4,6 +4,8 @@
  * NOTE this file contains embedded assembly.
  */
  
+#include "process.h"
+ 
 __asm void __rte(void)
 {
 	PRESERVE8
@@ -16,7 +18,6 @@ __asm void SVC_Handler (void)
 {
   PRESERVE8            ; 8 bytes alignement of the stack
   MRS  R0, MSP         ; Read MSP
-  
   LDR  R1, [R0, #24]   ; Read Saved PC from SP
                        ; Loads R1 from a word 24 bytes  above the address in R0
                        ; Note that R0 now contains the the SP value after the
@@ -27,10 +28,9 @@ __asm void SVC_Handler (void)
                        ; R1 <= R1 & ~(0xFF00), update flags
                    
   BNE  SVC_EXIT        ; if SVC Number !=0, exit
-
   LDM  R0, {R0-R3, R12}; Read R0-R3, R12 from stack. 
                        ; NOTE R0 contains the sp before this instruction
-	PUSH{r4-r11}
+  PUSH {r4-r11}
   BLX  R12             ; Call SVC Function, 
                        ; R12 contains the corresponding 
                        ; C kernel functions entry point

@@ -124,6 +124,11 @@ void k_TIMER0_IRQHandler(uint32_t msp)
 	timer_iprocess();
 	
 	__enable_irq();
-	//__set_MSP((uint32_t ) current_process->sp);
+	if (preempt_process!=NULL && preempt_process->priority < current_process->priority)
+	{
+		current_process = preempt_process;
+		preempt_process = NULL;
+	  __set_MSP((uint32_t ) current_process->sp);
+	}
 }
 

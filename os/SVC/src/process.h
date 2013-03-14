@@ -46,7 +46,7 @@ typedef struct pqueue_t{
 } pqueue;
 
 extern pcb* current_process;
-
+extern pcb* preempt_process;
 extern pcb *pcb_lookup_list;
 
 extern mailbox* delay_message_list;

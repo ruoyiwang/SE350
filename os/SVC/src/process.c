@@ -9,6 +9,7 @@
 #define NUM_PROCS 10
 
 pcb* current_process;
+pcb* preempt_process;
 pcb *pcb_lookup_list;
 mailbox* delay_message_list;
 pqueue ready_queue;
@@ -71,6 +72,7 @@ void k_send_message(int dest_id, envelope* env)
 	
 	if (dest_pcb->state == MESSAGE_BLOCK)
 	{
+		preempt_process = dest_pcb;
 		dest_pcb->state = READY;
 	}
 	atomic(0);
@@ -263,6 +265,7 @@ void process_init() {
 
 	volatile int i, j;
 	uint32_t * sp;
+	preempt_process = NULL;
 	delay_message_list = (mailbox*) k_request_memory_block();
 	delay_message_list->front =NULL;
 	delay_message_list->end =NULL;
@@ -417,11 +420,11 @@ int k_context_switch(pcb* pcb) {
 	}
 	else if (current_process->state == READY || current_process->state == INTERRUPTED) {
 	    current_process->state = RUN;
-	    __set_MSP((uint32_t ) current_process->sp);
 	}
 	else {
 		return 1;
 	}
+	__set_MSP((uint32_t ) current_process->sp);
   return 0;
 }
 

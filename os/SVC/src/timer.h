@@ -9,5 +9,6 @@ extern uint32_t timer_init ( uint8_t n_timer );  /* initialize timer n_timer */
 extern i_process timer;
 
 extern void k_TIMER0_IRQHandler(uint32_t msp);
-
+extern __asm void interrupt_context_switch (void);
+extern void set_msp(void);
 #endif /* ! _TIMER_H_ */
