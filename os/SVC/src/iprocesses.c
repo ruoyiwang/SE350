@@ -10,6 +10,7 @@
 #include <LPC17xx.h>
 //#include "CRT.h"
 
+
 int display_message_ready;
 volatile uint8_t g_UART0_TX_empty=1;
 volatile uint8_t g_UART0_buffer[BUFSIZE];
@@ -26,6 +27,13 @@ void i_process_routine(void){
 	// make an empty envelope to for the crt msgs
 	LPC_UART_TypeDef *pUart = (LPC_UART_TypeDef *)LPC_UART0;
 	int i = 0;
+
+	/** Hotkey variables **/
+	envelope* hotkey_message;
+	pcb* pcb;
+	const int hotkey_string_size = 5;
+	char hotkey_string[hotkey_string_size];
+
 	/* Reading IIR automatically acknowledges the interrupt */
 	IIR_IntId = (pUart->IIR) >> 1 ; /* skip pending bit in IIR */
 
@@ -58,15 +66,62 @@ void i_process_routine(void){
 		// Check if the hotkeys have been pressed 
 		// User types exclamation mark
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x21){
-			print_ready_queue_priority();
+			hotkey_message = k_request_memory_block();
+			// Traverse through each priority queue in the ready queue
+			for(i = 0; i < NUM_PROCS; i ++){
+				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
+				if(pcb->state == READY){
+					hotkey_string[0] = ('0' + pcb->pid);
+					hotkey_string[1] = ' ';
+					hotkey_string[2] = ('0' + pcb->priority);
+					hotkey_string[3] = '\n';
+					hotkey_string[4] = '\r';
+				}
+			}
+			// Send to CRT
+			hotkey_message->dest_id = 8;
+			hotkey_message->type = DISPLAY_REQUEST;
+			hotkey_message->message = hotkey_string;
+			k_send_message(8, hotkey_message);
 		}
 		// User types @
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x40){
-			print_memory_blocked_queue_priority();
+			hotkey_message = k_request_memory_block();
+			for(i = 0; i < NUM_PROCS; i ++){
+				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
+				if(pcb->state == MEMORY_BLOCK){
+					hotkey_string[0] = ('0' + pcb->pid);
+					hotkey_string[1] = ' ';
+					hotkey_string[2] = ('0' + pcb->priority);
+					hotkey_string[3] = '\n';
+					hotkey_string[4] = '\r';
+				}
+			}
+			// Send to CRT
+			hotkey_message->dest_id = 8;
+			hotkey_message->type = DISPLAY_REQUEST;
+			hotkey_message->message = hotkey_string;
+			k_send_message(8, hotkey_message);
 		}
 		// User types #
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x23){
-			print_message_blocked_queue_priority();
+			hotkey_message = k_request_memory_block();
+			// Traverse through each priority queue in the ready queue
+			for(i = 0; i < NUM_PROCS; i ++){
+				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
+				if(pcb->state == MESSAGE_BLOCK){
+					hotkey_string[0] = ('0' + pcb->pid);
+					hotkey_string[1] = ' ';
+					hotkey_string[2] = ('0' + pcb->priority);
+					hotkey_string[3] = '\n';
+					hotkey_string[4] = '\r';
+				}
+			}
+			// Send to CRT
+			hotkey_message->dest_id = 8;
+			hotkey_message->type = DISPLAY_REQUEST;
+			hotkey_message->message = hotkey_string;
+			k_send_message(8, hotkey_message);
 		}
 		
 		
