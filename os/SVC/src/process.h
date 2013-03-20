@@ -103,10 +103,6 @@ extern int __SVC_0 _release_processor(U32 p_func);
 
 void block_current_process(void);
 
-extern void print_ready_queue_priority(void);
-extern void	print_memory_blocked_queue_priority(void);
-extern void	print_message_blocked_queue_priority(void);
-
 extern void __rte(void);
 extern void null_process(void);
 extern void test_process_1(void);
