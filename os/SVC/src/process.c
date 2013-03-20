@@ -244,19 +244,21 @@ void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
 }
 
 pcb* pcb_lookup_by_pid(int pid, pcb *node){
-    /*if(node == NULL){
+    pcb lookup_node = &node;
+
+    if(lookup_node == NULL || pid > NUM_PROCS || pid < 0){
         return NULL;
     }
-    else if (pid == node->pid){
-        return node;
+    while(lookup_node != NULL){
+	    if (pid == lookup_node->pid){
+	        return lookup_node;
+	    }
+	    else{
+	    	lookup_node = lookup_node->lu_next;
+	    }
     }
-    else{
-        return pcb_lookup_by_pid(pid, node->lu_next);
-    }*/
-	if (pid > NUM_PROCS || pid < 0) {
-			return NULL;
-		}
-	return pcbs[pid];
+
+	return NULL;
 }
 
 void process_init() {
@@ -377,24 +379,22 @@ int k_set_process_priority(int pid, int priority) {
     if (node == NULL){
         return -1;
     }
-		k_pqueue_set_priority(&ready_queue, node, priority);
+	k_pqueue_set_priority(&ready_queue, node, priority);
 
-		return 0;
+	return 0;
 }
 
 int k_get_process_priority(int pid){
-    /*pcb *node = pcb_lookup_by_pid(pid, pcb_lookup_list);
+    pcb *node; 
 
     // As per section 3.5 of project description, if pid is invalid return "-1"
-    if(node == NULL){
+    if(node == NULL || pid > NUM_PROCS || pid < 0){
         return -1;
     }
-		*/
+		
+	node = pcb_lookup_by_pid(pid, pcb_lookup_list);
 	
-		if (pid > NUM_PROCS || pid < 0) {
-			return -1;
-		}
-		return pcbs[pid]->priority;
+	return node->priority;
 }
 
 int k_context_switch(pcb* pcb) {
