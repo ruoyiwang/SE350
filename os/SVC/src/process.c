@@ -456,8 +456,8 @@ void mqueue_enqueue(message_queue *mqueue, envelope *p){
 		return;
 	}
 	else{
-		mqueue->end->next = p;
-		mqueue->end = mqueue->end->next;
+		p->next = mqueue->front;
+		mqueue->front = p;
 	}
 }
 envelope* mqueue_dequeue(message_queue *mqueue){
