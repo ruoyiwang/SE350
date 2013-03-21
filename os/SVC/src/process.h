@@ -10,7 +10,7 @@ typedef unsigned int U32;
 
 #include <stdint.h>
 typedef enum {NEW, READY, MEMORY_BLOCK, MESSAGE_BLOCK, RUN, INTERRUPT, INTERRUPTED} process_state;
-typedef enum {DISPLAY_REQUEST, COMMAND_REGISTRATION, KEYBOARD_INPUT, TIMER_UPDATE} message_type;
+typedef enum {DISPLAY_REQUEST, COMMAND_REGISTRATION, KEYBOARD_INPUT, TIMER_UPDATE, COUNT_REPORT, WAKE_UP_10} message_type;
 
 typedef struct envelope_t{
 	void* message;
@@ -44,6 +44,11 @@ typedef struct pqueue_t{
 	pcb *pq_end[4];
 	pcb *pq_front[4];
 } pqueue;
+
+typedef struct message_queue_t{
+	envelope* mq_front;
+	envelope* mq_end;
+} message_queue;
 
 extern pcb* current_process;
 
@@ -101,6 +106,10 @@ extern int k_release_processor(void);
 #define release_processor() _release_processor((U32)k_release_processor)
 extern int __SVC_0 _release_processor(U32 p_func);
 
+/** message queue functions for process c **/
+extern void mqueue_enqueue(message_queue *mqueue, envelope *p);
+extern envelope* mqueue_dequeue(message_queue *mqueue);
+
 void block_current_process(void);
 
 extern void __rte(void);
@@ -111,6 +120,7 @@ extern void test_process_3(void);
 extern void test_process_4(void);
 extern void test_process_5(void);
 extern void test_process_6(void);
+extern void test_process_b(void);
 extern void i_process_routine(void);
 extern void timer_iprocess(void);
 extern void kcd(void);

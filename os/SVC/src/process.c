@@ -6,7 +6,7 @@
 #include <LPC17xx.h>
 #include "uart_polling.h"
 #include "CRT.h"
-#define NUM_PROCS 10
+#define NUM_PROCS 13
 
 pcb* current_process;
 pcb *pcb_lookup_list;
@@ -445,4 +445,24 @@ int k_release_processor() {
 void block_current_process()
 {
 	current_process->state = MEMORY_BLOCK;
+}
+
+/** message queue functions for process c **/
+void mqueue_enqueue(message_queue *mqueue, envelope *p){
+	if (mqueue->front == NULL)
+	{
+		mqueue->front = p;
+		mqueue->end = p;
+		return;
+	}
+	else{
+		mqueue->end->next = p;
+		mqueue->end = mqueue->end->next;
+	}
+}
+envelope* mqueue_dequeue(message_queue *mqueue){
+	envelope *temp = mqueue->front;
+	mqueue->front = mqueue->front->next;
+	temp->next = NULL;
+	return temp;
 }

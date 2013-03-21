@@ -251,3 +251,58 @@ void wall_clock() {
 		release_memory_block(re);
   }
 }
+
+void test_process_b(void){
+  envelope * re;
+  while(1){
+    re = (envelope *) request_memory_block();
+    re = (envelope*)receive_message();
+
+    // After receiving message we send to process C
+    /** TODO: Change the src and dest ids **/
+    re->src_id = test_process_b_id;
+    re->dest_id = test_process_c_id;
+
+    send_message(re->dest_id, re);
+  }
+}
+
+void test_process_c(void){
+  /** perform any needed initialization and create a local message queue **/
+  message_queue mqueue;
+  mqueue.front = NULL;
+  mqueue.end = NULL;
+  envelope *p;
+  envelope *q;
+  while(1){
+    // if (local message queue is empty) then
+    if(mqueue->front == mqueue->end){
+      p = (envelope*)receive_message();
+    }
+    else{
+      p = (envelope*)mqueue_dequeue(&mqueue);
+    }
+    if(p->type == COUNT_REPORT){
+      if(*(p->message)%20 == 0){
+        p->dest_id = CRT_PID;
+        p->src_id = test_process_c_id;
+        send_message(p->dest_id,p);
+
+        /** Hibernate for 10 seconds **/
+        q = (envelope*)request_memory_block();
+        q->type = WAKE_UP_10;
+        delay_send(test_process_c_id, q, 10000);
+        while(1){
+          p = receive_message();
+          if(p->type = WAKE_UP_10){
+            break;
+          }
+          else{
+            mqueue_enqueue(&mqueue,p);          }
+        }
+      }
+    }
+    p = release_memory_block();
+    release_processor();
+  }
+}
