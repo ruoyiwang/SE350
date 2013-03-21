@@ -11,6 +11,7 @@ int num_passes;         // Holds number of test cases that passed
 int num_fails;          // Hold number of test cases that failed
 int KCD_PID = 7;
 int WALLCLOCK_PID = 9;
+int PRIORITY_CHANGE_PID = 11;
 int CRT_PID = 8;
 
 /*int atoi(void* input) {
@@ -214,8 +215,13 @@ void wall_clock() {
       else if (*(input+2) == 'S') {
         // Set clock to HH:MM:SS
         if (*(input+4) >= '0' && *(input+4) <= '2' && *(input+5) >= '0' && *(input+5) <= '9' &&
-            *(input+7) >= '0' && *(input+7) <= '6' && *(input+8) >= '0' && *(input+8) <= '9' &&
-            *(input+10) >= '0' && *(input+10) <= '6' && *(input+11) >= '0' && *(input+11) <= '9') {
+            *(input+7) >= '0' && *(input+7) <= '5' && *(input+8) >= '0' && *(input+8) <= '9' &&
+            *(input+10) >= '0' && *(input+10) <= '5' && *(input+11) >= '0' && *(input+11) <= '9') {
+          
+          if ((*(input+4) == '2' && *(input+5) > '4') || (*(input+7) == '5' && *(input+8) > '9') || (*(input+10) == '5' && *(input+11) > '9')) {
+            continue;
+          }        
+
           hour = 10*(*(input+4) - '0');
           hour = hour + (*(input+5) - '0');
           minute = 10*(*(input+7) - '0');
@@ -304,5 +310,47 @@ void test_process_c(void){
     }
     p = release_memory_block();
     release_processor();
+  }
+}
+
+void priority_change() {
+  envelope e;
+  envelope* re;
+  char* input;
+  char c_message[] = "C";
+  char time_string[11];
+  int pid;
+  int priority;
+
+  // Register for command C (usage: %C PID PRIORITY)
+  e.src_id = PRIORITY_CHANGE_PID;
+  e.dest_id = KCD_PID;
+  e.type = COMMAND_REGISTRATION;
+  e.message = (void*)&e_message;
+  e.message_length = 2;
+  e.next = NULL;
+  send_message(KCD_PID, &e);
+
+  while (1) {
+    re = (envelope*)receive_message();
+    input = (char *)re->message;
+
+    // Currently only accepts 2 digit pids
+    if (re->type == KEYBOARD_INPUT) {
+      pid = *(input + 3) - '0';
+      if (pid < 0 || pid > 9) {
+        continue;
+      }
+      if (*(input + 4) >= '0' && *(input + 4) <= '9') {
+        pid = pid*10;
+        pid = pid + *(input + 4) - '0';
+        priority = *(input + 6) - '0';
+      }
+      else {
+        priority = *(input + 5) - '0';
+      }
+
+      set_process_priority(pid, priority);
+    }
   }
 }
