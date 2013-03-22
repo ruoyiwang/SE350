@@ -276,20 +276,20 @@ void test_process_b(void){
 void test_process_c(void){
   /** perform any needed initialization and create a local message queue **/
   message_queue mqueue;
-  mqueue.front = NULL;
-  mqueue.end = NULL;
   envelope *p;
   envelope *q;
+  mqueue.front = NULL;
+  mqueue.end = NULL;
   while(1){
     // if (local message queue is empty) then
-    if(mqueue->front == mqueue->end){
+    if(mqueue.front == mqueue.end){
       p = (envelope*)receive_message(NULL);
     }
     else{
       p = (envelope*)mqueue_dequeue(&mqueue);
     }
     if(p->type == COUNT_REPORT){
-      if(*(p->message)%20 == 0){
+      if(((uint8_t)(p->message))%20 == 0){
         p->dest_id = CRT_PID;
         p->src_id = test_process_c_id;
         send_message(p->dest_id,p);
@@ -300,15 +300,16 @@ void test_process_c(void){
         delay_send(test_process_c_id, q, 10000);
         while(1){
           p = receive_message(NULL);
-          if(p->type = WAKE_UP_10){
+          if(p->type == WAKE_UP_10){
             break;
           }
           else{
-            mqueue_enqueue(&mqueue,p);          }
+            mqueue_enqueue(&mqueue,p);          
+					}
         }
       }
     }
-    p = release_memory_block();
+    release_memory_block(p);
     release_processor();
   }
 }
@@ -326,7 +327,7 @@ void priority_change() {
   e.src_id = PRIORITY_CHANGE_PID;
   e.dest_id = KCD_PID;
   e.type = COMMAND_REGISTRATION;
-  e.message = (void*)&e_message;
+  e.message = (void*)&c_message;
   e.message_length = 2;
   e.next = NULL;
   send_message(KCD_PID, &e);
