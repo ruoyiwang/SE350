@@ -5,10 +5,12 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
+#define NUM_PROCS 10
 typedef unsigned int U32;
 #define __SVC_0  __svc_indirect(0)
 
 #include <stdint.h>
+
 typedef enum {NEW, READY, MEMORY_BLOCK, MESSAGE_BLOCK, RUN, INTERRUPT, INTERRUPTED} process_state;
 typedef enum {DISPLAY_REQUEST, COMMAND_REGISTRATION, KEYBOARD_INPUT, TIMER_UPDATE, COUNT_REPORT, WAKE_UP_10} message_type;
 
@@ -46,8 +48,8 @@ typedef struct pqueue_t{
 } pqueue;
 
 typedef struct message_queue_t{
-	envelope* mq_front;
-	envelope* mq_end;
+	envelope* front;
+	envelope* end;
 } message_queue;
 
 extern pcb* current_process;
@@ -55,6 +57,10 @@ extern pcb* current_process;
 extern pcb *pcb_lookup_list;
 
 extern mailbox* delay_message_list;
+
+extern int test_process_a_id;
+extern int test_process_b_id;
+extern int test_process_c_id;
 /*************************************************************************
  *          PCB LINKED LIST DEFINITIONS
  *************************************************************************/
@@ -85,9 +91,9 @@ extern void k_delay_send(int dest_id, envelope* env, int delay);
 #define delay_send(dest_id, env, delay) _delay_send((U32)k_delay_send, dest_id, env, delay)
 extern void __SVC_0 _delay_send(U32 p_func, int dest_id, envelope* env, int delay);
 
-extern envelope* k_receive_message(void);
-#define receive_message() _receive_message((U32)k_receive_message)
-extern envelope* _receive_message(U32 p_func) __SVC_0;
+extern envelope* k_receive_message(int *sender_ID);
+#define receive_message(sender_ID) _receive_message((U32)k_receive_message, sender_ID)
+extern envelope* _receive_message(U32 p_func, int* sender_ID) __SVC_0;
 
 extern int k_set_process_priority(int pid, int priority);
 #define set_process_priority(pid,priority) _set_process_priority((U32)k_set_process_priority, pid, priority)

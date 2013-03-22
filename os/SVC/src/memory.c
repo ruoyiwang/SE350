@@ -7,7 +7,12 @@ void mmu_init(){
 	mmu.free_mem = (unsigned int) &Image$$RW_IRAM1$$ZI$$Limit;
 		//this is somewhere between 0x10000000 to 0x10008000
 
-	mmu.max_mem = 0x10008000;
+	mmu.max_mem = 0x10008000 - 3 * USR_SZ_STACK;
+		//allocating/hardcoding 2 blocks to irqs
+		//allocating/hardcoding 1 blocks to timer
+	mmu.irq_using_mem1 = 0;
+	mmu.irq_using_mem2 = 0;
+	mmu.timer_using_mem = 0;
 	mmu.lookup_table_size = 256;
 	mmu.actual_size = (mmu.max_mem - mmu.free_mem) / USR_SZ_STACK;
 	mmu.memory_available = 1;	//set mem available to true
@@ -38,7 +43,34 @@ void* k_request_memory_block(){
 		block_current_process();	//block the current process
 		k_release_processor();
 	}
-	
+}
+
+void* k_request_irq_memory_block(){
+	if (mmu.irq_using_mem1 == 0){
+		mmu.irq_using_mem1 = 1;
+		return (void *)(0x10008000 - USR_SZ_STACK + 4);
+			//returning the bottom of the stack
+	}
+	else if (mmu.irq_using_mem2 == 0){
+		mmu.irq_using_mem2 = 1;
+		return (void *)(0x10008000 - 2 * USR_SZ_STACK + 4);
+			//returning the bottom of the stack
+	}
+	else {
+		return NULL;
+			//this would suck
+	}
+}
+
+void* k_request_timer_memory_block(){
+	if (mmu.timer_using_mem == 0){
+		mmu.timer_using_mem = 1;
+		return (void *)(0x10008000 - 3 * USR_SZ_STACK + 4);
+	}
+	else {
+		return NULL;
+			//fml
+	}
 }
 
 int k_release_memory_block(void *MemoryBlock){
@@ -51,8 +83,24 @@ int k_release_memory_block(void *MemoryBlock){
 		return 1;
 	}
 
+	if (mem_block_address <= 0x10008000 && mem_block_address > 0x10008000 - USR_SZ_STACK){
+		//means this is irq mem 1
+		mmu.irq_using_mem1 = 0;
+		return 0;
+	}
+	else if (mem_block_address <= 0x10008000 - USR_SZ_STACK && mem_block_address > 0x10008000 - 2 * USR_SZ_STACK){
+		//means this is irq mem 2
+		mmu.irq_using_mem2 = 0;
+		return 0;
+	}
+	else if (mem_block_address <= 0x10008000 - 2 * USR_SZ_STACK && mem_block_address > 0x10008000 - 3 * USR_SZ_STACK){
+		//means this is timer mem
+		mmu.timer_using_mem = 0;
+		return 0;
+	}
+
 	//calculates the index of the lookup table for that address and then set the flag to be freed
-	for (index = 0; index < mmu.actual_size; index ++){
+	for (index = 0; index < mmu.actual_size; index++){
 		if ((mmu.max_mem - USR_SZ_STACK * index >= mem_block_address) && ((mmu.max_mem - USR_SZ_STACK * index) - USR_SZ_STACK + 4) <= mem_block_address){
 			//if the memory given too me is within this range, then the index is correct
 			break;

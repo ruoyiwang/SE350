@@ -6,7 +6,10 @@
 #include <LPC17xx.h>
 #include "uart_polling.h"
 #include "CRT.h"
-#define NUM_PROCS 13
+
+int test_process_a_id = 7;
+int test_process_b_id = 8;
+int test_process_c_id = 9;
 
 pcb* current_process;
 pcb *pcb_lookup_list;
@@ -16,6 +19,7 @@ MMU mmu;
 pcb* pcbs[NUM_PROCS];
 i_process interrupt_process;
 i_process timer;
+
 
 void atomic (int onOff)
 {
@@ -248,7 +252,7 @@ void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
 }
 
 pcb* pcb_lookup_by_pid(int pid, pcb *node){
-    pcb lookup_node = &node;
+    pcb *lookup_node = node;
 
     if(lookup_node == NULL || pid > NUM_PROCS || pid < 0){
         return NULL;
