@@ -16,6 +16,7 @@ typedef struct mmu_t{
 	char lookup_table[256];
 	unsigned int free_mem;
 	unsigned int max_mem;
+	char irq_using_mem1, irq_using_mem2;
 	unsigned int lookup_table_size;
 	unsigned int actual_size;
 	char memory_available;	//1 is there is avail mem, 0 is there isn't
