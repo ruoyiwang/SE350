@@ -76,7 +76,7 @@ void k_send_message(int dest_id, envelope* env)
 	atomic(0);
 }
 
-envelope* k_receive_message()
+envelope* k_receive_message(int* sender_ID)
 {
 	envelope* ret;
 	atomic(1);
@@ -100,6 +100,10 @@ envelope* k_receive_message()
 	}
 	ret->next = NULL;
 	atomic(0);
+	if (sender_ID != NULL)
+	{
+		*sender_ID = ret->src_id;
+	}
 	return ret;
 }
 

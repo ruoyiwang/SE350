@@ -144,7 +144,7 @@ void test_process_6() {
 		re->src_id = 6;
 		re->dest_id = 6;
 		delay_send(6, re, 10000);
-    re = (envelope*)receive_message();
+    re = (envelope*)receive_message(NULL);
 		
 	//	env = (envelope *) k_request_memory_block();
 	//	env->type = KEYBOARD_INPUT;
@@ -188,7 +188,7 @@ void wall_clock() {
   }
 
   while (1) {
-    re = (envelope*)receive_message();
+    re = (envelope*)receive_message(NULL);
     input = (char *)re->message;
     if (on && re->type == TIMER_UPDATE) {
       if (second + 1 >= 60) {
@@ -262,7 +262,7 @@ void test_process_b(void){
   envelope * re;
   while(1){
     re = (envelope *) request_memory_block();
-    re = (envelope*)receive_message();
+    re = (envelope*)receive_message(NULL);
 
     // After receiving message we send to process C
     /** TODO: Change the src and dest ids **/
@@ -283,7 +283,7 @@ void test_process_c(void){
   while(1){
     // if (local message queue is empty) then
     if(mqueue->front == mqueue->end){
-      p = (envelope*)receive_message();
+      p = (envelope*)receive_message(NULL);
     }
     else{
       p = (envelope*)mqueue_dequeue(&mqueue);
@@ -299,7 +299,7 @@ void test_process_c(void){
         q->type = WAKE_UP_10;
         delay_send(test_process_c_id, q, 10000);
         while(1){
-          p = receive_message();
+          p = receive_message(NULL);
           if(p->type = WAKE_UP_10){
             break;
           }
@@ -332,7 +332,7 @@ void priority_change() {
   send_message(KCD_PID, &e);
 
   while (1) {
-    re = (envelope*)receive_message();
+    re = (envelope*)receive_message(NULL);
     input = (char *)re->message;
 
     // Currently only accepts 2 digit pids

@@ -72,7 +72,7 @@ void kcd() {
 	command_root = NULL;
 
 	while (1) {
-		m = (envelope *)receive_message();
+		m = (envelope *)receive_message(NULL);
 		input = (char*)m->message;
 		mt = m->type;
 		src_id = m->src_id;
