@@ -9,6 +9,7 @@ void mmu_init(){
 
 	mmu.max_mem = 0x10008000 - 3 * USR_SZ_STACK;
 		//allocating/hardcoding 2 blocks to irqs
+		//allocating/hardcoding 1 blocks to timer
 	mmu.irq_using_mem1 = 0;
 	mmu.irq_using_mem2 = 0;
 	mmu.timer_using_mem = 0;
