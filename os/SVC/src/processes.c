@@ -262,22 +262,24 @@ void test_process_a(){
   //void * p = request_memory_block();  //don't think Ineed this line
   
   char c_message[] = "Z";
+  char* c_temp;
   int num = 0;
   envelope * p;
-  envelope * e;
+  envelope * e = (envelope *)request_memory_block();
   //below registers the Z command
-  e.src_id = test_process_a_id;
-  e.dest_id = KCD_PID;
-  e.type = COMMAND_REGISTRATION;
-  e.message = (void*)&c_message;
-  e.message_length = 2;
-  e.next = NULL;
-  send_message(KCD_PID, &e);
+  e->src_id = test_process_a_id;
+  e->dest_id = KCD_PID;
+  e->type = COMMAND_REGISTRATION;
+  e->message = (void*)&c_message;
+  e->message_length = 2;
+  e->next = NULL;
+  send_message(KCD_PID, e);
 
   //below is the actual test
   while(1){
     p = (envelope*)receive_message(NULL);
-    if ((uint8_t *)(p->message) == 'Z'){
+    c_temp = p->message;
+    if (c_temp[0] == 'Z'){
       release_memory_block(p);
       break;
     }
@@ -289,7 +291,8 @@ void test_process_a(){
   while (1){
     p = (envelope*)request_memory_block();
     p->type = COUNT_REPORT;
-    *(p->message) = num;
+    c_temp = p->message;
+    c_temp[0] = num;
     p->src_id = test_process_a_id;
     p->dest_id = test_process_b_id;
     send_message(p->dest_id, p);
