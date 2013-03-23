@@ -5,5 +5,6 @@
 void test_init(int n);
 void test_pass();
 void test_fail();
+void test_finish();
 
 #endif

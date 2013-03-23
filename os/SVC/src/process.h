@@ -61,6 +61,10 @@ extern mailbox* delay_message_list;
 extern int test_process_a_id;
 extern int test_process_b_id;
 extern int test_process_c_id;
+extern int KCD_PID;
+extern int WALLCLOCK_PID;
+extern int PRIORITY_CHANGE_PID;
+extern int CRT_PID;
 /*************************************************************************
  *          PCB LINKED LIST DEFINITIONS
  *************************************************************************/

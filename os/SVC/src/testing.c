@@ -1,21 +1,21 @@
 #include "memory.h"
-#incldue "process.h"
+#include "process.h"
+#include "testing.h"
 
 int test_passed;
 int test_failed;
 const int TEST_TOTAL = 6;
-int CRT_PID = 8;
-bool test_init_complete = false;
-char[] test_string1 = "G029_test: START";
-char[] test_string2 = "G029_test: total 6 tests";
-char[] test_string3 = "G029_test: test n OK";
-char[] test_string4 = "G029_test: test m FAIL";
-char[] test_string5 = "G029_test: a/6 tests OK";
-char[] test_string6 = "G029_test: a/6 tests FAIL";
-char[] test_string7 = "G029_test: END";
+int test_init_complete = 0;
+char test_string1[] = "G029_test: START";
+char test_string2[] = "G029_test: total 6 tests";
+char test_string3[] = "G029_test: test n OK";
+char test_string4[] = "G029_test: test m FAIL";
+char test_string5[] = "G029_test: a/6 tests OK";
+char test_string6[] = "G029_test: a/6 tests FAIL";
+char test_string7[] = "G029_test: END";
 
 // Run in kernel mode
-void test_init() {
+void test_init(int n) {
 	envelope *ts1 = (envelope*)k_request_memory_block();
 	envelope *ts2 = (envelope*)k_request_memory_block();
 
@@ -28,7 +28,7 @@ void test_init() {
 	k_send_message(CRT_PID, ts2);
 	test_passed = 0;
 	test_failed = 0;
-	test_init_complete = true;
+	test_init_complete = 1;
 }
 
 void test_pass() {
@@ -86,7 +86,7 @@ void test_finish() {
 
 		ts5->dest_id = ts6->dest_id = ts7->dest_id = CRT_PID;
 		ts5->type = ts6->type = ts7->type = DISPLAY_REQUEST;
-		ts5->next = ts6->next = ts7->next = NULL
+		ts5->next = ts6->next = ts7->next = NULL;
 		ts5->message = (void *)&test_string5;
 		ts6->message = (void *)&test_string6;
 		ts7->message = (void *)&test_string7;
