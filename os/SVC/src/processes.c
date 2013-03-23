@@ -6,6 +6,7 @@
 #include "memory.h"
 #include "keyboard.h"
 #include "uart_polling.h"
+#include "testing.h"
 
 int num_passes;         // Holds number of test cases that passed
 int num_fails;          // Hold number of test cases that failed
@@ -95,8 +96,8 @@ void test_process_3() {
 }
 
 void test_process_4() {
-    int priority;
-    int prioritySet;    // priority we want to set on the process
+  int priority;
+  int prioritySet;    // priority we want to set on the process
 
 	while (1)
 	{
@@ -105,13 +106,11 @@ void test_process_4() {
     priority = get_process_priority(4);
 
     if(priority != prioritySet){
-        //uart0_put_string("\n\rG029_test: test 4 FAIL");
-        num_fails++;
+        test_fail();
         release_processor();
     }
 
-    //uart0_put_string("\n\rG029_test: test 4 OK");
-    num_passes++;
+    test_pass();
     release_processor();
 	}
 }
