@@ -17,6 +17,7 @@
 #include "process.h"
 #include "memory.h"
 #include "timer.h"
+#include "testing.h"
 
 int main()
 {
@@ -29,6 +30,7 @@ int main()
 	timer_init(0);
 	mmu_init();
   process_init();
+  test_init(6);
 
   __enable_irq(); 
   // transit to unprivileged level, default MSP is used
