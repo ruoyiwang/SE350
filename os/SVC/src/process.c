@@ -47,7 +47,8 @@ void k_send_message(int dest_id, envelope* env)
 	}
 	env->expire_time = 0;
 	env->dest_id = dest_id;
-	env->src_id = current_process->pid;
+	if (env->src_id != NULL)
+		env->src_id = current_process->pid;
 	env->next = NULL;
 	if (dest_pcb->mb.front == NULL)
 	{
@@ -83,6 +84,7 @@ void k_send_message(int dest_id, envelope* env)
 envelope* k_receive_message(int* sender_ID)
 {
 	envelope* ret;
+	int* src_ID = sender_ID;
 	atomic(1);
 	while (current_process->mb.front == NULL)
 	{
@@ -104,9 +106,9 @@ envelope* k_receive_message(int* sender_ID)
 	}
 	ret->next = NULL;
 	atomic(0);
-	if (sender_ID != NULL)
+	if (src_ID != NULL)
 	{
-		*sender_ID = ret->src_id;
+		*src_ID = ret->src_id;
 	}
 	return ret;
 }
