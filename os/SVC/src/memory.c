@@ -79,7 +79,7 @@ int k_release_memory_block(void *MemoryBlock){
 	int mem_block_address = (int) MemoryBlock;
 	//if the requested releasig address is outside of my range
 	//return 1 (error)
-	if (mem_block_address > mmu.max_mem || mem_block_address < mmu.free_mem){	
+	if (mem_block_address > 0x10008000 || mem_block_address < mmu.free_mem){	
 		return 1;
 	}
 
