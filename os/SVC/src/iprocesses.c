@@ -66,7 +66,7 @@ void i_process_routine(void){
 		// Check if the hotkeys have been pressed 
 		// User types exclamation mark
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x21){
-			hotkey_message = k_request_memory_block();
+			hotkey_message = k_request_irq_memory_block();
 			// Traverse through each priority queue in the ready queue
 			for(i = 0; i < NUM_PROCS; i ++){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
