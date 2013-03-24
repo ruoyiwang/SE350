@@ -10,10 +10,10 @@
 
 int num_passes;         // Holds number of test cases that passed
 int num_fails;          // Hold number of test cases that failed
-int KCD_PID = 7;
-int WALLCLOCK_PID = 9;
-int PRIORITY_CHANGE_PID = 11;
-int CRT_PID = 8;
+int KCD_PID = 10;
+int WALLCLOCK_PID = 12;
+int PRIORITY_CHANGE_PID = 13;
+int CRT_PID = 11;
 
 /*int atoi(void* input) {
   char c;
@@ -82,14 +82,14 @@ void test_process_3() {
 	int priority;
   //set_process_priority(3, 0);
 	while(1){
-		/*for(i =0; i<9;i++)
+		for(i =0; i<9;i++)
 		{
         priority = get_process_priority(i);
 				if(priority== -1){
           test_fail();
           release_processor();
         }
-		}*/
+		}
     test_pass();
 		set_process_priority(3, 3);
 		release_processor();
@@ -155,7 +155,7 @@ void test_process_6() {
 		crt = (envelope*)request_memory_block();
 		crt->type = DISPLAY_REQUEST;
 		crt->message = message;
-		send_message(8, crt);
+		send_message(CRT_PID, crt);
 		
 		release_memory_block(re);
 	}
@@ -250,11 +250,11 @@ void wall_clock() {
 			time_string[9] = '\r';
 			time_string[10] = '\0';
 			crt = (envelope*)request_memory_block();
-			crt->src_id = 9;
-			crt->dest_id = 8;
+			crt->src_id = WALLCLOCK_PID;
+			crt->dest_id = CRT_PID;
 			crt->type = DISPLAY_REQUEST;
 			crt->message = time_string;
-			send_message(8, crt);
+			send_message(CRT_PID, crt);
     }
 		release_memory_block(re);
   }
@@ -281,7 +281,7 @@ void test_process_a(){
   while(1){
     p = (envelope*)receive_message(NULL);
     c_temp = p->message;
-    if (c_temp[0] == 'Z'){
+    if (c_temp[1] == 'Z'){
       release_memory_block(p);
       break;
     }
@@ -303,7 +303,7 @@ void test_process_a(){
   }
 }
 
-void test_process_b(void){
+void test_process_b(){
   envelope * re;
   while(1){
     re = (envelope *) request_memory_block();
@@ -318,7 +318,7 @@ void test_process_b(void){
   }
 }
 
-void test_process_c(void){
+void test_process_c(){
   /** perform any needed initialization and create a local message queue **/
   message_queue mqueue;
   envelope *p;
