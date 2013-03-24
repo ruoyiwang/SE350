@@ -31,9 +31,9 @@ void i_process_routine(void){
 	/** Hotkey variables **/
 	envelope* hotkey_message;
 	pcb* pcb;
-	const int hotkey_string_size = 6;
+	const int hotkey_string_size = 84;
 	char hotkey_string[hotkey_string_size];
-
+	int ctr = 0 ;
 	/* Reading IIR automatically acknowledges the interrupt */
 	IIR_IntId = (pUart->IIR) >> 1 ; /* skip pending bit in IIR */
 
@@ -66,33 +66,34 @@ void i_process_routine(void){
 		// Check if the hotkeys have been pressed 
 		// User types exclamation mark
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x21){
-			hotkey_message = k_request_irq_memory_block();
+			hotkey_message = k_request_memory_block();
 			// Traverse through each priority queue in the ready queue
 			for(i = 0; i < NUM_PROCS; i ++){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 				if(pcb->state == READY){
 					if(pcb->pid > 9){
-						hotkey_string[0] = ('0' + (pcb->pid/10));
-						hotkey_string[1] = ('0' + (pcb->pid - (pcb->pid/10)*10));
-						hotkey_string[2] = ' ';
-						hotkey_string[3] = ('0' + pcb->priority);
-						hotkey_string[4] = '\n';
-						hotkey_string[5] = '\r';
+						hotkey_string[ctr++] = ('0' + (pcb->pid/10));
+						hotkey_string[ctr++] = ('0' + (pcb->pid - (pcb->pid/10)*10));
+						hotkey_string[ctr++] = ' ';
+						hotkey_string[ctr++] = ('0' + pcb->priority);
+						hotkey_string[ctr++] = '\n';
+						hotkey_string[ctr++] = '\r';
 					}
 					else{
-						hotkey_string[0] = ('0' + pcb->pid);
-						hotkey_string[1] = ' ';
-						hotkey_string[2] = ('0' + pcb->priority);
-						hotkey_string[3] = '\n';
-						hotkey_string[4] = '\r';
+						hotkey_string[ctr++] = ('0' + pcb->pid);
+						hotkey_string[ctr++] = ' ';
+						hotkey_string[ctr++] = ('0' + pcb->priority);
+						hotkey_string[ctr++] = '\n';
+						hotkey_string[ctr++] = '\r';
 					}
 				}
 			}
+			hotkey_string[ctr++] = '\0';
 			// Send to CRT
 			hotkey_message->dest_id = CRT_PID;
 			hotkey_message->type = DISPLAY_REQUEST;
 			hotkey_message->message = hotkey_string;
-			k_send_message(8, hotkey_message);
+			k_send_message(CRT_PID, hotkey_message);
 		}
 		// User types @
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x40){
@@ -101,22 +102,23 @@ void i_process_routine(void){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 				if(pcb->state == MEMORY_BLOCK){
 					if(pcb->pid > 9){
-						hotkey_string[0] = ('0' + (pcb->pid/10));
-						hotkey_string[1] = ('0' + (pcb->pid - (pcb->pid/10)*10));
-						hotkey_string[2] = ' ';
-						hotkey_string[3] = ('0' + pcb->priority);
-						hotkey_string[4] = '\n';
-						hotkey_string[5] = '\r';
+						hotkey_string[ctr++] = ('0' + (pcb->pid/10));
+						hotkey_string[ctr++] = ('0' + (pcb->pid - (pcb->pid/10)*10));
+						hotkey_string[ctr++] = ' ';
+						hotkey_string[ctr++] = ('0' + pcb->priority);
+						hotkey_string[ctr++] = '\n';
+						hotkey_string[ctr++] = '\r';
 					}
 					else{
-						hotkey_string[0] = ('0' + pcb->pid);
-						hotkey_string[1] = ' ';
-						hotkey_string[2] = ('0' + pcb->priority);
-						hotkey_string[3] = '\n';
-						hotkey_string[4] = '\r';
+						hotkey_string[ctr++] = ('0' + pcb->pid);
+						hotkey_string[ctr++] = ' ';
+						hotkey_string[ctr++] = ('0' + pcb->priority);
+						hotkey_string[ctr++] = '\n';
+						hotkey_string[ctr++] = '\r';
 					}
 				}
 			}
+			hotkey_string[ctr++] = '\0';
 			// Send to CRT
 			hotkey_message->dest_id = CRT_PID;
 			hotkey_message->type = DISPLAY_REQUEST;
@@ -131,22 +133,23 @@ void i_process_routine(void){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 				if(pcb->state == MESSAGE_BLOCK){
 					if(pcb->pid > 9){
-						hotkey_string[0] = ('0' + (pcb->pid/10));
-						hotkey_string[1] = ('0' + (pcb->pid - (pcb->pid/10)*10));
-						hotkey_string[2] = ' ';
-						hotkey_string[3] = ('0' + pcb->priority);
-						hotkey_string[4] = '\n';
-						hotkey_string[5] = '\r';
+						hotkey_string[ctr++] = ('0' + (pcb->pid/10));
+						hotkey_string[ctr++] = ('0' + (pcb->pid - (pcb->pid/10)*10));
+						hotkey_string[ctr++] = ' ';
+						hotkey_string[ctr++] = ('0' + pcb->priority);
+						hotkey_string[ctr++] = '\n';
+						hotkey_string[ctr++] = '\r';
 					}
 					else{
-						hotkey_string[0] = ('0' + pcb->pid);
-						hotkey_string[1] = ' ';
-						hotkey_string[2] = ('0' + pcb->priority);
-						hotkey_string[3] = '\n';
-						hotkey_string[4] = '\r';
+						hotkey_string[ctr++] = ('0' + pcb->pid);
+						hotkey_string[ctr++] = ' ';
+						hotkey_string[ctr++] = ('0' + pcb->priority);
+						hotkey_string[ctr++] = '\n';
+						hotkey_string[ctr++] = '\r';
 					}
 				}
 			}
+			hotkey_string[ctr++] = '\0';
 			// Send to CRT
 			hotkey_message->dest_id = CRT_PID;
 			hotkey_message->type = DISPLAY_REQUEST;
