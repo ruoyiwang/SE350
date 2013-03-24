@@ -7,12 +7,14 @@ void mmu_init(){
 	mmu.free_mem = (unsigned int) &Image$$RW_IRAM1$$ZI$$Limit;
 		//this is somewhere between 0x10000000 to 0x10008000
 
-	mmu.max_mem = 0x10008000 - 3 * USR_SZ_STACK;
+	mmu.max_mem = 0x10008000 - 4 * USR_SZ_STACK;
 		//allocating/hardcoding 2 blocks to irqs
-		//allocating/hardcoding 1 blocks to timer
+		//allocating/hardcoding 1 block to timer
+		//allocating/hardcoding 1 block for test harness
 	mmu.irq_using_mem1 = 0;
 	mmu.irq_using_mem2 = 0;
 	mmu.timer_using_mem = 0;
+	mmu.test_harness_using_mem = 0;
 	mmu.lookup_table_size = 256;
 	mmu.actual_size = (mmu.max_mem - mmu.free_mem) / USR_SZ_STACK;
 	mmu.memory_available = 1;	//set mem available to true
@@ -64,8 +66,19 @@ void* k_request_irq_memory_block(){
 
 void* k_request_timer_memory_block(){
 	if (mmu.timer_using_mem == 0){
-		mmu.timer_using_mem = 1;
+		mmu.test_harness_using_mem = 1;
 		return (void *)(0x10008000 - 3 * USR_SZ_STACK + 4);
+	}
+	else {
+		return NULL;
+			//fml
+	}
+}
+
+void* k_request_test_harness_memory_block(){
+	if (mmu.test_harness_using_mem == 0){
+		mmu.test_harness_using_mem = 1;
+		return (void *)(0x10008000 - 4 * USR_SZ_STACK + 4);
 	}
 	else {
 		return NULL;
@@ -96,6 +109,11 @@ int k_release_memory_block(void *MemoryBlock){
 	else if (mem_block_address <= 0x10008000 - 2 * USR_SZ_STACK && mem_block_address > 0x10008000 - 3 * USR_SZ_STACK){
 		//means this is timer mem
 		mmu.timer_using_mem = 0;
+		return 0;
+	}
+	else if (mem_block_address <= 0x10008000 - 3 * USR_SZ_STACK && mem_block_address > 0x10008000 - 4 * USR_SZ_STACK){
+		//means this is test harness mem
+		mmu.test_harness_using_mem = 0;
 		return 0;
 	}
 
