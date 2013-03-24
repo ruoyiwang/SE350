@@ -269,7 +269,7 @@ void timer_iprocess(void){
 	{
 		while ( temp->next != NULL)
 		{
-			if (temp->next->expire_time > g_timer_count)
+			if (temp->next->expire_time < g_timer_count)
 			{
 				if (temp->next == delay_message_list->end)
 				{
@@ -279,7 +279,8 @@ void timer_iprocess(void){
 				temp->next = temp->next->next;
 				finished_env->next = NULL;
 				k_send_message(finished_env->dest_id, finished_env);
-			}			
+			}	
+			temp = temp->next;	
 		}
 	}
 	if (g_timer_count%10 == 0)

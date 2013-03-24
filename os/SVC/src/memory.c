@@ -65,14 +65,14 @@ void* k_request_irq_memory_block(){
 }
 
 void* k_request_timer_memory_block(){
-	if (mmu.timer_using_mem == 0){
-		mmu.timer_using_mem = 1;
+	//if (mmu.timer_using_mem == 0){
+		//mmu.timer_using_mem = 1;
 		return (void *)(0x10008000 - 3 * USR_SZ_STACK + 4);
-	}
-	else {
-		return NULL;
+	//}
+	//else {
+		//return NULL;
 			//fml
-	}
+	//}
 }
 
 void* k_request_test_harness_memory_block(){

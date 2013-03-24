@@ -36,9 +36,11 @@ int CRT_PID = 11;
 
 void null_process() {
 	while(1) {
+		volatile int i =0;
 		#ifdef DEBUG_0
 		printf("NULL PROCESS");
 		#endif
+		for (i = 0; i < 10; i++) { }
 		release_processor();
 	}
 }
@@ -335,19 +337,21 @@ void test_process_c(){
   /** perform any needed initialization and create a local message queue **/
   message_queue mqueue;
   envelope *p;
+	char first;
   envelope *q;
   mqueue.front = NULL;
   mqueue.end = NULL;
   while(1){
     // if (local message queue is empty) then
-    if(mqueue.front == mqueue.end){
+    if(mqueue.front == NULL){
       p = (envelope*)receive_message(NULL);
     }
     else{
       p = (envelope*)mqueue_dequeue(&mqueue);
     }
     if(p->type == COUNT_REPORT){
-      if(((uint8_t)(p->message))%20 == 0){
+			first = ((char *)(p->message))[0];
+      if((uint8_t)first % 20 == 0){
         p->dest_id = CRT_PID;
         p->src_id = test_process_c_id;
 				p->type=DISPLAY_REQUEST;
@@ -357,7 +361,7 @@ void test_process_c(){
         /** Hibernate for 10 seconds **/
         q = (envelope*)request_memory_block();
         q->type = WAKE_UP_10;
-        delay_send(test_process_c_id, q, 10000);
+        delay_send(test_process_c_id, q, 100);
         while(1){
           p = receive_message(NULL);
           if(p->type == WAKE_UP_10){
@@ -369,7 +373,7 @@ void test_process_c(){
         }
       }
     }
-    //release_memory_block(p);
+    release_memory_block(p);
     release_processor();
   }
 }

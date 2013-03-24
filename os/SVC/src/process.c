@@ -160,8 +160,12 @@ pcb* pqueue_dequeue(pqueue *queue)
 				ret= ret->next;
 			}
 			if(ret == queue->pq_end[i] && ret->state == MESSAGE_BLOCK)
-					continue;			
+					continue;
+			if (ret->state == MEMORY_BLOCK) {
+				ret->state = READY;
+			}
 		}
+		
 		if (ret == queue->pq_front[i] && ret == queue->pq_end[i])
 		{
 			queue->pq_front[i] = NULL;
@@ -230,7 +234,8 @@ void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
 		if (_pcb->priority >3)
 		{
 			_pcb->priority = priority;
-			pqueue_enqueue(queue,_pcb); 
+			if (_pcb->pid != current_process->pid)
+					pqueue_enqueue(queue,_pcb); 
 		}
 		_pcb->priority = priority;
 	}
@@ -239,21 +244,24 @@ void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
 		queue->pq_end[_pcb->priority] = before;
 		before->next = NULL;
 		_pcb->priority = priority;
-		pqueue_enqueue(queue,_pcb); 
+		if (_pcb->pid != current_process->pid)
+					pqueue_enqueue(queue,_pcb);  
 	}
 	else if (before == NULL)
 	{
 		queue->pq_front[_pcb->priority] = after;
 		after->prev = NULL;
 		_pcb->priority = priority;
-		pqueue_enqueue(queue,_pcb); 
+		if (_pcb->pid != current_process->pid)
+					pqueue_enqueue(queue,_pcb); 
 	}
 	else 
 	{
 		before->next = after;
 		after->prev = before;
 		_pcb->priority = priority;
-		pqueue_enqueue(queue,_pcb); 
+		if (_pcb->pid != current_process->pid)
+					pqueue_enqueue(queue,_pcb);  
 	}
 	
 }
@@ -421,7 +429,7 @@ int k_get_process_priority(int pid){
 
 int k_context_switch(pcb* pcb) {
 	if (current_process != NULL) {
-			if (current_process->state != MESSAGE_BLOCK) {
+			if (!(current_process->state == MESSAGE_BLOCK || current_process->state == MEMORY_BLOCK)) {
 				current_process->state = READY;
 			}
 			current_process->sp = (uint32_t *) __get_MSP();
