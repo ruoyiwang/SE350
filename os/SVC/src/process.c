@@ -396,12 +396,15 @@ int k_get_process_priority(int pid){
     pcb *node; 
 
     // As per section 3.5 of project description, if pid is invalid return "-1"
-    if(node == NULL || pid > NUM_PROCS || pid < 0){
+    if(pid > NUM_PROCS || pid < 0){
         return -1;
     }
 		
 	node = pcb_lookup_by_pid(pid, pcb_lookup_list);
 	
+	if(node == NULL){
+        return -1;
+    }
 	return node->priority;
 }
 
