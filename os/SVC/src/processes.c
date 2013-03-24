@@ -91,6 +91,7 @@ void test_process_3() {
         }
 		}*/
     test_pass();
+		set_process_priority(3, 3);
 		release_processor();
 	}
 }
@@ -107,10 +108,12 @@ void test_process_4() {
 
     if(priority != prioritySet){
         test_fail();
+		    set_process_priority(4, 3);
         release_processor();
     }
 
     test_pass();
+		set_process_priority(4, 3);
     release_processor();
 	}
 }
