@@ -65,19 +65,29 @@ void test_process_1() {
 
 void test_process_2() {
   volatile int i =0;
-  volatile int ret_val = 20;
-  while ( 1) {
-    if (i!=0 &&i%5 == 0 ) {
-      ret_val = release_processor();
-#ifdef DEBUG_0
-      printf("\n\rproc2: ret_val=%d. ", ret_val);
-#else
-      //uart0_put_string("\n\rTEST 2: ");
-#endif  /* DEBUG_0 */
-    }
-    //uart0_put_char('a' + i%26);
-    i++;
-  }
+  volatile int ret_val = 0;
+  uint32_t mems[4] = {0};
+	//get all of the memories
+	while(1){
+		while (i<4){
+			mems[i] = (uint32_t)request_memory_block();
+			i++;
+		}
+		
+		while (i>0) {
+			i--;
+			ret_val = release_memory_block((void*)mems[i]);
+			mems[i] = 0;
+			if (ret_val == 1){
+				test_fail();
+		    set_process_priority(2, 3);
+				release_processor();
+			}
+		}
+		test_pass();
+		set_process_priority(2, 3);
+		release_processor();
+	}
 }
 
 void test_process_3() {
