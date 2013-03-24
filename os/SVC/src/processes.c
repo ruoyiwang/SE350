@@ -93,13 +93,13 @@ void test_process_2() {
 void test_process_3() {
 	int i;
 	int priority;
-  //set_process_priority(3, 0);
 	while(1){
 		for(i =0; i<9;i++)
 		{
         priority = get_process_priority(i);
 				if(priority== -1){
           test_fail();
+					set_process_priority(3, 3);
           release_processor();
         }
 		}
@@ -142,6 +142,7 @@ void test_process_5() {
     re = (envelope*)receive_message(NULL);
 		test_pass();
 		set_process_priority(5,3);
+		release_memory_block((void*)re);
 		release_processor();
 	}
 }
@@ -159,6 +160,7 @@ void test_process_6() {
     re = (envelope*)receive_message(NULL);
 		test_pass();
 		set_process_priority(6,3);
+		release_memory_block((void*)re);
 		release_processor();
 	//	env = (envelope *) k_request_memory_block();
 	//	env->type = KEYBOARD_INPUT;
