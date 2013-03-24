@@ -320,7 +320,6 @@ void test_process_a(){
 void test_process_b(){
   envelope * re;
   while(1){
-    re = (envelope *) request_memory_block();
     re = (envelope*)receive_message(NULL);
 
     // After receiving message we send to process C
