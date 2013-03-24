@@ -58,7 +58,7 @@ void test_process_1() {
 		else {
 			test_fail();
 		}
-		set_process_priority(1,3);
+		set_process_priority(1,4);
 		release_processor();
   }
 }
@@ -80,12 +80,12 @@ void test_process_2() {
 			mems[i] = 0;
 			if (ret_val == 1){
 				test_fail();
-		    set_process_priority(2, 3);
+		    set_process_priority(2, 4);
 				release_processor();
 			}
 		}
 		test_pass();
-		set_process_priority(2, 3);
+		set_process_priority(2, 4);
 		release_processor();
 	}
 }
@@ -99,12 +99,12 @@ void test_process_3() {
         priority = get_process_priority(i);
 				if(priority== -1){
           test_fail();
-					set_process_priority(3, 3);
+					set_process_priority(3, 4);
           release_processor();
         }
 		}
     test_pass();
-		set_process_priority(3, 3);
+		set_process_priority(3, 4);
 		release_processor();
 	}
 }
@@ -121,12 +121,12 @@ void test_process_4() {
 
     if(priority != prioritySet){
         test_fail();
-		    set_process_priority(4, 3);
+		    set_process_priority(4, 4);
         release_processor();
     }
 
     test_pass();
-		set_process_priority(4, 3);
+		set_process_priority(4, 4);
     release_processor();
 	}
 }
@@ -141,7 +141,7 @@ void test_process_5() {
 		send_message(5, re);
     re = (envelope*)receive_message(NULL);
 		test_pass();
-		set_process_priority(5,3);
+		set_process_priority(5,4);
 		release_memory_block((void*)re);
 		release_processor();
 	}
@@ -159,7 +159,7 @@ void test_process_6() {
 		delay_send(6, re, 10000);
     re = (envelope*)receive_message(NULL);
 		test_pass();
-		set_process_priority(6,3);
+		set_process_priority(6,4);
 		release_memory_block((void*)re);
 		release_processor();
 	//	env = (envelope *) k_request_memory_block();

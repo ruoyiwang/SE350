@@ -420,7 +420,7 @@ int k_context_switch(pcb* pcb) {
 				current_process->state = READY;
 			}
 			current_process->sp = (uint32_t *) __get_MSP();
-			if (pcb->state != INTERRUPT) {
+			if (pcb->state != INTERRUPT && current_process->priority <=3) {
 				pqueue_enqueue( &ready_queue, current_process );
 			}
 	}
