@@ -132,27 +132,24 @@ void test_process_4() {
 }
 
 void test_process_5() {
-  void * memory;
-  int release_success;
-	while(1)
-	{
-		memory = (void*)request_memory_block();
-		release_success = release_memory_block(memory);
-		if (release_success != 0){
-			//uart0_put_string("\n\rG029_test: test 5 FAIL");
-			release_processor();
-		}
-		else{
-			//uart0_put_string("\n\rG029_test: test 5 OK");
-			release_processor();
-		}
+	envelope * re;
+
+  while(1) {
+		re = (envelope *) request_memory_block();
+		re->src_id = 5;
+		re->dest_id = 5;
+		send_message(5, re);
+    re = (envelope*)receive_message(NULL);
+		test_pass();
+		set_process_priority(5,3);
+		release_processor();
 	}
 }
 
 void test_process_6() {
-  char* message ="10 seconds have passed!\n\r";
+  //char* message ="10 seconds have passed!\n\r";
 	envelope * re;
-	envelope * crt;
+	//envelope * crt;
   //envelope* crt_message = NULL;
   while(1) {
 		re = (envelope *) request_memory_block();
@@ -160,17 +157,19 @@ void test_process_6() {
 		re->dest_id = 6;
 		delay_send(6, re, 10000);
     re = (envelope*)receive_message(NULL);
-		
+		test_pass();
+		set_process_priority(6,3);
+		release_processor();
 	//	env = (envelope *) k_request_memory_block();
 	//	env->type = KEYBOARD_INPUT;
 	//	env->message = message;
 	//	k_send_message(9, env);
-		crt = (envelope*)request_memory_block();
-		crt->type = DISPLAY_REQUEST;
-		crt->message = message;
-		send_message(CRT_PID, crt);
+	//	crt = (envelope*)request_memory_block();
+	//	crt->type = DISPLAY_REQUEST;
+	//	crt->message = message;
+	//	send_message(CRT_PID, crt);
 		
-		release_memory_block(re);
+	//	release_memory_block(re);
 	}
 }
 
