@@ -307,8 +307,8 @@ void test_process_a(){
   while (1){
     p = (envelope*)request_memory_block();
     p->type = COUNT_REPORT;
-    c_temp = p->message;
-    c_temp[0] = num;
+		c_temp[0] = num;
+    p->message = c_temp;
     p->src_id = test_process_a_id;
     p->dest_id = test_process_b_id;
     send_message(p->dest_id, p);
@@ -350,6 +350,8 @@ void test_process_c(){
       if(((uint8_t)(p->message))%20 == 0){
         p->dest_id = CRT_PID;
         p->src_id = test_process_c_id;
+				p->type=DISPLAY_REQUEST;
+				(char*)(p->message) = "PROCESS C\n\r";
         send_message(p->dest_id,p);
 
         /** Hibernate for 10 seconds **/
@@ -367,7 +369,7 @@ void test_process_c(){
         }
       }
     }
-    release_memory_block(p);
+    //release_memory_block(p);
     release_processor();
   }
 }
