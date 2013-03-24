@@ -254,7 +254,7 @@ void timer_iprocess(void){
 	if (delay_message_list->front->expire_time < g_timer_count)
 	{
 		finished_env = delay_message_list->front;
-		finished_env->next = NULL;
+		//finished_env->next = NULL;
 		k_send_message(finished_env->dest_id, finished_env);
 		if (g_timer_count%10 == 0)
 		{

@@ -158,7 +158,7 @@ void test_process_6() {
 		re = (envelope *) request_memory_block();
 		re->src_id = 6;
 		re->dest_id = 6;
-		delay_send(6, re, 10000);
+		delay_send(6, re, 100);
     re = (envelope*)receive_message(NULL);
 		test_pass();
 		set_process_priority(6,4);

@@ -37,6 +37,20 @@ void k_send_message(int dest_id, envelope* env)
 	pcb* dest_pcb;
 	int i;
 	atomic(1);
+	//manage the delay message list
+	if (env == delay_message_list->front && env != NULL)
+	{
+		if (delay_message_list->front == delay_message_list->end)
+		{
+			delay_message_list->front = NULL;
+			delay_message_list->end = NULL;
+		}
+		else
+		{
+			delay_message_list->front = delay_message_list->front->next;
+		}
+	}
+	
 	for ( i= 0; i<NUM_PROCS; i++)
 	{
 		if (pcbs[i]->pid == dest_id)
@@ -59,19 +73,6 @@ void k_send_message(int dest_id, envelope* env)
 	{
 		dest_pcb->mb.end->next = env;
 		dest_pcb->mb.end = env;
-	}
-	//manage the delay message list
-	if (env == delay_message_list->front)
-	{
-		if (delay_message_list->front == delay_message_list->end)
-		{
-			delay_message_list->front = NULL;
-			delay_message_list->end = NULL;
-		}
-		else
-		{
-			delay_message_list->front = delay_message_list->front->next;
-		}
 	}
 	
 	if (dest_pcb->state == MESSAGE_BLOCK)
