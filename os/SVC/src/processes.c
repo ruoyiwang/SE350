@@ -43,20 +43,23 @@ void null_process() {
 	}
 }
 
+// Test stack management
 void test_process_1() {
   volatile int i =0;
+	int j = 0;
   volatile int ret_val = 10;
   while ( 1) {
-    if (i!=0 &&i%5 == 0 ) {
-      ret_val = release_processor();
-#ifdef DEBUG_0
-      printf("\n\rproc1: ret_val=%d. ", ret_val);
-#else
-      //uart0_put_string("\n\rTEST 1: ");
-#endif /* DEBUG_0 */
-    }
-    //uart0_put_char('A' + i%26);
-    i++;
+		for (i = 0; i < 5; i++) { }
+		for (j = 0; j < 10; j++) { }
+		release_processor();
+		if (i == 5 && j == 10) {
+			test_pass();
+		}
+		else {
+			test_fail();
+		}
+		set_process_priority(1,3);
+		release_processor();
   }
 }
 
@@ -91,6 +94,7 @@ void test_process_3() {
         }
 		}*/
     test_pass();
+		set_process_priority(3, 3);
 		release_processor();
 	}
 }
@@ -107,10 +111,12 @@ void test_process_4() {
 
     if(priority != prioritySet){
         test_fail();
+		    set_process_priority(4, 3);
         release_processor();
     }
 
     test_pass();
+		set_process_priority(4, 3);
     release_processor();
 	}
 }
