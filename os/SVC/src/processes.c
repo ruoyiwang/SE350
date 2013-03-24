@@ -43,38 +43,51 @@ void null_process() {
 	}
 }
 
+// Test stack management
 void test_process_1() {
   volatile int i =0;
+	int j = 0;
   volatile int ret_val = 10;
   while ( 1) {
-    if (i!=0 &&i%5 == 0 ) {
-      ret_val = release_processor();
-#ifdef DEBUG_0
-      printf("\n\rproc1: ret_val=%d. ", ret_val);
-#else
-      //uart0_put_string("\n\rTEST 1: ");
-#endif /* DEBUG_0 */
-    }
-    //uart0_put_char('A' + i%26);
-    i++;
+		for (i = 0; i < 5; i++) { }
+		for (j = 0; j < 10; j++) { }
+		release_processor();
+		if (i == 5 && j == 10) {
+			test_pass();
+		}
+		else {
+			test_fail();
+		}
+		set_process_priority(1,3);
+		release_processor();
   }
 }
 
 void test_process_2() {
   volatile int i =0;
-  volatile int ret_val = 20;
-  while ( 1) {
-    if (i!=0 &&i%5 == 0 ) {
-      ret_val = release_processor();
-#ifdef DEBUG_0
-      printf("\n\rproc2: ret_val=%d. ", ret_val);
-#else
-      //uart0_put_string("\n\rTEST 2: ");
-#endif  /* DEBUG_0 */
-    }
-    //uart0_put_char('a' + i%26);
-    i++;
-  }
+  volatile int ret_val = 0;
+  uint32_t mems[4] = {0};
+	//get all of the memories
+	while(1){
+		while (i<4){
+			mems[i] = (uint32_t)request_memory_block();
+			i++;
+		}
+		
+		while (i>0) {
+			i--;
+			ret_val = release_memory_block((void*)mems[i]);
+			mems[i] = 0;
+			if (ret_val == 1){
+				test_fail();
+		    set_process_priority(2, 3);
+				release_processor();
+			}
+		}
+		test_pass();
+		set_process_priority(2, 3);
+		release_processor();
+	}
 }
 
 void test_process_3() {
