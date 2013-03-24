@@ -56,7 +56,7 @@ void i_process_routine(void){
 			g_UART0_count = 0;
 			// Code for sending a message to the KCD for a command registration
 			// Set the message destination id to the id of the crt process
-			kcd_command->dest_id = 7;
+			kcd_command->dest_id = 10;
 			kcd_command->type = KEYBOARD_INPUT;
 			kcd_command->message = char_buffer_string;
 			k_send_message(kcd_command->dest_id, kcd_command);
@@ -79,7 +79,7 @@ void i_process_routine(void){
 				}
 			}
 			// Send to CRT
-			hotkey_message->dest_id = 8;
+			hotkey_message->dest_id = CRT_PID;
 			hotkey_message->type = DISPLAY_REQUEST;
 			hotkey_message->message = hotkey_string;
 			k_send_message(8, hotkey_message);
@@ -98,10 +98,10 @@ void i_process_routine(void){
 				}
 			}
 			// Send to CRT
-			hotkey_message->dest_id = 8;
+			hotkey_message->dest_id = CRT_PID;
 			hotkey_message->type = DISPLAY_REQUEST;
 			hotkey_message->message = hotkey_string;
-			k_send_message(8, hotkey_message);
+			k_send_message(CRT_PID, hotkey_message);
 		}
 		// User types #
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x23){
@@ -118,10 +118,10 @@ void i_process_routine(void){
 				}
 			}
 			// Send to CRT
-			hotkey_message->dest_id = 8;
+			hotkey_message->dest_id = CRT_PID;
 			hotkey_message->type = DISPLAY_REQUEST;
 			hotkey_message->message = hotkey_string;
-			k_send_message(8, hotkey_message);
+			k_send_message(CRT_PID, hotkey_message);
 		}
 		
 		
@@ -176,7 +176,7 @@ void i_process_routine(void){
 				g_UART0_count = 0;
 				// Code for sending a message to the KCD for a command registration
 				// Set the message destination id to the id of the crt process
-				kcd_command->dest_id = 7;
+				kcd_command->dest_id = 10;
 				kcd_command->type = KEYBOARD_INPUT;
 				kcd_command->message = char_buffer_string;
 				k_send_message(kcd_command->dest_id, kcd_command);
@@ -227,7 +227,7 @@ void timer_iprocess(void){
 		{
 			env = (envelope *) k_request_timer_memory_block();
 			env->type = TIMER_UPDATE;
-			k_send_message(9, env);
+			k_send_message(WALLCLOCK_PID, env);
 		}
 		return;
 	}
@@ -253,6 +253,6 @@ void timer_iprocess(void){
 	{
 		env = (envelope *) k_request_timer_memory_block();
 		env->type = TIMER_UPDATE;
-		k_send_message(9, env);
+		k_send_message(WALLCLOCK_PID, env);
 	}
 }
