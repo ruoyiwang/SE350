@@ -227,6 +227,11 @@ void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
 		return;
 	if (after == NULL && before == NULL)
 	{
+		if (_pcb->priority >3)
+		{
+			_pcb->priority = priority;
+			pqueue_enqueue(queue,_pcb); 
+		}
 		_pcb->priority = priority;
 	}
 	if (after == NULL)

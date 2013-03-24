@@ -396,7 +396,7 @@ void priority_change() {
     input = (char *)re->message;
 
     // Currently only accepts 2 digit pids
-    if (re->type == KEYBOARD_INPUT) {
+    if (re->type == DISPLAY_REQUEST) {
       pid = *(input + 3) - '0';
       if (pid < 0 || pid > 9) {
         continue;
