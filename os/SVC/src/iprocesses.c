@@ -31,7 +31,7 @@ void i_process_routine(void){
 	/** Hotkey variables **/
 	envelope* hotkey_message;
 	pcb* pcb;
-	const int hotkey_string_size = 5;
+	const int hotkey_string_size = 6;
 	char hotkey_string[hotkey_string_size];
 
 	/* Reading IIR automatically acknowledges the interrupt */
@@ -71,11 +71,21 @@ void i_process_routine(void){
 			for(i = 0; i < NUM_PROCS; i ++){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 				if(pcb->state == READY){
-					hotkey_string[0] = ('0' + pcb->pid);
-					hotkey_string[1] = ' ';
-					hotkey_string[2] = ('0' + pcb->priority);
-					hotkey_string[3] = '\n';
-					hotkey_string[4] = '\r';
+					if(pcb->pid > 9){
+						hotkey_string[0] = ('0' + (pcb->pid/10));
+						hotkey_string[1] = ('0' + (pcb->pid - (pcb->pid/10)*10));
+						hotkey_string[2] = ' ';
+						hotkey_string[3] = ('0' + pcb->priority);
+						hotkey_string[4] = '\n';
+						hotkey_string[5] = '\r';
+					}
+					else{
+						hotkey_string[0] = ('0' + pcb->pid);
+						hotkey_string[1] = ' ';
+						hotkey_string[2] = ('0' + pcb->priority);
+						hotkey_string[3] = '\n';
+						hotkey_string[4] = '\r';
+					}
 				}
 			}
 			// Send to CRT
@@ -90,11 +100,21 @@ void i_process_routine(void){
 			for(i = 0; i < NUM_PROCS; i ++){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 				if(pcb->state == MEMORY_BLOCK){
-					hotkey_string[0] = ('0' + pcb->pid);
-					hotkey_string[1] = ' ';
-					hotkey_string[2] = ('0' + pcb->priority);
-					hotkey_string[3] = '\n';
-					hotkey_string[4] = '\r';
+					if(pcb->pid > 9){
+						hotkey_string[0] = ('0' + (pcb->pid/10));
+						hotkey_string[1] = ('0' + (pcb->pid - (pcb->pid/10)*10));
+						hotkey_string[2] = ' ';
+						hotkey_string[3] = ('0' + pcb->priority);
+						hotkey_string[4] = '\n';
+						hotkey_string[5] = '\r';
+					}
+					else{
+						hotkey_string[0] = ('0' + pcb->pid);
+						hotkey_string[1] = ' ';
+						hotkey_string[2] = ('0' + pcb->priority);
+						hotkey_string[3] = '\n';
+						hotkey_string[4] = '\r';
+					}
 				}
 			}
 			// Send to CRT
@@ -110,11 +130,21 @@ void i_process_routine(void){
 			for(i = 0; i < NUM_PROCS; i ++){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 				if(pcb->state == MESSAGE_BLOCK){
-					hotkey_string[0] = ('0' + pcb->pid);
-					hotkey_string[1] = ' ';
-					hotkey_string[2] = ('0' + pcb->priority);
-					hotkey_string[3] = '\n';
-					hotkey_string[4] = '\r';
+					if(pcb->pid > 9){
+						hotkey_string[0] = ('0' + (pcb->pid/10));
+						hotkey_string[1] = ('0' + (pcb->pid - (pcb->pid/10)*10));
+						hotkey_string[2] = ' ';
+						hotkey_string[3] = ('0' + pcb->priority);
+						hotkey_string[4] = '\n';
+						hotkey_string[5] = '\r';
+					}
+					else{
+						hotkey_string[0] = ('0' + pcb->pid);
+						hotkey_string[1] = ' ';
+						hotkey_string[2] = ('0' + pcb->priority);
+						hotkey_string[3] = '\n';
+						hotkey_string[4] = '\r';
+					}
 				}
 			}
 			// Send to CRT
