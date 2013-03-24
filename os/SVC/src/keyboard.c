@@ -95,13 +95,13 @@ void kcd() {
 				}
 			}
 			m->type = DISPLAY_REQUEST;
-			send_message(8, m);
+			send_message(CRT_PID, m);
 			
 			input = "\n\r";
 			m = request_memory_block();
 			m->type = DISPLAY_REQUEST;
 			m->message = input;
-			send_message(8, m);
+			send_message(CRT_PID, m);
 		}
 	}
 }

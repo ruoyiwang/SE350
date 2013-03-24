@@ -289,15 +289,19 @@ void process_init() {
 	pcbs[4]->pc = (uint32_t)test_process_4;
 	pcbs[5]->pc = (uint32_t)test_process_5;
 	pcbs[6]->pc = (uint32_t)test_process_6;
-	pcbs[7]->pc = (uint32_t)kcd;
-	pcbs[8]->pc = (uint32_t)crt_displpay_process;
-	pcbs[9]->pc = (uint32_t)wall_clock;
+	pcbs[7]->pc = (uint32_t)test_process_a;
+	pcbs[8]->pc = (uint32_t)test_process_b;
+	pcbs[9]->pc = (uint32_t)test_process_c;
+	pcbs[10]->pc = (uint32_t)kcd;
+	pcbs[11]->pc = (uint32_t)crt_displpay_process;
+	pcbs[12]->pc = (uint32_t)wall_clock;
+	pcbs[13]->pc = (uint32_t)priority_change;
 
 	pcbs[0]->priority = 3;
 	pcb_lookup_list = pcbs[0];
 
 	// setup the interrupt process;
-	interrupt_process.pcb.pid = 10;
+	interrupt_process.pcb.pid = 14;
 	interrupt_process.pcb.pc = (uint32_t)i_process_routine;
 	interrupt_process.state = RUNNING;
 	interrupt_process.pcb.priority=0;
@@ -321,7 +325,7 @@ void process_init() {
 	}
 	interrupt_process.pcb.sp = sp;
 
-	timer.pcb.pid = 11;
+	timer.pcb.pid = 15;
 	timer.pcb.pc = (uint32_t)timer_iprocess;
 	timer.state = RUNNING;
 	timer.pcb.priority=0;
@@ -356,7 +360,7 @@ void process_init() {
 		pcbs[i]->mb.end = NULL;
 		pcbs[i]->prev = NULL;
 		
-		if (i == 7 || i ==8 || i == 9)
+		if (i == 10 || i ==11 || i == 12)
 			pcbs[i]->priority = 1;
 		else if (i!=0)
 			pcbs[i]->priority = 2;

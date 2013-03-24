@@ -5,7 +5,7 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-#define NUM_PROCS 10
+#define NUM_PROCS 14
 typedef unsigned int U32;
 #define __SVC_0  __svc_indirect(0)
 
@@ -130,10 +130,13 @@ extern void test_process_3(void);
 extern void test_process_4(void);
 extern void test_process_5(void);
 extern void test_process_6(void);
+extern void test_process_a(void);
 extern void test_process_b(void);
+extern void test_process_c(void);
 extern void i_process_routine(void);
 extern void timer_iprocess(void);
 extern void kcd(void);
 extern void wall_clock(void);
+extern void priority_change(void);
 
 #endif
