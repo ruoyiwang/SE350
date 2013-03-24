@@ -7,7 +7,7 @@ void mmu_init(){
 	mmu.free_mem = (unsigned int) &Image$$RW_IRAM1$$ZI$$Limit;
 		//this is somewhere between 0x10000000 to 0x10008000
 
-	mmu.max_mem = 0x10008000 - 4 * USR_SZ_STACK;
+	mmu.max_mem = 0x10008000 - 5 * USR_SZ_STACK;
 		//allocating/hardcoding 2 blocks to irqs
 		//allocating/hardcoding 1 block to timer
 		//allocating/hardcoding 1 block for test harness
@@ -66,7 +66,7 @@ void* k_request_irq_memory_block(){
 
 void* k_request_timer_memory_block(){
 	if (mmu.timer_using_mem == 0){
-		mmu.test_harness_using_mem = 1;
+		mmu.timer_using_mem = 1;
 		return (void *)(0x10008000 - 3 * USR_SZ_STACK + 4);
 	}
 	else {
