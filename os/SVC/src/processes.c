@@ -81,17 +81,18 @@ void test_process_3() {
 	int i;
 	int priority;
   //set_process_priority(3, 0);
-		for(i =0; i<9;i++)
+	while(1){
+		/*for(i =0; i<9;i++)
 		{
         priority = get_process_priority(i);
 				if(priority== -1){
           test_fail();
           release_processor();
         }
-		}
+		}*/
     test_pass();
 		release_processor();
-	
+	}
 }
 
 void test_process_4() {
