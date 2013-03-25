@@ -13,7 +13,7 @@ typedef unsigned int U32;
 #define __SVC_0  __svc_indirect(0)
 
 typedef struct mmu_t{
-	char lookup_table[256];
+	char lookup_table[128];
 	unsigned int free_mem;
 	unsigned int max_mem;
 	char irq_using_mem1, irq_using_mem2, timer_using_mem, test_harness_using_mem;

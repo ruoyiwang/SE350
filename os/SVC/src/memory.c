@@ -15,8 +15,9 @@ void mmu_init(){
 	mmu.irq_using_mem2 = 0;
 	mmu.timer_using_mem = 0;
 	mmu.test_harness_using_mem = 0;
-	mmu.lookup_table_size = 256;
-	mmu.actual_size = (mmu.max_mem - mmu.free_mem) / USR_SZ_STACK;
+	mmu.lookup_table_size = 128;
+	mmu.actual_size = (mmu.max_mem - mmu.free_mem) / USR_SZ_STACK - 1;
+//	mmu.actual_size = 64;
 	mmu.memory_available = 1;	//set mem available to true
 
 	//set all flags in the lookup table to 0

@@ -158,7 +158,7 @@ void test_process_6() {
 		re = (envelope *) request_memory_block();
 		re->src_id = 6;
 		re->dest_id = 6;
-		delay_send(6, re, 100);
+		delay_send(6, re, 10000);
     re = (envelope*)receive_message(NULL);
 		test_pass();
 		set_process_priority(6,4);
@@ -254,6 +254,7 @@ void wall_clock() {
         on = 0;
       }
     }
+		release_memory_block(re);
     if (on) {
       time_string[0] = hour/10 + '0';
       time_string[1] = hour%10 + '0';
@@ -272,7 +273,6 @@ void wall_clock() {
 			crt->message = time_string;
 			send_message(CRT_PID, crt);
     }
-		release_memory_block(re);
   }
 }
 
@@ -338,6 +338,7 @@ void test_process_c(){
   message_queue mqueue;
   envelope *p;
 	char first;
+	char* processC = "PROCESS C\n\r";
   envelope *q;
   mqueue.front = NULL;
   mqueue.end = NULL;
@@ -355,13 +356,13 @@ void test_process_c(){
         p->dest_id = CRT_PID;
         p->src_id = test_process_c_id;
 				p->type=DISPLAY_REQUEST;
-				(char*)(p->message) = "PROCESS C\n\r";
+				p->message = (void *)processC;
         send_message(p->dest_id,p);
 
         /** Hibernate for 10 seconds **/
         q = (envelope*)request_memory_block();
         q->type = WAKE_UP_10;
-        delay_send(test_process_c_id, q, 100);
+        delay_send(test_process_c_id, q, 10000);
         while(1){
           p = receive_message(NULL);
           if(p->type == WAKE_UP_10){
@@ -383,7 +384,6 @@ void priority_change() {
   envelope* re;
   char* input;
   char c_message[] = "C";
-  char time_string[11];
   int pid;
   int priority;
 
