@@ -37,6 +37,11 @@ void k_send_message(int dest_id, envelope* env)
 	pcb* dest_pcb;
 	int i;
 	atomic(1);
+	if (env == NULL)
+	{
+		atomic(0);
+		return;
+	}
 	//manage the delay message list
 	if (env == delay_message_list->front && env != NULL)
 	{
@@ -289,12 +294,12 @@ void process_init() {
 
 	volatile int i, j;
 	uint32_t * sp;
-	delay_message_list = (mailbox*) k_request_memory_block();
+	delay_message_list = (mailbox*) k_request_kernel_memory_block();
 	delay_message_list->front =NULL;
 	delay_message_list->end =NULL;
 	
 	for (i=0; i < NUM_PROCS; i++) {
-		pcbs[i] = (pcb*)k_request_memory_block();
+		pcbs[i] = (pcb*)k_request_kernel_memory_block();
 	}
 	pcbs[0]->pc = (uint32_t)null_process;
 	pcbs[1]->pc = (uint32_t)test_process_1;
@@ -325,7 +330,7 @@ void process_init() {
 	interrupt_process.pcb.next = NULL;
 	interrupt_process.pcb.lu_next = NULL;
 	interrupt_process.pcb.prev = NULL;
-	sp = k_request_memory_block();
+	sp = k_request_kernel_memory_block();
 	sp = sp + USR_SZ_STACK - 4;
 	// 8 bytes alignement adjustment to exception stack frame 
 	if (!(((uint32_t)sp) & 0x04)) {
@@ -349,7 +354,7 @@ void process_init() {
 	timer.pcb.next = NULL;
 	timer.pcb.lu_next = NULL;
 	timer.pcb.prev = NULL;
-	sp = k_request_memory_block();
+	sp = k_request_kernel_memory_block();
 	sp = sp + USR_SZ_STACK - 4;
 	// 8 bytes alignement adjustment to exception stack frame 
 	if (!(((uint32_t)sp) & 0x04)) {
@@ -379,7 +384,7 @@ void process_init() {
 		else if (i!=0)
 			pcbs[i]->priority = 2;
 
-		sp = k_request_memory_block();
+		sp = k_request_kernel_memory_block();
 		sp = sp + USR_SZ_STACK - 4;
 		/* 8 bytes alignement adjustment to exception stack frame */
 		if (!(((uint32_t)sp) & 0x04)) {

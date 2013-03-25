@@ -16,8 +16,8 @@ char test_string7[] = "\n\rG029_test: END";
 
 // Run in kernel mode
 void test_init(int n) {
-	envelope *ts1 = (envelope*)k_request_memory_block();
-	envelope *ts2 = (envelope*)k_request_memory_block();
+	envelope *ts1 = (envelope*)k_request_kernel_memory_block();
+	envelope *ts2 = (envelope*)k_request_kernel_memory_block();
 
 	ts1->dest_id = ts2->dest_id = CRT_PID;
 	ts1->type = ts2->type = DISPLAY_REQUEST;

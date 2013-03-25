@@ -158,13 +158,13 @@ void test_process_6() {
 		re = (envelope *) request_memory_block();
 		re->src_id = 6;
 		re->dest_id = 6;
-		delay_send(6, re, 10000);
+		delay_send(6, re, 100);
     re = (envelope*)receive_message(NULL);
 		test_pass();
 		set_process_priority(6,4);
 		release_memory_block((void*)re);
 		release_processor();
-	//	env = (envelope *) k_request_memory_block();
+	//	env = (envelope *) k_request_kernel_memory_block();
 	//	env->type = KEYBOARD_INPUT;
 	//	env->message = message;
 	//	k_send_message(9, env);
@@ -266,7 +266,7 @@ void wall_clock() {
 			time_string[8] = '\n';
 			time_string[9] = '\r';
 			time_string[10] = '\0';
-			crt = (envelope*)request_memory_block();
+			crt = (envelope*)request_kernel_memory_block();
 			crt->src_id = WALLCLOCK_PID;
 			crt->dest_id = CRT_PID;
 			crt->type = DISPLAY_REQUEST;
@@ -362,7 +362,7 @@ void test_process_c(){
         /** Hibernate for 10 seconds **/
         q = (envelope*)request_memory_block();
         q->type = WAKE_UP_10;
-        delay_send(test_process_c_id, q, 10000);
+        delay_send(test_process_c_id, q, 100);
         while(1){
           p = receive_message(NULL);
           if(p->type == WAKE_UP_10){
