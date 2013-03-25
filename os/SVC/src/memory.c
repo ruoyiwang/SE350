@@ -7,10 +7,10 @@ void mmu_init(){
 	mmu.free_mem = (unsigned int) &Image$$RW_IRAM1$$ZI$$Limit;
 		//this is somewhere between 0x10000000 to 0x10008000
 
-	mmu.irq_using_mem1 = 0;
-	mmu.irq_using_mem2 = 0;
-	mmu.timer_using_mem = 0;
-	mmu.test_harness_using_mem = 0;
+	//mmu.irq_using_mem1 = 0;
+	//mmu.irq_using_mem2 = 0;
+	//mmu.timer_using_mem = 0;
+	//mmu.test_harness_using_mem = 0;
 	//allocating/hardcoding 2 blocks to irqs
 	//allocating/hardcoding 1 block to timer
 	//allocating/hardcoding 1 block for test harness
@@ -21,13 +21,13 @@ void mmu_init(){
 	mmu.user_min_mem = mmu.user_max_mem - mmu.user_stack_table_size * USR_SZ_STACK;
 	temp = (mmu.user_max_mem - mmu.user_min_mem) / USR_SZ_STACK;	//debug line
 	//32 blocks for user
-	for (i = 0; i < 32; i++){
+	for (i = 0; i < mmu.user_stack_table_size; i++){
 		mmu.user_stack_table[i] = 0;	//0 means free mem
 	}
 	
 	//below is for the kernal stack
-	mmu.max_mem = mmu.user_min_mem - USR_SZ_STACK;
-	mmu.lookup_table_size = 128;
+	mmu.max_mem = 0x10008000 - mmu.user_stack_table_size*USR_SZ_STACK - USR_SZ_STACK;
+	mmu.lookup_table_size = 64;
 	mmu.actual_size = (mmu.max_mem - mmu.free_mem) / USR_SZ_STACK - 1;
 //	mmu.actual_size = 64;
 	mmu.memory_available = 1;	//set mem available to true
@@ -84,6 +84,7 @@ void* k_request_kernel_memory_block(){
 	}
 }
 
+/*
 void* k_request_irq_memory_block(){
 	if (mmu.irq_using_mem1 == 0){
 		mmu.irq_using_mem1 = 1;
@@ -122,7 +123,7 @@ void* k_request_test_harness_memory_block(){
 			//fml
 	}
 }
-
+*/
 int k_release_memory_block(void *MemoryBlock){
 	int index;
 	int temp;

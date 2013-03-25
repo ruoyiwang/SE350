@@ -281,6 +281,7 @@ void test_process_a(){
   
   char c_message[] = "Z";
   char* c_temp;
+	char c_num[] = "0";
   int num = 0;
   envelope * p;
   envelope * e = (envelope *)request_memory_block();
@@ -309,12 +310,14 @@ void test_process_a(){
   while (1){
     p = (envelope*)request_memory_block();
     p->type = COUNT_REPORT;
-		c_temp[0] = num;
-    p->message = c_temp;
+		c_num[0] = num;
+    p->message = c_num;
     p->src_id = test_process_a_id;
     p->dest_id = test_process_b_id;
+		p->next = NULL;
+		p->message_length = 1;
     send_message(p->dest_id, p);
-    num = num + 1;
+    num = (num + 1)%20;
     release_processor();
   }
 }
