@@ -114,7 +114,7 @@ envelope* k_receive_message(int* sender_ID)
 	atomic(0);
 	if (src_ID != NULL)
 	{
-		*src_ID = ret->src_id;
+		//*src_ID = ret->src_id;
 	}
 	return ret;
 }
@@ -207,12 +207,14 @@ void pqueue_enqueue(pqueue *queue, pcb *new_pcb)
 	{
 		queue->pq_front[priority] = new_pcb;
 		queue->pq_end[priority] = new_pcb;
+		queue->pq_end[priority]->next = NULL;
 		return;
 	}
 	queue->pq_end[priority]->next = new_pcb;
 	new_pcb->prev = queue->pq_end[priority];
 	new_pcb->next = NULL;
 	queue->pq_end[priority] = new_pcb;
+	queue->pq_end[priority]->next = NULL;
 }
 
 void pcb_insert(pcb *block, pcb *node){
@@ -237,47 +239,42 @@ void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
 		return;
 	if (after == NULL && before == NULL)
 	{
-		if (_pcb->priority >3)
-		{
+		if (_pcb->pid != current_process->pid) {
 			queue->pq_front[_pcb->priority] = NULL;
 			queue->pq_end[_pcb->priority] = NULL;
-			_pcb->priority = priority;
-			_pcb->next = NULL;
-			if (_pcb->pid != current_process->pid)
-					pqueue_enqueue(queue,_pcb); 
 		}
-		else{
-			queue->pq_front[_pcb->priority] = NULL;
-			queue->pq_end[_pcb->priority] = NULL;
-			_pcb->next = NULL;
-			_pcb->priority = priority;
-			if (_pcb->pid != current_process->pid)
-					pqueue_enqueue(queue,_pcb);  
-		}
+		_pcb->priority = priority;
+		if (_pcb->pid != current_process->pid)
+			pqueue_enqueue(queue,_pcb);  
 	}
 	else if (after == NULL)
 	{
-		queue->pq_end[_pcb->priority] = before;
-		before->next = NULL;
-		_pcb->next = NULL;
+		if (_pcb->pid != current_process->pid) {
+			queue->pq_end[_pcb->priority] = before;
+			before->next = NULL;
+		}
 		_pcb->priority = priority;
 		if (_pcb->pid != current_process->pid)
 					pqueue_enqueue(queue,_pcb);  
 	}
 	else if (before == NULL)
 	{
-		queue->pq_front[_pcb->priority] = after;
-		after->prev = NULL;
-		_pcb->next = NULL;
+		if (_pcb->pid != current_process->pid) {
+			queue->pq_front[_pcb->priority] = after;
+			after->prev = NULL;
+			_pcb->next = NULL;
+		}
 		_pcb->priority = priority;
 		if (_pcb->pid != current_process->pid)
 					pqueue_enqueue(queue,_pcb); 
 	}
 	else 
 	{
-		before->next = after;
-		after->prev = before;
-		_pcb->next = NULL;
+		if (_pcb->pid != current_process->pid) {
+			before->next = after;
+			after->prev = before;
+			_pcb->next = NULL;
+		}
 		_pcb->priority = priority;
 		if (_pcb->pid != current_process->pid)
 					pqueue_enqueue(queue,_pcb);  

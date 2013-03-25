@@ -66,95 +66,98 @@ void i_process_routine(void){
 		// Check if the hotkeys have been pressed 
 		// User types exclamation mark
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x21){
-			hotkey_message = k_request_kernel_memory_block();
+			--g_UART0_count;
+			//hotkey_message = k_request_kernel_memory_block();
 			// Traverse through each priority queue in the ready queue
 			for(i = 0; i < NUM_PROCS; i ++){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 				if(pcb->state == READY){
 					if(pcb->pid > 9){
-						hotkey_string[ctr++] = ('0' + (pcb->pid/10));
-						hotkey_string[ctr++] = ('0' + (pcb->pid - (pcb->pid/10)*10));
-						hotkey_string[ctr++] = ' ';
-						hotkey_string[ctr++] = ('0' + pcb->priority);
-						hotkey_string[ctr++] = '\n';
-						hotkey_string[ctr++] = '\r';
+						uart0_put_char('0' + (pcb->pid/10));
+						uart0_put_char('0' + (pcb->pid - (pcb->pid/10)*10));
+						uart0_put_char(' ');
+						uart0_put_char('0' + pcb->priority);
+						uart0_put_char('\n');
+						uart0_put_char('\r');
 					}
 					else{
-						hotkey_string[ctr++] = ('0' + pcb->pid);
-						hotkey_string[ctr++] = ' ';
-						hotkey_string[ctr++] = ('0' + pcb->priority);
-						hotkey_string[ctr++] = '\n';
-						hotkey_string[ctr++] = '\r';
+						uart0_put_char('0' + pcb->pid);
+						uart0_put_char(' ');
+						uart0_put_char('0' + pcb->priority);
+						uart0_put_char('\n');
+						uart0_put_char('\r');
 					}
 				}
 			}
-			hotkey_string[ctr++] = '\0';
+			/*hotkey_string[ctr++] = '\0';
 			// Send to CRT
 			hotkey_message->dest_id = CRT_PID;
 			hotkey_message->type = DISPLAY_REQUEST;
 			hotkey_message->message = hotkey_string;
-			k_send_message(CRT_PID, hotkey_message);
+			k_send_message(CRT_PID, hotkey_message);*/
 		}
 		// User types @
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x40){
-			hotkey_message = k_request_kernel_memory_block();
+			--g_UART0_count;
+			//hotkey_message = k_request_kernel_memory_block();
 			for(i = 0; i < NUM_PROCS; i ++){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 				if(pcb->state == MEMORY_BLOCK){
 					if(pcb->pid > 9){
-						hotkey_string[ctr++] = ('0' + (pcb->pid/10));
-						hotkey_string[ctr++] = ('0' + (pcb->pid - (pcb->pid/10)*10));
-						hotkey_string[ctr++] = ' ';
-						hotkey_string[ctr++] = ('0' + pcb->priority);
-						hotkey_string[ctr++] = '\n';
-						hotkey_string[ctr++] = '\r';
+						uart0_put_char('0' + (pcb->pid/10));
+						uart0_put_char('0' + (pcb->pid - (pcb->pid/10)*10));
+						uart0_put_char(' ');
+						uart0_put_char('0' + pcb->priority);
+						uart0_put_char('\n');
+						uart0_put_char('\r');
 					}
 					else{
-						hotkey_string[ctr++] = ('0' + pcb->pid);
-						hotkey_string[ctr++] = ' ';
-						hotkey_string[ctr++] = ('0' + pcb->priority);
-						hotkey_string[ctr++] = '\n';
-						hotkey_string[ctr++] = '\r';
+						uart0_put_char('0' + pcb->pid);
+						uart0_put_char(' ');
+						uart0_put_char('0' + pcb->priority);
+						uart0_put_char('\n');
+						uart0_put_char('\r');
 					}
 				}
 			}
-			hotkey_string[ctr++] = '\0';
+			/*hotkey_string[ctr++] = '\0';
 			// Send to CRT
 			hotkey_message->dest_id = CRT_PID;
 			hotkey_message->type = DISPLAY_REQUEST;
 			hotkey_message->message = hotkey_string;
-			k_send_message(CRT_PID, hotkey_message);
+			k_send_message(CRT_PID, hotkey_message);*/
 		}
 		// User types #
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x23){
-			hotkey_message = k_request_kernel_memory_block();
+			--g_UART0_count;
+			//hotkey_message = k_request_kernel_memory_block();
 			// Traverse through each priority queue in the ready queue
 			for(i = 0; i < NUM_PROCS; i ++){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 				if(pcb->state == MESSAGE_BLOCK){
 					if(pcb->pid > 9){
-						hotkey_string[ctr++] = ('0' + (pcb->pid/10));
-						hotkey_string[ctr++] = ('0' + (pcb->pid - (pcb->pid/10)*10));
-						hotkey_string[ctr++] = ' ';
-						hotkey_string[ctr++] = ('0' + pcb->priority);
-						hotkey_string[ctr++] = '\n';
-						hotkey_string[ctr++] = '\r';
+						uart0_put_char('0' + (pcb->pid/10));
+						uart0_put_char('0' + (pcb->pid - (pcb->pid/10)*10));
+						uart0_put_char(' ');
+						uart0_put_char('0' + pcb->priority);
+						uart0_put_char('\n');
+						uart0_put_char('\r');
 					}
 					else{
-						hotkey_string[ctr++] = ('0' + pcb->pid);
-						hotkey_string[ctr++] = ' ';
-						hotkey_string[ctr++] = ('0' + pcb->priority);
-						hotkey_string[ctr++] = '\n';
-						hotkey_string[ctr++] = '\r';
+						uart0_put_char('0' + pcb->pid);
+						uart0_put_char(' ');
+						uart0_put_char('0' + pcb->priority);
+						uart0_put_char('\n');
+						uart0_put_char('\r');
 					}
 				}
 			}
-			hotkey_string[ctr++] = '\0';
+			/*hotkey_string[ctr++] = '\0';
 			// Send to CRT
 			hotkey_message->dest_id = CRT_PID;
 			hotkey_message->type = DISPLAY_REQUEST;
 			hotkey_message->message = hotkey_string;
-			k_send_message(CRT_PID, hotkey_message);
+			k_send_message(CRT_PID, hotkey_message);*/
 		}
 		
 		
