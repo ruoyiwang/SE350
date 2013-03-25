@@ -158,7 +158,7 @@ void test_process_6() {
 		re = (envelope *) request_memory_block();
 		re->src_id = 6;
 		re->dest_id = 6;
-		delay_send(6, re, 100);
+		delay_send(6, re, 10000);
     re = (envelope*)receive_message(NULL);
 		test_pass();
 		set_process_priority(6,4);
@@ -362,7 +362,7 @@ void test_process_c(){
         /** Hibernate for 10 seconds **/
         q = (envelope*)request_memory_block();
         q->type = WAKE_UP_10;
-        delay_send(test_process_c_id, q, 100);
+        delay_send(test_process_c_id, q, 10000);
         while(1){
           p = receive_message(NULL);
           if(p->type == WAKE_UP_10){
