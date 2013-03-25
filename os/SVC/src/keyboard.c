@@ -94,12 +94,10 @@ void kcd() {
 					}
 				}
 			}
-			m->type = DISPLAY_REQUEST;
-			send_message(CRT_PID, m);
 			
-			input = "\n\r";
 			m = request_memory_block();
 			m->type = DISPLAY_REQUEST;
+			m->dest_id = CRT_PID;
 			m->message = input;
 			send_message(CRT_PID, m);
 		}

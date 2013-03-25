@@ -404,7 +404,6 @@ void priority_change() {
     input = (char *)re->message;
 
     // Currently only accepts 2 digit pids
-    if (re->type == DISPLAY_REQUEST) {
       pid = *(input + 3) - '0';
       if (pid < 0 || pid > 9) {
         continue;
@@ -417,8 +416,7 @@ void priority_change() {
       else {
         priority = *(input + 5) - '0';
       }
-
+			release_memory_block(re);
       set_process_priority(pid, priority);
-    }
   }
 }

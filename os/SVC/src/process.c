@@ -239,16 +239,27 @@ void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
 	{
 		if (_pcb->priority >3)
 		{
+			queue->pq_front[_pcb->priority] = NULL;
+			queue->pq_end[_pcb->priority] = NULL;
 			_pcb->priority = priority;
+			_pcb->next = NULL;
 			if (_pcb->pid != current_process->pid)
 					pqueue_enqueue(queue,_pcb); 
 		}
-		_pcb->priority = priority;
+		else{
+			queue->pq_front[_pcb->priority] = NULL;
+			queue->pq_end[_pcb->priority] = NULL;
+			_pcb->next = NULL;
+			_pcb->priority = priority;
+			if (_pcb->pid != current_process->pid)
+					pqueue_enqueue(queue,_pcb);  
+		}
 	}
-	if (after == NULL)
+	else if (after == NULL)
 	{
 		queue->pq_end[_pcb->priority] = before;
 		before->next = NULL;
+		_pcb->next = NULL;
 		_pcb->priority = priority;
 		if (_pcb->pid != current_process->pid)
 					pqueue_enqueue(queue,_pcb);  
@@ -257,6 +268,7 @@ void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
 	{
 		queue->pq_front[_pcb->priority] = after;
 		after->prev = NULL;
+		_pcb->next = NULL;
 		_pcb->priority = priority;
 		if (_pcb->pid != current_process->pid)
 					pqueue_enqueue(queue,_pcb); 
@@ -265,6 +277,7 @@ void k_pqueue_set_priority(pqueue *queue, pcb *_pcb, int priority)
 	{
 		before->next = after;
 		after->prev = before;
+		_pcb->next = NULL;
 		_pcb->priority = priority;
 		if (_pcb->pid != current_process->pid)
 					pqueue_enqueue(queue,_pcb);  
@@ -379,7 +392,7 @@ void process_init() {
 		pcbs[i]->mb.end = NULL;
 		pcbs[i]->prev = NULL;
 		
-		if (i == 10 || i ==11 || i == 12)
+		if (i == 10 || i ==11 || i == 12 || i == 13)
 			pcbs[i]->priority = 1;
 		else if (i!=0)
 			pcbs[i]->priority = 2;
@@ -406,7 +419,11 @@ void process_init() {
 }
 
 int k_set_process_priority(int pid, int priority) {
-    pcb *node = pcb_lookup_by_pid(pid, pcb_lookup_list);
+    pcb *node;
+		if (pid > 14 || priority > 4) {
+			return -1;
+		}
+		node = pcb_lookup_by_pid(pid, pcb_lookup_list);
 
     // As per project description section 2.4, if no process exists with the pid passed in return a non-zero int value
     if (node == NULL){

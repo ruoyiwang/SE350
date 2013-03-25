@@ -53,7 +53,7 @@ typedef struct message_queue_t{
 } message_queue;
 
 extern pcb* current_process;
-
+extern pcb* pcbs[NUM_PROCS];
 extern pcb *pcb_lookup_list;
 
 extern mailbox* delay_message_list;
