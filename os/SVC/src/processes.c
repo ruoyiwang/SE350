@@ -297,7 +297,7 @@ void test_process_a(){
   while(1){
     p = (envelope*)receive_message(NULL);
     c_temp = p->message;
-    if (c_temp[1] == 'Z'){
+    if (c_temp && c_temp[1] == 'Z'){
       release_memory_block(p);
       break;
     }

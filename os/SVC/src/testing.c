@@ -32,7 +32,7 @@ void test_init(int n) {
 }
 
 void test_pass() {
-	envelope *ts3 = (envelope*)request_test_harness_memory_block();
+	envelope *ts3 = (envelope*)request_kernel_memory_block();
 
 	if (test_init_complete) {
 		test_passed = test_passed + 1;
@@ -55,7 +55,7 @@ void test_pass() {
 }
 
 void test_fail() {
-	envelope *ts4 = (envelope*)request_test_harness_memory_block();
+	envelope *ts4 = (envelope*)request_kernel_memory_block();
 
 	if (test_init_complete) {
 		test_failed = test_failed + 1;

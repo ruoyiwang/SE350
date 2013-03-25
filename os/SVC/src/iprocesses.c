@@ -43,7 +43,7 @@ void i_process_routine(void){
 		// Check if the user clicked enter
 		if(g_UART0_buffer[g_UART0_count-1] == ENTER){
 			// Create an envelope for the kcd message send
-			kcd_command = k_request_irq_memory_block();
+			kcd_command = k_request_kernel_memory_block();
 			kcd_command->src_id = interrupt_process.pcb.pid;
 			
 			// Copy the char buffer into a char array to pass into the message
@@ -66,7 +66,7 @@ void i_process_routine(void){
 		// Check if the hotkeys have been pressed 
 		// User types exclamation mark
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x21){
-			hotkey_message = k_request_irq_memory_block();
+			hotkey_message = k_request_kernel_memory_block();
 			// Traverse through each priority queue in the ready queue
 			for(i = 0; i < NUM_PROCS; i ++){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
@@ -97,7 +97,7 @@ void i_process_routine(void){
 		}
 		// User types @
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x40){
-			hotkey_message = k_request_irq_memory_block();
+			hotkey_message = k_request_kernel_memory_block();
 			for(i = 0; i < NUM_PROCS; i ++){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
 				if(pcb->state == MEMORY_BLOCK){
@@ -127,7 +127,7 @@ void i_process_routine(void){
 		}
 		// User types #
 		else if(g_UART0_buffer[g_UART0_count-1] == 0x23){
-			hotkey_message = k_request_irq_memory_block();
+			hotkey_message = k_request_kernel_memory_block();
 			// Traverse through each priority queue in the ready queue
 			for(i = 0; i < NUM_PROCS; i ++){
 				pcb = pcb_lookup_by_pid(i,pcb_lookup_list);
@@ -193,7 +193,7 @@ void i_process_routine(void){
 
 			if(g_UART0_buffer[g_UART0_count-1] == ENTER){
 				// Create an envelope for the kcd message send
-				kcd_command = k_request_irq_memory_block();
+				kcd_command = k_request_kernel_memory_block();
 				kcd_command->src_id = interrupt_process.pcb.pid;
 
 				// Make sure that interrupts don't add to the char buffer
@@ -258,7 +258,7 @@ void timer_iprocess(void){
 		k_send_message(finished_env->dest_id, finished_env);
 		if (g_timer_count%1000 == 0)
 		{
-			env = (envelope *) k_request_timer_memory_block();
+			env = (envelope *) k_request_kernel_memory_block();
 			env->type = TIMER_UPDATE;
 			k_send_message(WALLCLOCK_PID, env);
 		}
@@ -285,7 +285,7 @@ void timer_iprocess(void){
 	}
 	if (g_timer_count%1000 == 0)
 	{
-		env = (envelope *) k_request_timer_memory_block();
+		env = (envelope *) k_request_kernel_memory_block();
 		env->type = TIMER_UPDATE;
 		k_send_message(WALLCLOCK_PID, env);
 	}

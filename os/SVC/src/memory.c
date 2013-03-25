@@ -17,6 +17,7 @@ void mmu_init(){
 	
 	mmu.user_stack_table_size = 32;
 	mmu.user_max_mem = 0x10008000 - 5 * USR_SZ_STACK;
+	mmu.user_max_mem = 0x10008000;
 	mmu.user_min_mem = mmu.user_max_mem - mmu.user_stack_table_size * USR_SZ_STACK;
 	temp = (mmu.user_max_mem - mmu.user_min_mem) / USR_SZ_STACK;	//debug line
 	//32 blocks for user
@@ -131,7 +132,7 @@ int k_release_memory_block(void *MemoryBlock){
 	if (mem_block_address > 0x10008000 || mem_block_address < mmu.free_mem){	
 		return 1;
 	}
-
+/*
 	if (mem_block_address <= 0x10008000 && mem_block_address > 0x10008000 - USR_SZ_STACK){
 		//means this is irq mem 1
 		mmu.irq_using_mem1 = 0;
@@ -152,7 +153,7 @@ int k_release_memory_block(void *MemoryBlock){
 		mmu.test_harness_using_mem = 0;
 		return 0;
 	}
-
+*/
 	//THIS IS RELEASING USER MEMORY
 	for (index = 0; index < mmu.user_stack_table_size; index++){
 		if ((mmu.user_max_mem - USR_SZ_STACK * index >= mem_block_address) && ((mmu.user_max_mem - USR_SZ_STACK * index) - USR_SZ_STACK + 4) <= mem_block_address){
